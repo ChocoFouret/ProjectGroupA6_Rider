@@ -1,0 +1,54 @@
+use GroupeA6;
+
+create Table Functions
+(
+    idFunctions int identity not null primary key,
+    title varchar(50) not null,
+)
+
+create Table Account
+(
+    idAccount int identity not null primary key,
+    email varchar(100) not null,
+    passwords varchar(200) not null,
+    name varchar(50) not null,
+    firstName varchar(100) not null,
+    street varchar(100) not null,
+    address varchar(100) not null,
+    isChief bit not null,
+    pictureURL varchar(100) not null,
+    idFunctions int not null,
+    foreign key (idAccount) references Functions(idFunctions)
+
+)
+
+create Table Schedule
+(
+    idSchedule   int identity not null primary key,
+    dateSchedule date         not null,
+    startHour    time         not null,
+    endHour      time         not null,
+    breakTime    time         not null,
+    idAccount    int          not null,
+    foreign key(idSchedule) references Account(idAccount)
+);
+
+create Table Holidays
+(
+    idHolidays   int identity not null primary key,
+    dateHolidays date         not null,
+    isAccepted   bit          not null,
+    comments     varchar(200),
+    idAccount int not null,
+    foreign key(idHolidays) references Account(idAccount)
+);
+
+create Table Absent
+(
+    idAbsent int identity not null primary key,
+    dateAbsent date not null,
+    isJustified bit not null,
+    comments varchar(200) not null,
+    idAccount int not null,
+    foreign key(idAbsent) references Account(idAccount)
+)
