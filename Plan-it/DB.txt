@@ -1,28 +1,36 @@
+-- RESET ID : DBCC CHECKIDENT (table, RESEED, 0)
+
+use gamer;
+
+drop database GroupeA6;
+create database GroupeA6;
+
 use GroupeA6;
 
 create Table Functions
 (
-    idFunctions int identity not null primary key,
+    idFunction int identity not null primary key,
     title varchar(50) not null,
 )
 
-create Table Account
+create Table Accounts
 (
     idAccount int identity not null primary key,
     email varchar(100) not null,
-    passwords varchar(200) not null,
-    name varchar(50) not null,
+    passwordHash varchar(200) not null,
+    lastName varchar(50) not null,
     firstName varchar(100) not null,
     street varchar(100) not null,
-    address varchar(100) not null,
+    number varchar(10) not null,
+    postCode int not null,
+	city varchar(30) not null,
     isChief bit not null,
     pictureURL varchar(100) not null,
-    idFunctions int not null,
-    foreign key (idAccount) references Functions(idFunctions)
-
+    idFunction int not null,
+    foreign key(idFunction) references Functions(idFunction)
 )
 
-create Table Schedule
+create Table Schedules
 (
     idSchedule   int identity not null primary key,
     dateSchedule date         not null,
@@ -30,7 +38,7 @@ create Table Schedule
     endHour      time         not null,
     breakTime    time         not null,
     idAccount    int          not null,
-    foreign key(idSchedule) references Account(idAccount)
+    foreign key(idSchedule) references Accounts(idAccount)
 );
 
 create Table Holidays
@@ -40,15 +48,15 @@ create Table Holidays
     isAccepted   bit          not null,
     comments     varchar(200),
     idAccount int not null,
-    foreign key(idHolidays) references Account(idAccount)
+    foreign key(idHolidays) references Accounts(idAccount)
 );
 
-create Table Absent
+create Table Absents
 (
     idAbsent int identity not null primary key,
     dateAbsent date not null,
     isJustified bit not null,
     comments varchar(200) not null,
     idAccount int not null,
-    foreign key(idAbsent) references Account(idAccount)
+    foreign key(idAbsent) references Accounts(idAccount)
 )

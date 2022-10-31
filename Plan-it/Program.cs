@@ -1,3 +1,8 @@
+using Domain;
+using Infrastructure;
+using Infrastructure.EF;
+using Plan_it;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -6,6 +11,16 @@ builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
+builder.Services.AddScoped<IAccountRepository, EfAccountRepository>();
+builder.Services.AddScoped<IFunctionRepository, EfFunctionRepository>();
+
+// Database
+builder.Services.AddScoped<IConnectionStringProvider, ConnectionStringProvider>();
+
+// Context
+builder.Services.AddScoped<PlanitContextProvider>();
+
 
 var app = builder.Build();
 
@@ -23,6 +38,3 @@ app.UseAuthorization();
 app.MapControllers();
 
 app.Run();
-
-// TEST 2
-// Test 3
