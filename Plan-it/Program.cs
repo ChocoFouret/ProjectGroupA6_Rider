@@ -1,3 +1,5 @@
+using Application.UseCases.Accounts;
+using Application.UseCases.Functions;
 using Domain;
 using Infrastructure;
 using Infrastructure.EF;
@@ -12,8 +14,19 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+builder.Services.AddScoped<IConnectionStringProvider, ConnectionStringProvider>();
 builder.Services.AddScoped<IAccountRepository, EfAccountRepository>();
 builder.Services.AddScoped<IFunctionRepository, EfFunctionRepository>();
+
+// Use cases accounts
+builder.Services.AddScoped<UseCaseFetchAllAccounts>();
+builder.Services.AddScoped<UseCaseCreateAccount>();
+builder.Services.AddScoped<UseCaseFetchAccountById>();
+
+// Use cases functions
+builder.Services.AddScoped<UseCaseFetchAllFunctions>();
+builder.Services.AddScoped<UseCaseCreateFunction>();
+builder.Services.AddScoped<UseCaseFetchFunctionById>();
 
 // Database
 builder.Services.AddScoped<IConnectionStringProvider, ConnectionStringProvider>();

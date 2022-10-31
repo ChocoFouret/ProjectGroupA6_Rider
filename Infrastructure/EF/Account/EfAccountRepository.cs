@@ -12,13 +12,13 @@ public class EfAccountRepository : IAccountRepository
         _planitContextProvider = planitContextProvider;
     }
 
-    public IEnumerable<Account> GetAll()
+    public IEnumerable<Account> FetchAll()
     {
         using var context = _planitContextProvider.NewContext();
         return context.Accounts.ToList<Account>();
     }
 
-    public Account GetById(int idAccount)
+    public Account FetchById(int idAccount)
     {
         using var context = _planitContextProvider.NewContext();
         var account = context.Accounts.FirstOrDefault(account => account.Id == idAccount);
@@ -40,6 +40,19 @@ public class EfAccountRepository : IAccountRepository
         return account;
     }
 
+    public bool Login(int idAccount, string password)
+    {
+        using var context = _planitContextProvider.NewContext();
+        var account = context.Accounts.FirstOrDefault(account => account.Id == idAccount);
+
+        if (account == null)
+            throw new KeyNotFoundException($"Account with {idAccount} has not been found");
+        
+        return EncryptPassword.ValidatePassword(password, account.PasswordHash);
+    }
+    
+    /*
+    
     public Account Read(Account account)
     {
         return null;
@@ -74,14 +87,5 @@ public class EfAccountRepository : IAccountRepository
         }
     }
     
-    public bool Login(int idAccount, string password)
-    {
-        using var context = _planitContextProvider.NewContext();
-        var account = context.Accounts.FirstOrDefault(account => account.Id == idAccount);
-
-        if (account == null)
-            throw new KeyNotFoundException($"Account with {idAccount} has not been found");
-        
-        return EncryptPassword.ValidatePassword(password, account.PasswordHash);
-    }
+    */
 }

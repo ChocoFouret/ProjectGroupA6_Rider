@@ -12,13 +12,26 @@ public class EfFunctionRepository : IFunctionRepository
         _planitContextProvider = planitContextProvider;
     }
 
-    public IEnumerable<Function> GetAll()
+    public IEnumerable<Function> FetchAll()
     {
         using var context = _planitContextProvider.NewContext();
         return context.Functions.ToList<Function>();
     }
 
-    public Function GetById(int idFunction)
+    public Function Create(string title)
+    {
+        using var context = _planitContextProvider.NewContext();
+
+        Function function = new Function();
+        function.Title = title;
+        
+        context.Functions.Add(function);
+        
+        context.SaveChanges();
+        return function;
+    }
+    
+    public Function FetchById(int idFunction)
     {
         using var context = _planitContextProvider.NewContext();
         var function = context.Functions.FirstOrDefault(function => function.Id == idFunction);
@@ -28,17 +41,9 @@ public class EfFunctionRepository : IFunctionRepository
 
         return function;
     }
-
-    public Function Create(Function function)
-    {
-        using var context = _planitContextProvider.NewContext();
-        
-        context.Functions.Add(function);
-        
-        context.SaveChanges();
-        return function;
-    }
-
+    
+    
+    /*
     public Function Read(Function function)
     {
         return null;
@@ -72,4 +77,5 @@ public class EfFunctionRepository : IFunctionRepository
             return false;
         }
     }
+    */
 }
