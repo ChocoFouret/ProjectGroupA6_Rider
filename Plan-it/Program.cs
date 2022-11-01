@@ -19,9 +19,13 @@ builder.Services.AddScoped<IAccountRepository, EfAccountRepository>();
 builder.Services.AddScoped<IFunctionRepository, EfFunctionRepository>();
 
 // Use cases accounts
-builder.Services.AddScoped<UseCaseFetchAllAccounts>();
+builder.Services.AddScoped<UseCaseLoginAccount>();
 builder.Services.AddScoped<UseCaseCreateAccount>();
+builder.Services.AddScoped<UseCaseUpdateAccount>();
+builder.Services.AddScoped<UseCaseDeleteAccount>();
+builder.Services.AddScoped<UseCaseFetchAllAccounts>();
 builder.Services.AddScoped<UseCaseFetchAccountById>();
+builder.Services.AddScoped<UseCaseFetchAccountByEmail>();
 
 // Use cases functions
 builder.Services.AddScoped<UseCaseFetchAllFunctions>();

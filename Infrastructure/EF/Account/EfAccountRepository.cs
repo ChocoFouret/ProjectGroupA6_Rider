@@ -7,6 +7,8 @@ public class EfAccountRepository : IAccountRepository
 {
     private readonly PlanitContextProvider _planitContextProvider;
 
+    // For add method : Application -> UsesCases -> Account
+
     public EfAccountRepository(PlanitContextProvider planitContextProvider)
     {
         _planitContextProvider = planitContextProvider;
@@ -29,33 +31,30 @@ public class EfAccountRepository : IAccountRepository
         return account;
     }
 
-    public Account Create(Account account)
+    public Account? FetchByEmail(string email)
     {
         using var context = _planitContextProvider.NewContext();
+        var account = context.Accounts.FirstOrDefault(account => account.Email == email);
 
-        account.PasswordHash = EncryptPassword.HashPassword(account.PasswordHash);
+        if (account == null)
+            return null;
 
-        context.Accounts.Add(account);
-        context.SaveChanges();
         return account;
     }
 
-    public bool Login(int idAccount, string password)
+    public Account Create(Account account)
     {
         using var context = _planitContextProvider.NewContext();
-        var account = context.Accounts.FirstOrDefault(account => account.Id == idAccount);
-
-        if (account == null)
-            throw new KeyNotFoundException($"Account with {idAccount} has not been found");
-        
-        return EncryptPassword.ValidatePassword(password, account.PasswordHash);
-    }
-    
-    /*
-    
-    public Account Read(Account account)
-    {
-        return null;
+        try
+        {
+            context.Accounts.Add(account);
+            context.SaveChanges();
+            return account;
+        }
+        catch (DbUpdateConcurrencyException e)
+        {
+            return null;
+        }
     }
 
     public bool Update(Account account)
@@ -72,13 +71,13 @@ public class EfAccountRepository : IAccountRepository
         }
     }
 
-    public bool Delete(int idAccount)
+    public bool Delete(Account account)
     {
         using var context = _planitContextProvider.NewContext();
 
         try
         {
-            context.Accounts.Remove(new Account { Id = idAccount });
+            context.Accounts.Remove(account);
             return context.SaveChanges() == 1;
         }
         catch (DbUpdateConcurrencyException e)
@@ -86,6 +85,17 @@ public class EfAccountRepository : IAccountRepository
             return false;
         }
     }
-    
-    */
+
+    public bool Login(string email, string password)
+    {
+        using var context = _planitContextProvider.NewContext();
+        var account = context.Accounts.FirstOrDefault(account => account.Email == email);
+
+        if (account == null)
+            throw new KeyNotFoundException($"Account with {email} has not been found");
+
+        return EncryptPassword.ValidatePassword(password, account.PasswordHash)
+            ? true
+            : false;
+    }
 }

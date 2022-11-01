@@ -4,11 +4,9 @@ public interface IAccountRepository
 {
     IEnumerable<Account> FetchAll();
     Account FetchById(int idAccount);
+    Account? FetchByEmail(string email);
     Account Create(Account account);
-    /*
-    Account Read(Account account);
     bool Update(Account account);
-    bool Delete(int idAccount);
-    bool Login(int idAccount, string password);
-    */
+    bool Delete(Account account);
+    bool Login(string email, string password);
 }

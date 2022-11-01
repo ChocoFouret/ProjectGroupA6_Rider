@@ -1,62 +1,62 @@
--- RESET ID : DBCC CHECKIDENT (table, RESEED, 0)
+-- DBCC CHECKIDENT (table, RESEED, 0)
 
-use gamer;
+USE gamer;
 
-drop database GroupeA6;
-create database GroupeA6;
+DROP DATABASE GroupeA6;
+CREATE DATABASE GroupeA6;
 
-use GroupeA6;
+USE GroupeA6;
 
-create Table Functions
+CREATE TABLE Functions
 (
-    idFunction int identity not null primary key,
-    title varchar(50) not null,
+    idFunction INT IDENTITY NOT NULL PRIMARY KEY,
+    title VARCHAR(50) NOT NULL,
 )
 
-create Table Accounts
+CREATE TABLE Accounts
 (
-    idAccount int identity not null primary key,
-    email varchar(100) not null,
-    passwordHash varchar(200) not null,
-    lastName varchar(50) not null,
-    firstName varchar(100) not null,
-    street varchar(100) not null,
-    number varchar(10) not null,
-    postCode int not null,
-	city varchar(30) not null,
-    isChief bit not null,
-    pictureURL varchar(100) not null,
-    idFunction int not null,
-    foreign key(idFunction) references Functions(idFunction)
+    idAccount INT IDENTITY NOT NULL PRIMARY KEY,
+    email VARCHAR(100) NOT NULL UNIQUE,
+    passwordHash VARCHAR(200) NOT NULL,
+    lastName VARCHAR(50) NOT NULL,
+    firstName VARCHAR(100) NOT NULL,
+    street VARCHAR(100) NOT NULL,
+    number VARCHAR(10) NOT NULL,
+    postCode INT NOT NULL,
+	city VARCHAR(30) NOT NULL,
+    isChief bit NOT NULL,
+    pictureURL VARCHAR(100) NOT NULL,
+    idFunction INT NOT NULL,
+    FOREIGN KEY(idFunction) REFERENCES Functions(idFunction)
 )
 
-create Table Schedules
+CREATE TABLE Schedules
 (
-    idSchedule   int identity not null primary key,
-    dateSchedule date         not null,
-    startHour    time         not null,
-    endHour      time         not null,
-    breakTime    time         not null,
-    idAccount    int          not null,
-    foreign key(idSchedule) references Accounts(idAccount)
+    idSchedule   INT IDENTITY NOT NULL PRIMARY KEY,
+    DATESchedule DATE         NOT NULL,
+    startHour    TIME         NOT NULL,
+    endHour      TIME         NOT NULL,
+    breakTime    TIME         NOT NULL,
+    idAccount    INT          NOT NULL,
+    FOREIGN KEY(idSchedule) REFERENCES Accounts(idAccount)
 );
 
-create Table Holidays
+CREATE TABLE Holidays
 (
-    idHolidays   int identity not null primary key,
-    dateHolidays date         not null,
-    isAccepted   bit          not null,
-    comments     varchar(200),
-    idAccount int not null,
-    foreign key(idHolidays) references Accounts(idAccount)
+    idHolidays   INT IDENTITY NOT NULL PRIMARY KEY,
+    DATEHolidays DATE         NOT NULL,
+    isAccepted   BIT          NOT NULL,
+    comments     VARCHAR(200),
+    idAccount INT NOT NULL,
+    FOREIGN KEY(idHolidays) REFERENCES Accounts(idAccount)
 );
 
-create Table Absents
+CREATE TABLE Absents
 (
-    idAbsent int identity not null primary key,
-    dateAbsent date not null,
-    isJustified bit not null,
-    comments varchar(200) not null,
-    idAccount int not null,
-    foreign key(idAbsent) references Accounts(idAccount)
+    idAbsent INT IDENTITY NOT NULL PRIMARY KEY,
+    DATEAbsent DATE NOT NULL,
+    isJustified BIT NOT NULL,
+    comments VARCHAR(200) NOT NULL,
+    idAccount INT NOT NULL,
+    FOREIGN KEY(idAbsent) REFERENCES Accounts(idAccount)
 )
