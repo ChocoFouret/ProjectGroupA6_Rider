@@ -10,25 +10,25 @@ public class FunctionController : ControllerBase
 {
     private readonly UseCaseCreateFunction _useCaseCreateFunction;
     private readonly UseCaseFetchAllFunctions _useCaseFetchAllFunctions;
-    private readonly UseCaseFetchFunctionById _useCaseFetchFunctionById;
+    private readonly UseCaseFetchFunctionByTitle _useCaseFetchFunctionByTitle;
     
     public FunctionController(UseCaseCreateFunction useCaseCreateFunction, UseCaseFetchAllFunctions useCaseFetchAllFunctions,
-        UseCaseFetchFunctionById useCaseFetchFunctionById)
+        UseCaseFetchFunctionByTitle useCaseFetchFunctionByTitle)
     {
         _useCaseCreateFunction = useCaseCreateFunction;
         _useCaseFetchAllFunctions = useCaseFetchAllFunctions;
-        _useCaseFetchFunctionById = useCaseFetchFunctionById;
+        _useCaseFetchFunctionByTitle = useCaseFetchFunctionByTitle;
     }
 
     [HttpGet]
-    [Route("{id:int}")]
+    [Route("{title}")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public ActionResult<DtoOutputFunction> FetchById(int id)
+    public ActionResult<DtoOutputFunction> FetchById(string title)
     {
         try
         {
-            return _useCaseFetchFunctionById.Execute(id);
+            return _useCaseFetchFunctionByTitle.Execute(title);
         }
         catch (KeyNotFoundException e)
         {

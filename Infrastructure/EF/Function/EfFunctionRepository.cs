@@ -31,13 +31,13 @@ public class EfFunctionRepository : IFunctionRepository
         return function;
     }
     
-    public Function FetchById(int idFunction)
+    public Function FetchByTitle(string title)
     {
         using var context = _planitContextProvider.NewContext();
-        var function = context.Functions.FirstOrDefault(function => function.Id == idFunction);
+        var function = context.Functions.FirstOrDefault(function => function.Title == title);
 
         if (function == null)
-            throw new KeyNotFoundException($"Function with {idFunction} has not been found");
+            throw new KeyNotFoundException($"Function with {title} has not been found");
 
         return function;
     }
@@ -63,7 +63,7 @@ public class EfFunctionRepository : IFunctionRepository
         }
     }
 
-    public bool Delete(int idFunction)
+    public bool Delete(string Function)
     {
         using var context = _planitContextProvider.NewContext();
 

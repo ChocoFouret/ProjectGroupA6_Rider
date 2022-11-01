@@ -13,5 +13,5 @@ public class DbAccount
     public string City {get; set;}
     public bool IsChief {get; set;}
     public string PictureURL {get; set;}
-    public int idFunction { get; set; }
+    public string Function { get; set; }
 }

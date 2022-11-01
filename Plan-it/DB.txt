@@ -9,8 +9,7 @@ USE GroupeA6;
 
 CREATE TABLE Functions
 (
-    idFunction INT IDENTITY NOT NULL PRIMARY KEY,
-    title VARCHAR(50) NOT NULL,
+    title VARCHAR(50) NOT NULL PRIMARY KEY,
 )
 
 CREATE TABLE Accounts
@@ -26,8 +25,8 @@ CREATE TABLE Accounts
 	city VARCHAR(30) NOT NULL,
     isChief bit NOT NULL,
     pictureURL VARCHAR(100) NOT NULL,
-    idFunction INT NOT NULL,
-    FOREIGN KEY(idFunction) REFERENCES Functions(idFunction)
+    title VARCHAR(50) NOT NULL,
+    FOREIGN KEY(title) REFERENCES Functions(title)
 )
 
 CREATE TABLE Schedules
@@ -60,3 +59,20 @@ CREATE TABLE Absents
     idAccount INT NOT NULL,
     FOREIGN KEY(idAbsent) REFERENCES Accounts(idAccount)
 )
+
+INSERT INTO dbo.Functions(title)
+	VALUES 
+	('Employee'),
+	('Director'),
+	('Administrator');
+
+-- Password = 12345
+INSERT INTO Accounts
+           (email, passwordHash, lastName, firstName, street, number, postCode, city, isChief, pictureURL, title)
+     VALUES
+           ('user1@gmail.com', '1000:lAwhECG/vjIu5XaM8/6Vnofas95NKCat:/SZEXfEa7RE6wrF1zFxJSafHSzs=', 'Nom 1', 'Prenom 1', 'RUE 1', 'NUM 1', 1, 'VILLE 1', 1, 'image', 'Employee'),
+		   ('user2@gmail.com', '1000:lAwhECG/vjIu5XaM8/6Vnofas95NKCat:/SZEXfEa7RE6wrF1zFxJSafHSzs=', 'Nom 2', 'Prenom 2', 'RUE 2', 'NUM 2', 2, 'VILLE 2', 1, 'image', 'Employee'),
+		   ('user3@outlook.fr', '1000:lAwhECG/vjIu5XaM8/6Vnofas95NKCat:/SZEXfEa7RE6wrF1zFxJSafHSzs=', 'Nom 3', 'Prenom 3', 'RUE 3', 'NUM 3', 3, 'VILLE 3', 1, 'image', 'Employee'),
+		   ('admin', '1000:lAwhECG/vjIu5XaM8/6Vnofas95NKCat:/SZEXfEa7RE6wrF1zFxJSafHSzs=', 'Admin 1', 'Admin 1', 'RUE 1', 'NUM 1', 1, 'VILLE 1', 1, 'image', 'Administrator'),
+           ('director', '1000:lAwhECG/vjIu5XaM8/6Vnofas95NKCat:/SZEXfEa7RE6wrF1zFxJSafHSzs=', 'Directeur 1', 'Directeur 2', 'RUE 2', 'NUM 2', 2, 'VILLE 2', 1, 'image', 'Director'),
+           ('employee', '1000:lAwhECG/vjIu5XaM8/6Vnofas95NKCat:/SZEXfEa7RE6wrF1zFxJSafHSzs=', 'Employé 1', 'Employé 3', 'RUE 3', 'NUM 3', 3, 'VILLE 3', 1, 'image', 'Employee');

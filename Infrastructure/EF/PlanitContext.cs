@@ -42,14 +42,13 @@ public class PlanitContext : DbContext
             entity.Property(arg => arg.City).HasColumnName("city");
             entity.Property(arg => arg.IsChief).HasColumnName("isChief");
             entity.Property(arg => arg.PictureURL).HasColumnName("pictureURL");
-            entity.Property(arg => arg.idFunction).HasColumnName("idFunction");
+            entity.Property(arg => arg.Function).HasColumnName("title");
         });
         // Function table
         modelBuilder.Entity<Function>(entity =>
         {
             entity.ToTable("Functions"); // Accounts tables
-            entity.HasKey(arg => arg.Id); // Primary key
-            entity.Property(arg => arg.Id).HasColumnName("idFunction");
+            entity.HasKey(arg => arg.Title); // Primary key
             entity.Property(arg => arg.Title).HasColumnName("title");
         });
     }

@@ -36,8 +36,13 @@ public class EfAccountRepository : IAccountRepository
         using var context = _planitContextProvider.NewContext();
         var account = context.Accounts.FirstOrDefault(account => account.Email == email);
 
-        if (account == null)
-            return null;
+        return account;
+    } 
+    
+    public Account? GetAccount(string email)
+    {
+        using var context = _planitContextProvider.NewContext();
+        var account = context.Accounts.FirstOrDefault(account => account.Email == email);
 
         return account;
     }
@@ -94,8 +99,8 @@ public class EfAccountRepository : IAccountRepository
         if (account == null)
             throw new KeyNotFoundException($"Account with {email} has not been found");
 
-        return EncryptPassword.ValidatePassword(password, account.PasswordHash)
-            ? true
-            : false;
+        return EncryptPassword.ValidatePassword(password, account.PasswordHash);
     }
+    
+    
 }

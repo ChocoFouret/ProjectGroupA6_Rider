@@ -1,6 +1,8 @@
 using Application.UseCases.Accounts;
 using Application.UseCases.Accounts.Dtos;
 using Domain;
+using JWT.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Plan_it.Controllers;
@@ -16,7 +18,11 @@ public class AccountController : ControllerBase
     private readonly UseCaseFetchAllAccounts _useCaseFetchAllAccounts;
     private readonly UseCaseFetchAccountById _useCaseFetchAccountById;
     private readonly UseCaseFetchAccountByEmail _useCaseFetchAccountByEmail;
+    private readonly UseCaseGetAccount _useCaseGetAccount;
 
+    private readonly ISessionService _sessionService;
+    private readonly IConfiguration _config;
+    
     public AccountController(
         UseCaseLoginAccount useCaseLoginAccount,
         UseCaseCreateAccount useCaseCreateAccount,
@@ -24,7 +30,10 @@ public class AccountController : ControllerBase
         UseCaseDeleteAccount useCaseDeleteAccount,
         UseCaseFetchAllAccounts useCaseFetchAllAccounts,
         UseCaseFetchAccountById useCaseFetchAccountById,
-        UseCaseFetchAccountByEmail useCaseFetchAccountByEmail
+        UseCaseGetAccount useCaseGetAccount,
+        UseCaseFetchAccountByEmail useCaseFetchAccountByEmail,
+        ISessionService sessionService,
+        IConfiguration configuration
     )
     {
         _useCaseLoginAccount = useCaseLoginAccount;
@@ -33,7 +42,11 @@ public class AccountController : ControllerBase
         _useCaseDeleteAccount = useCaseDeleteAccount;
         _useCaseFetchAllAccounts = useCaseFetchAllAccounts;
         _useCaseFetchAccountById = useCaseFetchAccountById;
+        _useCaseGetAccount = useCaseGetAccount;
         _useCaseFetchAccountByEmail = useCaseFetchAccountByEmail;
+
+        _sessionService = sessionService;
+        _config = configuration;
     }
 
     [HttpGet]
@@ -75,17 +88,18 @@ public class AccountController : ControllerBase
         }
     }
 
+    [Authorize(Policy = "all")]
     [HttpPost]
     [Route("/account/create")]
     [ProducesResponseType(StatusCodes.Status201Created)]
-    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(StatusCodes.Status409Conflict)]
     public ActionResult<DtoOutputAccount> Create(DtoInputCreateAccount dto)
     {
         // Use for add new account easily
-        if (dto.account.idFunction == 0) dto.account.idFunction = 1;
+        dto.account.Function = "Employee";
         var output = _useCaseCreateAccount.Execute(dto);
 
-        if (output == null) return Conflict();
+        if (output == null) return Conflict(new Account());
 
         return CreatedAtAction(
             nameof(FetchById),
@@ -110,7 +124,7 @@ public class AccountController : ControllerBase
     public ActionResult<Boolean> Update(DtoInputUpdateAccount dto)
     {
         // Use for add new account easily
-        if (dto.account.idFunction == 0) dto.account.idFunction = 1;
+        if (dto.account.Function.Equals("string")) dto.account.Function = "Employee";
         return _useCaseUpdateAccount.Execute(dto);
     }
     
@@ -118,8 +132,55 @@ public class AccountController : ControllerBase
     [Route("/account/login")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-    public ActionResult<Boolean> Login(DtoInputLoginAccount dto)
+    public ActionResult Login(DtoInputLoginAccount dto)
     {
-        return _useCaseLoginAccount.Execute(dto);
+        if (_useCaseLoginAccount.Execute(dto))
+        {
+            var generatedToken =
+                _sessionService.BuildToken(_config["Jwt:Key"].ToString(), _config["Jwt:Issuer"].ToString(), _useCaseGetAccount.Execute(dto.Email));
+            
+            var cookie = new CookieOptions()
+            {
+                Secure = true,
+                HttpOnly = true,
+                SameSite = SameSiteMode.None
+            };
+
+            Response.Cookies.Append("session", generatedToken, cookie);
+
+            return Ok(new {});
+        }
+
+        return Unauthorized();
+    }
+    
+    [Authorize]
+    [HttpGet]
+    [Route("/account/is/employee")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    public ActionResult IsLogged()
+    {
+        return Ok(new {ok = true});
+    }
+    
+    [Authorize(Policy = "all")]
+    [HttpGet]
+    [Route("/account/is/director")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    public ActionResult IsDirector()
+    {
+        return Ok(new {ok = true});
+    }
+    
+    [Authorize(Policy = "administrator")]
+    [HttpGet]
+    [Route("/account/is/admin")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    public ActionResult IsAdmin()
+    {
+        return Ok(new {ok = true});
     }
 }
