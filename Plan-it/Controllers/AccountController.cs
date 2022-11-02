@@ -156,31 +156,14 @@ public class AccountController : ControllerBase
     
     [Authorize]
     [HttpGet]
-    [Route("/account/is/employee")]
+    [Route("/account/is/status")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-    public ActionResult IsLogged()
+    public ActionResult IsStatus()
     {
-        return Ok(new {ok = true});
-    }
-    
-    [Authorize(Policy = "all")]
-    [HttpGet]
-    [Route("/account/is/director")]
-    [ProducesResponseType(StatusCodes.Status200OK)]
-    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-    public ActionResult IsDirector()
-    {
-        return Ok(new {ok = true});
-    }
-    
-    [Authorize(Policy = "administrator")]
-    [HttpGet]
-    [Route("/account/is/admin")]
-    [ProducesResponseType(StatusCodes.Status200OK)]
-    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-    public ActionResult IsAdmin()
-    {
-        return Ok(new {ok = true});
+        bool isLogged = User.IsInRole("Employee") | User.IsInRole("Director") | User.IsInRole("Administrator");
+        bool isDirector = User.IsInRole("Director") | User.IsInRole("Administrator");
+        bool isAdmin = User.IsInRole("Administrator");
+        return Ok(new {logged = isLogged, director = isDirector, admin = isAdmin});
     }
 }
