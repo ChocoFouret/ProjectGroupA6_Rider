@@ -50,14 +50,14 @@ public class AccountController : ControllerBase
     }
 
     [HttpGet]
-    [Route("/account/find/")]
+    [Route("/fetch/")]
     public IEnumerable<DtoOutputAccount> FetchAll()
     {
         return _useCaseFetchAllAccounts.Execute();
     }
 
     [HttpGet]
-    [Route("/account/find/{id:int}")]
+    [Route("/fetch/{id:int}")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public ActionResult<DtoOutputAccount> FetchById(int id)
@@ -73,7 +73,7 @@ public class AccountController : ControllerBase
     }
 
     [HttpGet]
-    [Route("/account/find/{email}")]
+    [Route("/fetch/{email}")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public ActionResult<DtoOutputAccount> FetchByEmail(string email)
@@ -90,7 +90,7 @@ public class AccountController : ControllerBase
 
     [Authorize(Policy = "all")]
     [HttpPost]
-    [Route("/account/create")]
+    [Route("/create")]
     [ProducesResponseType(StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status409Conflict)]
     public ActionResult<DtoOutputAccount> Create(DtoInputCreateAccount dto)
@@ -109,27 +109,25 @@ public class AccountController : ControllerBase
     }
 
     [HttpDelete]
-    [Route("/account/delete/{email}")]
+    [Route("/delete/{id:int}")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public ActionResult<Boolean> Delete(string email)
+    public ActionResult<Boolean> Delete(int id)
     {
-        return _useCaseDeleteAccount.Execute(email);
+        return _useCaseDeleteAccount.Execute(id);
     }
 
     [HttpPut]
-    [Route("/account/update")]
+    [Route("/update")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public ActionResult<Boolean> Update(DtoInputUpdateAccount dto)
     {
-        // Use for add new account easily
-        if (dto.account.Function.Equals("string")) dto.account.Function = "Employee";
         return _useCaseUpdateAccount.Execute(dto);
     }
     
     [HttpPost]
-    [Route("/account/login")]
+    [Route("/login")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     public ActionResult Login(DtoInputLoginAccount dto)
@@ -156,7 +154,7 @@ public class AccountController : ControllerBase
     
     [Authorize]
     [HttpGet]
-    [Route("/account/is/status")]
+    [Route("/is/status")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     public ActionResult IsStatus()

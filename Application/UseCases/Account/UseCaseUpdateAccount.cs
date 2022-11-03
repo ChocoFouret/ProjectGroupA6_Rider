@@ -16,14 +16,17 @@ public class UseCaseUpdateAccount : IUseCaseWriter<Boolean, DtoInputUpdateAccoun
 
     public Boolean Execute(DtoInputUpdateAccount input)
     {
-        var account = _accountRepository.FetchByEmail(input.account.Email);
+        var account = _accountRepository.FetchById(input.Id);
         if (account == null) return false;
 
-        input.account.Id = account.Id;
-
-        var tmp = input.account.PasswordHash;
-        input.account.PasswordHash = EncryptPassword.HashPassword(tmp);
+        account.FirstName = input.FirstName;
+        account.LastName = input.LastName;
+        account.Email = input.Email;
+        account.Function = input.Function;
         
-        return _accountRepository.Update(input.account);
+        // var tmp = input.Password;
+        // input.account.Password = EncryptPassword.HashPassword(tmp);
+        
+        return _accountRepository.Update(account);
     }
 }

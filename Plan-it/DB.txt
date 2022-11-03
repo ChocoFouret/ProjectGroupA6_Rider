@@ -16,7 +16,7 @@ CREATE TABLE Accounts
 (
     idAccount INT IDENTITY NOT NULL PRIMARY KEY,
     email VARCHAR(100) NOT NULL UNIQUE,
-    passwordHash VARCHAR(200) NOT NULL,
+    password VARCHAR(200) NOT NULL,
     lastName VARCHAR(50) NOT NULL,
     firstName VARCHAR(100) NOT NULL,
     street VARCHAR(100) NOT NULL,
@@ -68,11 +68,11 @@ INSERT INTO dbo.Functions(title)
 
 -- Password = 12345
 INSERT INTO Accounts
-           (email, passwordHash, lastName, firstName, street, number, postCode, city, isChief, pictureURL, title)
+           (email, password, lastName, firstName, street, number, postCode, city, isChief, pictureURL, title)
      VALUES
            ('user1@gmail.com', '1000:lAwhECG/vjIu5XaM8/6Vnofas95NKCat:/SZEXfEa7RE6wrF1zFxJSafHSzs=', 'Nom 1', 'Prenom 1', 'RUE 1', 'NUM 1', 1, 'VILLE 1', 1, 'image', 'Employee'),
 		   ('user2@gmail.com', '1000:lAwhECG/vjIu5XaM8/6Vnofas95NKCat:/SZEXfEa7RE6wrF1zFxJSafHSzs=', 'Nom 2', 'Prenom 2', 'RUE 2', 'NUM 2', 2, 'VILLE 2', 1, 'image', 'Employee'),
 		   ('user3@outlook.fr', '1000:lAwhECG/vjIu5XaM8/6Vnofas95NKCat:/SZEXfEa7RE6wrF1zFxJSafHSzs=', 'Nom 3', 'Prenom 3', 'RUE 3', 'NUM 3', 3, 'VILLE 3', 1, 'image', 'Employee'),
-		   ('admin', '1000:lAwhECG/vjIu5XaM8/6Vnofas95NKCat:/SZEXfEa7RE6wrF1zFxJSafHSzs=', 'Admin 1', 'Admin 1', 'RUE 1', 'NUM 1', 1, 'VILLE 1', 1, 'image', 'Administrator'),
-           ('director', '1000:lAwhECG/vjIu5XaM8/6Vnofas95NKCat:/SZEXfEa7RE6wrF1zFxJSafHSzs=', 'Directeur 1', 'Directeur 2', 'RUE 2', 'NUM 2', 2, 'VILLE 2', 1, 'image', 'Director'),
-           ('employee', '1000:lAwhECG/vjIu5XaM8/6Vnofas95NKCat:/SZEXfEa7RE6wrF1zFxJSafHSzs=', 'Employé 1', 'Employé 3', 'RUE 3', 'NUM 3', 3, 'VILLE 3', 1, 'image', 'Employee');
+		   ('admin', '1000:lAwhECG/vjIu5XaM8/6Vnofas95NKCat:/SZEXfEa7RE6wrF1zFxJSafHSzs=', 'Admin', 'Admin', 'RUE', 'NUM',, 'VILLE', 1, 'image', 'Administrator'),
+           ('director', '1000:lAwhECG/vjIu5XaM8/6Vnofas95NKCat:/SZEXfEa7RE6wrF1zFxJSafHSzs=', 'Directeur', 'Directeur', 'RUE', 'NUM', 2, 'VILLE', 1, 'image', 'Director'),
+           ('employee', '1000:lAwhECG/vjIu5XaM8/6Vnofas95NKCat:/SZEXfEa7RE6wrF1zFxJSafHSzs=', 'Employé', 'Employé', 'RUE', 'NUM', 3, 'VILLE', 1, 'image', 'Employee');

@@ -5,7 +5,7 @@ using Infrastructure.EF;
 
 namespace Application.UseCases.Accounts;
 
-public class UseCaseDeleteAccount : IUseCaseWriter<Boolean, String>
+public class UseCaseDeleteAccount : IUseCaseWriter<Boolean, int>
 {
     private readonly IAccountRepository _accountRepository;
 
@@ -14,9 +14,9 @@ public class UseCaseDeleteAccount : IUseCaseWriter<Boolean, String>
         _accountRepository = accountRepository;
     }
 
-    public Boolean Execute(string email)
+    public Boolean Execute(int id)
     {
-        var account = _accountRepository.FetchByEmail(email);
+        var account = _accountRepository.FetchById(id);
         return _accountRepository.Delete(account);
     }
 }

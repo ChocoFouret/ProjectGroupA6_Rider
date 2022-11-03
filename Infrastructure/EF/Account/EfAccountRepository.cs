@@ -99,7 +99,7 @@ public class EfAccountRepository : IAccountRepository
         if (account == null)
             throw new KeyNotFoundException($"Account with {email} has not been found");
 
-        return EncryptPassword.ValidatePassword(password, account.PasswordHash);
+        return EncryptPassword.ValidatePassword(password, account.Password);
     }
     
     

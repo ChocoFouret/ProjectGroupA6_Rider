@@ -33,9 +33,9 @@ public class PlanitContext : DbContext
             entity.HasKey(arg => arg.Id); // Primary key
             entity.Property(arg => arg.Id).HasColumnName("idAccount"); 
             entity.Property(arg => arg.Email).HasColumnName("email"); 
-            entity.Property(arg => arg.PasswordHash).HasColumnName("passwordHash"); 
-            entity.Property(arg => arg.FirstName).HasColumnName("lastName");
-            entity.Property(arg => arg.LastName).HasColumnName("firstName");
+            entity.Property(arg => arg.Password).HasColumnName("password"); 
+            entity.Property(arg => arg.FirstName).HasColumnName("firstName");
+            entity.Property(arg => arg.LastName).HasColumnName("lastName");
             entity.Property(arg => arg.Street).HasColumnName("street");
             entity.Property(arg => arg.Number).HasColumnName("number");
             entity.Property(arg => arg.PostCode).HasColumnName("postCode");
