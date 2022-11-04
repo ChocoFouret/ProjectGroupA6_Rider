@@ -14,6 +14,7 @@ public class UseCaseUpdateAccount : IUseCaseWriter<Boolean, DtoInputUpdateAccoun
         _accountRepository = accountRepository;
     }
 
+    // Call the method into EfAccountRepesitory
     public Boolean Execute(DtoInputUpdateAccount input)
     {
         var account = _accountRepository.FetchById(input.Id);

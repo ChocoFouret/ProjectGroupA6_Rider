@@ -14,6 +14,7 @@ public class UseCaseCreateAccount : IUseCaseWriter<DtoOutputAccount, DtoInputCre
         _accountRepository = accountRepository;
     }
 
+    // Call the method into EfAccountRepesitory
     public DtoOutputAccount Execute(DtoInputCreateAccount input)
     {
         var account = _accountRepository.FetchByEmail(input.account.Email);

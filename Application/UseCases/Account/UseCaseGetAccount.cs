@@ -14,6 +14,7 @@ public class UseCaseGetAccount : IUseCaseParameterizedQuery<Account, string>
         _accountRepository = accountRepository;
     }
 
+    // Call the method into EfAccountRepesitory
     public Account? Execute(string email)
     {
         return _accountRepository.GetAccount(email);

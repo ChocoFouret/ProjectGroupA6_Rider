@@ -14,6 +14,7 @@ public class UseCaseLoginAccount : IUseCaseWriter<Boolean, DtoInputLoginAccount>
         _accountRepository = accountRepository;
     }
 
+    // Call the method into EfAccountRepesitory
     public Boolean Execute(DtoInputLoginAccount input)
     {
         return _accountRepository.Login(input.Email, input.Password);

@@ -49,6 +49,13 @@ public class AccountController : ControllerBase
         _config = configuration;
     }
 
+    /// <summary>
+    /// It returns a list of DtoOutputAccount objects, which are the result of the Execute() function of the
+    /// _useCaseFetchAllAccounts object
+    /// </summary>
+    /// <returns>
+    /// A list of DtoOutputAccount objects.
+    /// </returns>
     [HttpGet]
     [Route("/fetch/")]
     public IEnumerable<DtoOutputAccount> FetchAll()
@@ -56,6 +63,13 @@ public class AccountController : ControllerBase
         return _useCaseFetchAllAccounts.Execute();
     }
 
+    /// <summary>
+    /// It returns a DtoOutputAccount object if the id is found, otherwise it returns a 404 Not Found error
+    /// </summary>
+    /// <param name="id">int - This is the route parameter. It's a required parameter.</param>
+    /// <returns>
+    /// ActionResult<DtoOutputAccount>
+    /// </returns>
     [HttpGet]
     [Route("/fetch/{id:int}")]
     [ProducesResponseType(StatusCodes.Status200OK)]
@@ -72,6 +86,13 @@ public class AccountController : ControllerBase
         }
     }
 
+    /// <summary>
+    /// It takes an email address as a parameter, and returns a DTO object containing the account details
+    /// </summary>
+    /// <param name="email">The email of the account to fetch.</param>
+    /// <returns>
+    /// The action result is returning a DtoOutputAccount object.
+    /// </returns>
     [HttpGet]
     [Route("/fetch/{email}")]
     [ProducesResponseType(StatusCodes.Status200OK)]
@@ -88,6 +109,15 @@ public class AccountController : ControllerBase
         }
     }
 
+    /// <summary>
+    /// The function is called when a POST request is made to the /create route. It takes a DtoInputCreateAccount object as
+    /// a parameter, and returns a DtoOutputAccount object
+    /// </summary>
+    /// <param name="DtoInputCreateAccount">The input data transfer object (DTO) that contains the data that the user will
+    /// send to the API.</param>
+    /// <returns>
+    /// The action result of the create method is being returned.
+    /// </returns>
     [Authorize(Policy = "all")]
     [HttpPost]
     [Route("/create")]
@@ -108,6 +138,13 @@ public class AccountController : ControllerBase
         );
     }
 
+    /// <summary>
+    /// The function takes in a DTO (Data Transfer Object) and returns a boolean
+    /// </summary>
+    /// <param name="id">The id of the account to be deleted</param>
+    /// <returns>
+    /// The return type is ActionResult<Boolean>
+    /// </returns>
     [HttpDelete]
     [Route("/delete/{id:int}")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
@@ -117,6 +154,13 @@ public class AccountController : ControllerBase
         return _useCaseDeleteAccount.Execute(id);
     }
 
+    /// <summary>
+    /// The function takes a DTO as input, calls the use case, and returns the result of the use case
+    /// </summary>
+    /// <param name="DtoInputUpdateAccount">This is the input parameter for the use case.</param>
+    /// <returns>
+    /// A boolean value.
+    /// </returns>
     [HttpPut]
     [Route("/update")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
@@ -126,6 +170,14 @@ public class AccountController : ControllerBase
         return _useCaseUpdateAccount.Execute(dto);
     }
     
+    /// <summary>
+    /// It takes a DTO as input, checks if the user exists, and if so, it generates a JWT token and returns it as a cookie
+    /// </summary>
+    /// <param name="DtoInputLoginAccount">This is the input data transfer object that will be used to pass the data to the
+    /// use case.</param>
+    /// <returns>
+    /// A cookie with the name "session" and the value of the generated token.
+    /// </returns>
     [HttpPost]
     [Route("/login")]
     [ProducesResponseType(StatusCodes.Status200OK)]
@@ -152,6 +204,15 @@ public class AccountController : ControllerBase
         return Unauthorized();
     }
     
+    /// <summary>
+    /// It returns a JSON object with three boolean values, one for each role
+    /// </summary>
+    /// <returns>
+    /// A JSON object with the following properties:
+    /// - logged: true if the user is logged in, false otherwise
+    /// - director: true if the user is a director or an administrator, false otherwise
+    /// - admin: true if the user is an administrator, false otherwise
+    /// </returns>
     [Authorize]
     [HttpGet]
     [Route("/is/status")]

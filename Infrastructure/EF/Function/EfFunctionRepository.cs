@@ -12,12 +12,25 @@ public class EfFunctionRepository : IFunctionRepository
         _planitContextProvider = planitContextProvider;
     }
 
+    /// <summary>
+    /// > This function fetches all the functions from the database and returns them as a list
+    /// </summary>
+    /// <returns>
+    /// A list of all the functions in the database.
+    /// </returns>
     public IEnumerable<Function> FetchAll()
     {
         using var context = _planitContextProvider.NewContext();
         return context.Functions.ToList<Function>();
     }
 
+    /// <summary>
+    /// > This function creates a new function with the given title
+    /// </summary>
+    /// <param name="title">The title of the function.</param>
+    /// <returns>
+    /// A new function object
+    /// </returns>
     public Function Create(string title)
     {
         using var context = _planitContextProvider.NewContext();
@@ -31,6 +44,13 @@ public class EfFunctionRepository : IFunctionRepository
         return function;
     }
     
+    /// <summary>
+    /// > This function fetches a function by its title
+    /// </summary>
+    /// <param name="title">The title of the function you want to fetch.</param>
+    /// <returns>
+    /// A function with the title that was passed in.
+    /// </returns>
     public Function FetchByTitle(string title)
     {
         using var context = _planitContextProvider.NewContext();

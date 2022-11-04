@@ -14,6 +14,8 @@ public class UseCaseDeleteAccount : IUseCaseWriter<Boolean, int>
         _accountRepository = accountRepository;
     }
 
+    
+    // Call the method into EfAccountRepesitory
     public Boolean Execute(int id)
     {
         var account = _accountRepository.FetchById(id);

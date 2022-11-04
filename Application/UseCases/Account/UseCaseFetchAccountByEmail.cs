@@ -14,6 +14,7 @@ public class UseCaseFetchAccountByEmail : IUseCaseParameterizedQuery<DtoOutputAc
         _accountRepository = accountRepository;
     }
 
+    // Call the method into EfAccountRepesitory
     public DtoOutputAccount Execute(string email)
     {
         var dbAccount = _accountRepository.FetchByEmail(email);

@@ -14,6 +14,7 @@ public class UseCaseFetchAccountById : IUseCaseParameterizedQuery<DtoOutputAccou
         _accountRepository = accountRepository;
     }
 
+    // Call the method into EfAccountRepesitory
     public DtoOutputAccount Execute(int id)
     {
         var dbAccount = _accountRepository.FetchById(id);

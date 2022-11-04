@@ -14,6 +14,7 @@ public class UseCaseFetchAllAccounts : IUseCaseQuery<IEnumerable<DtoOutputAccoun
         _accountRepository = accountRepository;
     }
 
+    // Call the method into EfAccountRepesitory
     public IEnumerable<DtoOutputAccount> Execute()
     {
         var dbAccounts = _accountRepository.FetchAll();
