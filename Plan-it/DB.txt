@@ -73,5 +73,6 @@ INSERT INTO Accounts
            ('user1@gmail.com', '1000:lAwhECG/vjIu5XaM8/6Vnofas95NKCat:/SZEXfEa7RE6wrF1zFxJSafHSzs=', 'Nom 1', 'Prenom 1', 'RUE 1', 'NUM 1', 1, 'VILLE 1', 1, 'image', 'Employee'),
 		   ('user2@gmail.com', '1000:lAwhECG/vjIu5XaM8/6Vnofas95NKCat:/SZEXfEa7RE6wrF1zFxJSafHSzs=', 'Nom 2', 'Prenom 2', 'RUE 2', 'NUM 2', 2, 'VILLE 2', 1, 'image', 'Employee'),
 		   ('user3@outlook.fr', '1000:lAwhECG/vjIu5XaM8/6Vnofas95NKCat:/SZEXfEa7RE6wrF1zFxJSafHSzs=', 'Nom 3', 'Prenom 3', 'RUE 3', 'NUM 3', 3, 'VILLE 3', 1, 'image', 'Employee'),
+           ('admin', '1000:lAwhECG/vjIu5XaM8/6Vnofas95NKCat:/SZEXfEa7RE6wrF1zFxJSafHSzs=', 'admin', 'admin', 'RUE', 'NUM', 2, 'VILLE', 1, 'image', 'Administrator'),
            ('director', '1000:lAwhECG/vjIu5XaM8/6Vnofas95NKCat:/SZEXfEa7RE6wrF1zFxJSafHSzs=', 'Directeur', 'Directeur', 'RUE', 'NUM', 2, 'VILLE', 1, 'image', 'Director'),
            ('employee', '1000:lAwhECG/vjIu5XaM8/6Vnofas95NKCat:/SZEXfEa7RE6wrF1zFxJSafHSzs=', 'Employé', 'Employé', 'RUE', 'NUM', 3, 'VILLE', 1, 'image', 'Employee');
