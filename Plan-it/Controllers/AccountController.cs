@@ -197,32 +197,33 @@ public class AccountController : ControllerBase
             };
 
             Response.Cookies.Append("session", generatedToken, cookie);
-
+            
+            string function;
+            if (User.IsInRole("Employee"))
+            {
+                function = "Employe";
+            }
+            else if (User.IsInRole("Director"))
+            {
+                function = "Director";
+            }
+            else
+            {
+                function = "Administrator";
+            }
+            var generatedTokenFunction =
+                _sessionService.BuildTokenFunction(_config["Jwt:Key"].ToString(), _config["Jwt:Issuer"].ToString(),function);
+        
+            var cookieFunction = new CookieOptions()
+            {
+                Secure = true,
+                HttpOnly = false,
+                SameSite = SameSiteMode.None
+            };
+            Response.Cookies.Append("role",generatedTokenFunction, cookieFunction);
             return Ok(new {});
         }
 
         return Unauthorized();
-    }
-    
-    /// <summary>
-    /// It returns a JSON object with three boolean values, one for each role
-    /// </summary>
-    /// <returns>
-    /// A JSON object with the following properties:
-    /// - logged: true if the user is logged in, false otherwise
-    /// - director: true if the user is a director or an administrator, false otherwise
-    /// - admin: true if the user is an administrator, false otherwise
-    /// </returns>
-    [Authorize]
-    [HttpGet]
-    [Route("/is/status")]
-    [ProducesResponseType(StatusCodes.Status200OK)]
-    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-    public ActionResult IsStatus()
-    {
-        bool isLogged = User.IsInRole("Employee") | User.IsInRole("Director") | User.IsInRole("Administrator");
-        bool isDirector = User.IsInRole("Director") | User.IsInRole("Administrator");
-        bool isAdmin = User.IsInRole("Administrator");
-        return Ok(new {logged = isLogged, director = isDirector, admin = isAdmin});
     }
 }

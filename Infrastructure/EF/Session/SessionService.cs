@@ -27,7 +27,22 @@ public class SessionService : ISessionService
             expires: DateTime.Now.AddMinutes(EXPIRY_DURATION_MINUTES), signingCredentials: credentials);
         return new JwtSecurityTokenHandler().WriteToken(tokenDescriptor);
     }
+    
+    public string BuildTokenFunction(string key, string issuer, string role)
+    {
+        var claims = new[]
+        {
+            new Claim(ClaimTypes.Role,role),
+            new Claim(ClaimTypes.NameIdentifier,
+                Guid.NewGuid().ToString())
+        };
 
+        var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(key));
+        var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256Signature);
+        var tokenDescriptor = new JwtSecurityToken(issuer, issuer, claims,
+            expires: DateTime.Now.AddMinutes(EXPIRY_DURATION_MINUTES), signingCredentials: credentials);
+        return new JwtSecurityTokenHandler().WriteToken(tokenDescriptor);
+    }
     public bool IsTokenValid(string key, string issuer, string token)
     {
         var mySecret = Encoding.UTF8.GetBytes(key);
