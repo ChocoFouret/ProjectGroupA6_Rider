@@ -182,12 +182,13 @@ public class AccountController : ControllerBase
     [Route("/login")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-    public ActionResult Login(DtoInputLoginAccount dto)
+    public IActionResult Login(DtoInputLoginAccount dto)
     {
         if (_useCaseLoginAccount.Execute(dto))
         {
+            Account account = _useCaseGetAccount.Execute(dto.Email);
             var generatedToken =
-                _sessionService.BuildToken(_config["Jwt:Key"].ToString(), _config["Jwt:Issuer"].ToString(), _useCaseGetAccount.Execute(dto.Email));
+                _sessionService.BuildToken(_config["Jwt:Key"].ToString(), _config["Jwt:Issuer"].ToString(), account);
             
             var cookie = new CookieOptions()
             {
@@ -198,21 +199,8 @@ public class AccountController : ControllerBase
 
             Response.Cookies.Append("session", generatedToken, cookie);
             
-            string function;
-            if (User.IsInRole("Employee"))
-            {
-                function = "Employe";
-            }
-            else if (User.IsInRole("Director"))
-            {
-                function = "Director";
-            }
-            else
-            {
-                function = "Administrator";
-            }
             var generatedTokenFunction =
-                _sessionService.BuildTokenFunction(_config["Jwt:Key"].ToString(), _config["Jwt:Issuer"].ToString(),function);
+                _sessionService.BuildTokenFunction(_config["Jwt:Key"].ToString(), _config["Jwt:Issuer"].ToString(),account.Function);
         
             var cookieFunction = new CookieOptions()
             {
@@ -221,7 +209,7 @@ public class AccountController : ControllerBase
                 SameSite = SameSiteMode.None
             };
             Response.Cookies.Append("role",generatedTokenFunction, cookieFunction);
-            return Ok(new {});
+            return Ok(new {A = account.Function});
         }
 
         return Unauthorized();
