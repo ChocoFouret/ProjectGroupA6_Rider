@@ -1,10 +1,8 @@
 -- DBCC CHECKIDENT (table, RESEED, 0)
+-- USE gamer;
 
-USE gamer;
-
-DROP DATABASE GroupeA6;
+DROP DATABASE IF EXISTS GroupeA6;
 CREATE DATABASE GroupeA6;
-
 USE GroupeA6;
 
 CREATE TABLE Functions
@@ -61,7 +59,7 @@ CREATE TABLE Absents
 )
 
 INSERT INTO dbo.Functions(title)
-	VALUES 
+	VALUES
 	('Employee'),
 	('Director'),
 	('Administrator');
@@ -70,9 +68,10 @@ INSERT INTO dbo.Functions(title)
 INSERT INTO Accounts
            (email, password, lastName, firstName, street, number, postCode, city, isChief, pictureURL, title)
      VALUES
-           ('user1@gmail.com', '1000:lAwhECG/vjIu5XaM8/6Vnofas95NKCat:/SZEXfEa7RE6wrF1zFxJSafHSzs=', 'Nom 1', 'Prenom 1', 'RUE 1', 'NUM 1', 1, 'VILLE 1', 1, 'image', 'Employee'),
-		   ('user2@gmail.com', '1000:lAwhECG/vjIu5XaM8/6Vnofas95NKCat:/SZEXfEa7RE6wrF1zFxJSafHSzs=', 'Nom 2', 'Prenom 2', 'RUE 2', 'NUM 2', 2, 'VILLE 2', 1, 'image', 'Employee'),
-		   ('user3@outlook.fr', '1000:lAwhECG/vjIu5XaM8/6Vnofas95NKCat:/SZEXfEa7RE6wrF1zFxJSafHSzs=', 'Nom 3', 'Prenom 3', 'RUE 3', 'NUM 3', 3, 'VILLE 3', 1, 'image', 'Employee'),
-           ('admin', '1000:lAwhECG/vjIu5XaM8/6Vnofas95NKCat:/SZEXfEa7RE6wrF1zFxJSafHSzs=', 'admin', 'admin', 'RUE', 'NUM', 2, 'VILLE', 1, 'image', 'Administrator'),
-           ('director', '1000:lAwhECG/vjIu5XaM8/6Vnofas95NKCat:/SZEXfEa7RE6wrF1zFxJSafHSzs=', 'Directeur', 'Directeur', 'RUE', 'NUM', 2, 'VILLE', 1, 'image', 'Director'),
-           ('employee', '1000:lAwhECG/vjIu5XaM8/6Vnofas95NKCat:/SZEXfEa7RE6wrF1zFxJSafHSzs=', 'Employé', 'Employé', 'RUE', 'NUM', 3, 'VILLE', 1, 'image', 'Employee');
+           ('danazaret@admin.planit.be', '1000:lAwhECG/vjIu5XaM8/6Vnofas95NKCat:/SZEXfEa7RE6wrF1zFxJSafHSzs=', 'Da Nazaret', 'Nicolas', 'RUE 1', 'NUM 1', 1, 'VILLE 1', 1, 'image', 'Administrator'),
+		   ('bouhmadi@admin.planit.be', '1000:lAwhECG/vjIu5XaM8/6Vnofas95NKCat:/SZEXfEa7RE6wrF1zFxJSafHSzs=', 'Bouhmadi', 'Shaïma', 'RUE 2', 'NUM 2', 2, 'VILLE 2', 1, 'image', 'Administrator'),
+		   ('fouret@admin.planit.be', '1000:lAwhECG/vjIu5XaM8/6Vnofas95NKCat:/SZEXfEa7RE6wrF1zFxJSafHSzs=', 'Fouret', 'Jason', 'RUE 3', 'NUM 3', 3, 'VILLE 3', 1, 'image', 'Administrator'),
+		   ('tchani@admin.planit.be', '1000:lAwhECG/vjIu5XaM8/6Vnofas95NKCat:/SZEXfEa7RE6wrF1zFxJSafHSzs=', 'Tchani', 'Ghislain', 'RUE 4', 'NUM 4', 4, 'VILLE 4', 1, 'image', 'Administrator'),
+           ('godemont@director.planit.be', '1000:lAwhECG/vjIu5XaM8/6Vnofas95NKCat:/SZEXfEa7RE6wrF1zFxJSafHSzs=', 'Flavian', 'Godemont', 'RUE', 'NUM', 2, 'VILLE', 1, 'image', 'Director'),
+           ('livio@employee.planit.be', '1000:lAwhECG/vjIu5XaM8/6Vnofas95NKCat:/SZEXfEa7RE6wrF1zFxJSafHSzs=', 'Florian', 'Decout', 'RUE', 'NUM', 3, 'VILLE', 1, 'image', 'Employee'),
+           ('florian@employee.planit.be', '1000:lAwhECG/vjIu5XaM8/6Vnofas95NKCat:/SZEXfEa7RE6wrF1zFxJSafHSzs=', 'Livio', 'Rubino', 'RUE', 'NUM', 3, 'VILLE', 1, 'image', 'Employee');

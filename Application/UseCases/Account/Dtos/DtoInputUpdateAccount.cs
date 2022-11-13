@@ -6,6 +6,8 @@ namespace Application.UseCases.Accounts.Dtos;
 public class DtoInputUpdateAccount
 {
     // public Account account { get; set; }
+    
+    // To add information to be updated, also add in UseCaseUpdateAccount.cs
     public int Id { get; set; }
     public string Email { get; set; }
     public string? Password { get; set; }

@@ -19,8 +19,9 @@ public class PlanitContext : DbContext
     {
         if (!optionsBuilder.IsConfigured)
         {
-            //optionsBuilder.UseSqlServer(_connectionStringProvider.GetConnectionString("DbWindows"));
-            optionsBuilder.UseSqlServer(_connectionStringProvider.GetConnectionString("DbLinuxMac"));
+            // optionsBuilder.UseSqlServer(_connectionStringProvider.GetConnectionString("DbWindows"));
+            // optionsBuilder.UseSqlServer(_connectionStringProvider.GetConnectionString("DbLinuxMac"));
+            optionsBuilder.UseSqlServer(_connectionStringProvider.GetConnectionString("DbRemote"));
         }
     }
 
