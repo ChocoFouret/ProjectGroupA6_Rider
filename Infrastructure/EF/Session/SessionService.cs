@@ -28,11 +28,13 @@ public class SessionService : ISessionService
         return new JwtSecurityTokenHandler().WriteToken(tokenDescriptor);
     }
     
-    public string BuildTokenFunction(string key, string issuer, string role)
+//    public string BuildTokenFunction(string key, string issuer, string role)
+    public string BuildTokenPublic(string key, string issuer, Account account)
     {
         var claims = new[]
         {
-            new Claim(ClaimTypes.Role,role),
+            new Claim(ClaimTypes.Email, account.Email),
+            new Claim(ClaimTypes.Role, account.Function),
             new Claim(ClaimTypes.NameIdentifier,
                 Guid.NewGuid().ToString())
         };
@@ -43,6 +45,7 @@ public class SessionService : ISessionService
             expires: DateTime.Now.AddMinutes(EXPIRY_DURATION_MINUTES), signingCredentials: credentials);
         return new JwtSecurityTokenHandler().WriteToken(tokenDescriptor);
     }
+    
     public bool IsTokenValid(string key, string issuer, string token)
     {
         var mySecret = Encoding.UTF8.GetBytes(key);

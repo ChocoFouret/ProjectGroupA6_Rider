@@ -57,8 +57,8 @@ public class EfAccountRepository : IAccountRepository
         var account = context.Accounts.FirstOrDefault(account => account.Email == email);
 
         return account;
-    } 
-    
+    }
+
     /// <summary>
     /// > This function returns an account object if the email exists in the database
     /// </summary>
@@ -73,7 +73,7 @@ public class EfAccountRepository : IAccountRepository
 
         return account;
     }
-    
+
     /// <summary>
     /// This function creates a new account in the database
     /// </summary>
@@ -127,7 +127,6 @@ public class EfAccountRepository : IAccountRepository
     public bool Delete(Account account)
     {
         using var context = _planitContextProvider.NewContext();
-
         try
         {
             context.Accounts.Remove(account);

@@ -26,6 +26,7 @@ builder.Services.AddScoped<IFunctionRepository, EfFunctionRepository>();
 builder.Services.AddScoped<UseCaseLoginAccount>();
 builder.Services.AddScoped<UseCaseCreateAccount>();
 builder.Services.AddScoped<UseCaseUpdateAccount>();
+builder.Services.AddScoped<UseCaseUpdatePasswordAccount>();
 builder.Services.AddScoped<UseCaseDeleteAccount>();
 builder.Services.AddScoped<UseCaseFetchAllAccounts>();
 builder.Services.AddScoped<UseCaseFetchAccountById>();

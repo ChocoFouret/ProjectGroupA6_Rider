@@ -14,6 +14,7 @@ public class AccountController : ControllerBase
     private readonly UseCaseLoginAccount _useCaseLoginAccount;
     private readonly UseCaseCreateAccount _useCaseCreateAccount;
     private readonly UseCaseUpdateAccount _useCaseUpdateAccount;
+    private readonly UseCaseUpdatePasswordAccount _useCaseUpdatePasswordAccount;
     private readonly UseCaseDeleteAccount _useCaseDeleteAccount;
     private readonly UseCaseFetchAllAccounts _useCaseFetchAllAccounts;
     private readonly UseCaseFetchAccountById _useCaseFetchAccountById;
@@ -27,6 +28,7 @@ public class AccountController : ControllerBase
         UseCaseLoginAccount useCaseLoginAccount,
         UseCaseCreateAccount useCaseCreateAccount,
         UseCaseUpdateAccount useCaseUpdateAccount,
+        UseCaseUpdatePasswordAccount useCaseUpdatePasswordAccount,
         UseCaseDeleteAccount useCaseDeleteAccount,
         UseCaseFetchAllAccounts useCaseFetchAllAccounts,
         UseCaseFetchAccountById useCaseFetchAccountById,
@@ -39,6 +41,7 @@ public class AccountController : ControllerBase
         _useCaseLoginAccount = useCaseLoginAccount;
         _useCaseCreateAccount = useCaseCreateAccount;
         _useCaseUpdateAccount = useCaseUpdateAccount;
+        _useCaseUpdatePasswordAccount = useCaseUpdatePasswordAccount;
         _useCaseDeleteAccount = useCaseDeleteAccount;
         _useCaseFetchAllAccounts = useCaseFetchAllAccounts;
         _useCaseFetchAccountById = useCaseFetchAccountById;
@@ -170,6 +173,15 @@ public class AccountController : ControllerBase
         return _useCaseUpdateAccount.Execute(dto);
     }
     
+    [HttpPut]
+    [Route("/update/password")]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public IActionResult UpdatePassword(DtoInputUpdatePasswordAccount dto)
+    {
+        return Ok(new {Password = _useCaseUpdatePasswordAccount.Execute(dto)});
+    }
+    
     /// <summary>
     /// It takes a DTO as input, checks if the user exists, and if so, it generates a JWT token and returns it as a cookie
     /// </summary>
@@ -196,20 +208,18 @@ public class AccountController : ControllerBase
                 HttpOnly = true,
                 SameSite = SameSiteMode.None
             };
-
             Response.Cookies.Append("session", generatedToken, cookie);
-            
-            var generatedTokenFunction =
-                _sessionService.BuildTokenFunction(_config["Jwt:Key"].ToString(), _config["Jwt:Issuer"].ToString(),account.Function);
-        
-            var cookieFunction = new CookieOptions()
+
+            var generatedTokenPublic =
+                _sessionService.BuildTokenPublic(_config["Jwt:Key"].ToString(), _config["Jwt:Issuer"].ToString(), account);
+            var cookiePublic = new CookieOptions()
             {
                 Secure = true,
                 HttpOnly = false,
                 SameSite = SameSiteMode.None
             };
-            Response.Cookies.Append("role",generatedTokenFunction, cookieFunction);
-            return Ok(new {A = account.Function});
+            Response.Cookies.Append("public",generatedTokenPublic, cookiePublic);
+            return Ok(new {});
         }
 
         return Unauthorized();
