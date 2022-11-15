@@ -21,7 +21,6 @@ CREATE TABLE Accounts
     number VARCHAR(10) NOT NULL,
     postCode INT NOT NULL,
 	city VARCHAR(30) NOT NULL,
-    isChief bit NOT NULL,
     pictureURL VARCHAR(100) NOT NULL,
     title VARCHAR(50) NOT NULL,
     FOREIGN KEY(title) REFERENCES Functions(title)
@@ -30,7 +29,7 @@ CREATE TABLE Accounts
 CREATE TABLE Schedules
 (
     idSchedule   INT IDENTITY NOT NULL PRIMARY KEY,
-    DATESchedule DATE         NOT NULL,
+    dateSchedule DATE         NOT NULL,
     startHour    TIME         NOT NULL,
     endHour      TIME         NOT NULL,
     breakTime    TIME         NOT NULL,
@@ -41,7 +40,7 @@ CREATE TABLE Schedules
 CREATE TABLE Holidays
 (
     idHolidays   INT IDENTITY NOT NULL PRIMARY KEY,
-    DATEHolidays DATE         NOT NULL,
+    dateolidays DATE         NOT NULL,
     isAccepted   BIT          NOT NULL,
     comments     VARCHAR(200),
     idAccount INT NOT NULL,
@@ -51,7 +50,7 @@ CREATE TABLE Holidays
 CREATE TABLE Absents
 (
     idAbsent INT IDENTITY NOT NULL PRIMARY KEY,
-    DATEAbsent DATE NOT NULL,
+    dateAbsent DATE NOT NULL,
     isJustified BIT NOT NULL,
     comments VARCHAR(200) NOT NULL,
     idAccount INT NOT NULL,
@@ -68,10 +67,10 @@ INSERT INTO dbo.Functions(title)
 INSERT INTO Accounts
            (email, password, lastName, firstName, street, number, postCode, city, isChief, pictureURL, title)
      VALUES
-           ('danazaret@admin.planit.be', '1000:lAwhECG/vjIu5XaM8/6Vnofas95NKCat:/SZEXfEa7RE6wrF1zFxJSafHSzs=', 'Da Nazaret', 'Nicolas', 'RUE 1', 'NUM 1', 1, 'VILLE 1', 1, 'image', 'Administrator'),
-		   ('bouhmadi@admin.planit.be', '1000:lAwhECG/vjIu5XaM8/6Vnofas95NKCat:/SZEXfEa7RE6wrF1zFxJSafHSzs=', 'Bouhmadi', 'Shaïma', 'RUE 2', 'NUM 2', 2, 'VILLE 2', 1, 'image', 'Administrator'),
-		   ('fouret@admin.planit.be', '1000:lAwhECG/vjIu5XaM8/6Vnofas95NKCat:/SZEXfEa7RE6wrF1zFxJSafHSzs=', 'Fouret', 'Jason', 'RUE 3', 'NUM 3', 3, 'VILLE 3', 1, 'image', 'Administrator'),
-		   ('tchani@admin.planit.be', '1000:lAwhECG/vjIu5XaM8/6Vnofas95NKCat:/SZEXfEa7RE6wrF1zFxJSafHSzs=', 'Tchani', 'Ghislain', 'RUE 4', 'NUM 4', 4, 'VILLE 4', 1, 'image', 'Administrator'),
-           ('godemont@director.planit.be', '1000:lAwhECG/vjIu5XaM8/6Vnofas95NKCat:/SZEXfEa7RE6wrF1zFxJSafHSzs=', 'Flavian', 'Godemont', 'RUE', 'NUM', 2, 'VILLE', 1, 'image', 'Director'),
-           ('livio@employee.planit.be', '1000:lAwhECG/vjIu5XaM8/6Vnofas95NKCat:/SZEXfEa7RE6wrF1zFxJSafHSzs=', 'Florian', 'Decout', 'RUE', 'NUM', 3, 'VILLE', 1, 'image', 'Employee'),
-           ('florian@employee.planit.be', '1000:lAwhECG/vjIu5XaM8/6Vnofas95NKCat:/SZEXfEa7RE6wrF1zFxJSafHSzs=', 'Livio', 'Rubino', 'RUE', 'NUM', 3, 'VILLE', 1, 'image', 'Employee');
+           ('danazaret@admin.planit.be', '1000:lAwhECG/vjIu5XaM8/6Vnofas95NKCat:/SZEXfEa7RE6wrF1zFxJSafHSzs=', 'Da Nazaret', 'Nicolas', 'RUE 1', 'NUM 1', 1, 'VILLE 1', 'image', 'Administrator'),
+		   ('bouhmadi@admin.planit.be', '1000:lAwhECG/vjIu5XaM8/6Vnofas95NKCat:/SZEXfEa7RE6wrF1zFxJSafHSzs=', 'Bouhmadi', 'Shaïma', 'RUE 2', 'NUM 2', 2, 'VILLE 2', 'image', 'Administrator'),
+		   ('fouret@admin.planit.be', '1000:lAwhECG/vjIu5XaM8/6Vnofas95NKCat:/SZEXfEa7RE6wrF1zFxJSafHSzs=', 'Fouret', 'Jason', 'RUE 3', 'NUM 3', 3, 'VILLE 3', 'image', 'Administrator'),
+		   ('tchani@admin.planit.be', '1000:lAwhECG/vjIu5XaM8/6Vnofas95NKCat:/SZEXfEa7RE6wrF1zFxJSafHSzs=', 'Tchani', 'Ghislain', 'RUE 4', 'NUM 4', 4, 'VILLE 4', 'image', 'Administrator'),
+           ('godemont@director.planit.be', '1000:lAwhECG/vjIu5XaM8/6Vnofas95NKCat:/SZEXfEa7RE6wrF1zFxJSafHSzs=', 'Flavian', 'Godemont', 'RUE', 'NUM', 2, 'VILLE', 'image', 'Director'),
+           ('livio@employee.planit.be', '1000:lAwhECG/vjIu5XaM8/6Vnofas95NKCat:/SZEXfEa7RE6wrF1zFxJSafHSzs=', 'Florian', 'Decout', 'RUE', 'NUM', 3, 'VILLE', 'image', 'Employee'),
+           ('florian@employee.planit.be', '1000:lAwhECG/vjIu5XaM8/6Vnofas95NKCat:/SZEXfEa7RE6wrF1zFxJSafHSzs=', 'Livio', 'Rubino', 'RUE', 'NUM', 3, 'VILLE', 'image', 'Employee');
