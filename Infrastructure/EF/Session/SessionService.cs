@@ -16,7 +16,7 @@ public class SessionService : ISessionService
         {
             new Claim(ClaimTypes.Email, account.Email),
             new Claim(ClaimTypes.Name, account.LastName),
-            new Claim(ClaimTypes.Role, account.Function),
+            new Claim(ClaimTypes.Role, account.IsAdmin.ToString()),
             new Claim(ClaimTypes.NameIdentifier,
                 Guid.NewGuid().ToString())
         };
@@ -34,7 +34,7 @@ public class SessionService : ISessionService
         var claims = new[]
         {
             new Claim(ClaimTypes.Email, account.Email),
-            new Claim(ClaimTypes.Role, account.Function),
+            new Claim(ClaimTypes.Role, account.IsAdmin.ToString()),
             new Claim(ClaimTypes.NameIdentifier,
                 Guid.NewGuid().ToString())
         };

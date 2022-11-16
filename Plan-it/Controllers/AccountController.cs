@@ -128,8 +128,6 @@ public class AccountController : ControllerBase
     [ProducesResponseType(StatusCodes.Status409Conflict)]
     public ActionResult<DtoOutputAccount> Create(DtoInputCreateAccount dto)
     {
-        // Use for add new account easily
-        dto.account.Function = "Employee";
         var output = _useCaseCreateAccount.Execute(dto);
 
         if (output == null) return Conflict(new Account());

@@ -11,7 +11,6 @@ public class Account
     public string Number {get; set;}
     public int PostCode {get; set;}
     public string City {get; set;}
-    public bool IsChief {get; set;}
     public string PictureURL {get; set;}
-    public string Function { get; set; }
+    public bool IsAdmin { get; set; }
 }

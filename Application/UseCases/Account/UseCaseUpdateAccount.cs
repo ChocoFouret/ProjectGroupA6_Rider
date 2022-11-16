@@ -25,8 +25,7 @@ public class UseCaseUpdateAccount : IUseCaseWriter<Boolean, DtoInputUpdateAccoun
         account.Email = input.Email;
         // account.Password = EncryptPassword.HashPassword(input.Password);
 
-        account.Function = input.Function;
-        account.IsChief = input.IsChief;
+        account.IsAdmin = input.IsAdmin;
 
         account.Street = input.Street;
         account.Number = input.Number;

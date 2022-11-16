@@ -16,5 +16,5 @@ public class DtoOutputAccount
     public int PostCode { get; set; }
     public string City { get; set; }
     public string PictureURL { get; set; }
-    public string Function { get; set; }
+    public bool IsAdmin { get; set; }
 }
