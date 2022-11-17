@@ -36,7 +36,7 @@ public class EfAccountRepository : IAccountRepository
     public Account FetchById(int idAccount)
     {
         using var context = _planitContextProvider.NewContext();
-        var account = context.Accounts.FirstOrDefault(account => account.Id == idAccount);
+        var account = context.Accounts.FirstOrDefault(account => account.IdAccount == idAccount);
 
         if (account == null)
             throw new KeyNotFoundException($"Account with {idAccount} has not been found");

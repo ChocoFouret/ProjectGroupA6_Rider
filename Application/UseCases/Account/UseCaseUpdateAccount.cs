@@ -17,22 +17,18 @@ public class UseCaseUpdateAccount : IUseCaseWriter<Boolean, DtoInputUpdateAccoun
     // Call the method into EfAccountRepesitory
     public Boolean Execute(DtoInputUpdateAccount input)
     {
-        var account = _accountRepository.FetchById(input.Id);
+        var account = _accountRepository.FetchById(input.IdAccount);
 
         account.FirstName = input.FirstName;
         account.LastName = input.LastName;
 
         account.Email = input.Email;
         // account.Password = EncryptPassword.HashPassword(input.Password);
-
-        account.Function = input.Function;
-        account.IsChief = input.IsChief;
-
-        account.Street = input.Street;
-        account.Number = input.Number;
-        account.PostCode = input.PostCode;
-        account.City = input.City;
         
+        account.IsAdmin = input.IsAdmin;
+
+        account.IdAddress = input.IdAddress;
+
         account.PictureURL = input.PictureURL;
         
         return _accountRepository.Update(account);
