@@ -8,15 +8,13 @@ public class DtoInputUpdateAccount
     // public Account account { get; set; }
     
     // To add information to be updated, also add in UseCaseUpdateAccount.cs
-    public int Id { get; set; }
+    public int IdAccount { get; set; }
     public string Email { get; set; }
     public string LastName { get; set; }
     public string FirstName { get; set; }
-    public string Street {get; set;}
-    public string Number {get; set;}
-    public int PostCode {get; set;}
-    public string City {get; set;}
-    public string PictureURL {get; set;}
-    public bool IsAdmin { get; set; }
     
+    public int IdAddress { get; set; }
+    public bool IsAdmin {get; set;}
+    public string PictureURL {get; set;}
+
 }

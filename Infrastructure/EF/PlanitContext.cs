@@ -32,19 +32,15 @@ public class PlanitContext : DbContext
         modelBuilder.Entity<Account>(entity =>
         {
             entity.ToTable("Accounts"); // Accounts tables
-            entity.HasKey(arg => arg.Id); // Primary key
-            entity.Property(arg => arg.Id).HasColumnName("idAccount"); 
+            entity.HasKey(arg => arg.IdAccount); // Primary key
+            entity.Property(arg => arg.IdAccount).HasColumnName("idAccount"); 
             entity.Property(arg => arg.Email).HasColumnName("email"); 
             entity.Property(arg => arg.Password).HasColumnName("password"); 
             entity.Property(arg => arg.FirstName).HasColumnName("firstName");
             entity.Property(arg => arg.LastName).HasColumnName("lastName");
-            entity.Property(arg => arg.Street).HasColumnName("street");
-            entity.Property(arg => arg.Number).HasColumnName("number");
-            entity.Property(arg => arg.PostCode).HasColumnName("postCode");
-            entity.Property(arg => arg.City).HasColumnName("city");
-            entity.Property(arg => arg.IsChief).HasColumnName("isChief");
-            entity.Property(arg => arg.PictureURL).HasColumnName("pictureURL");
-            entity.Property(arg => arg.Function).HasColumnName("title");
+            entity.Property(arg => arg.IdAddress).HasColumnName("idAddress");
+            entity.Property(arg => arg.IsAdmin).HasColumnName("isAdmin");
+            entity.Property(arg => arg.PictureURL).HasColumnName("pictureUrl");
         });
         // Function table
         modelBuilder.Entity<Function>(entity =>

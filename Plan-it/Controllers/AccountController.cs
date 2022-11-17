@@ -11,6 +11,7 @@ namespace Plan_it.Controllers;
 [Route("api/v1/[controller]")]
 public class AccountController : ControllerBase
 {
+    private const string _route="api/v1/accounts/";
     private readonly UseCaseLoginAccount _useCaseLoginAccount;
     private readonly UseCaseCreateAccount _useCaseCreateAccount;
     private readonly UseCaseUpdateAccount _useCaseUpdateAccount;
@@ -60,7 +61,7 @@ public class AccountController : ControllerBase
     /// A list of DtoOutputAccount objects.
     /// </returns>
     [HttpGet]
-    [Route("/fetch/")]
+    [Route("fetch/")]
     public IEnumerable<DtoOutputAccount> FetchAll()
     {
         return _useCaseFetchAllAccounts.Execute();
@@ -74,7 +75,7 @@ public class AccountController : ControllerBase
     /// ActionResult<DtoOutputAccount>
     /// </returns>
     [HttpGet]
-    [Route("/fetch/{id:int}")]
+    [Route("fetch/{id:int}")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public ActionResult<DtoOutputAccount> FetchById(int id)
@@ -97,7 +98,7 @@ public class AccountController : ControllerBase
     /// The action result is returning a DtoOutputAccount object.
     /// </returns>
     [HttpGet]
-    [Route("/fetch/{email}")]
+    [Route("fetch/{email}")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public ActionResult<DtoOutputAccount> FetchByEmail(string email)
@@ -121,20 +122,22 @@ public class AccountController : ControllerBase
     /// <returns>
     /// The action result of the create method is being returned.
     /// </returns>
-    [Authorize(Policy = "all")]
+    // [Authorize(Policy = "all")]
     [HttpPost]
-    [Route("/create")]
+    [Route("create")]
     [ProducesResponseType(StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status409Conflict)]
     public ActionResult<DtoOutputAccount> Create(DtoInputCreateAccount dto)
     {
+        // Use for add new account easily
+        //dto.account.Function = "Employee";
         var output = _useCaseCreateAccount.Execute(dto);
 
         if (output == null) return Conflict(new Account());
 
         return CreatedAtAction(
             nameof(FetchById),
-            new { id = output.Id },
+            new { id = output.IdAccount },
             output
         );
     }
@@ -147,7 +150,7 @@ public class AccountController : ControllerBase
     /// The return type is ActionResult<Boolean>
     /// </returns>
     [HttpDelete]
-    [Route("/delete/{id:int}")]
+    [Route("delete/{id:int}")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public ActionResult<Boolean> Delete(int id)
@@ -163,7 +166,7 @@ public class AccountController : ControllerBase
     /// A boolean value.
     /// </returns>
     [HttpPut]
-    [Route("/update")]
+    [Route("update")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public ActionResult<Boolean> Update(DtoInputUpdateAccount dto)
@@ -172,7 +175,7 @@ public class AccountController : ControllerBase
     }
     
     [HttpPut]
-    [Route("/update/password")]
+    [Route("update/password")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public IActionResult UpdatePassword(DtoInputUpdatePasswordAccount dto)
@@ -189,7 +192,7 @@ public class AccountController : ControllerBase
     /// A cookie with the name "session" and the value of the generated token.
     /// </returns>
     [HttpPost]
-    [Route("/login")]
+    [Route("login")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     public IActionResult Login(DtoInputLoginAccount dto)
@@ -216,10 +219,9 @@ public class AccountController : ControllerBase
                 HttpOnly = false,
                 SameSite = SameSiteMode.None
             };
-            Response.Cookies.Append("public",generatedTokenPublic, cookiePublic);
+            Response.Cookies.Append("public", generatedTokenPublic, cookiePublic);
             return Ok(new {});
         }
-
         return Unauthorized();
     }
 }
