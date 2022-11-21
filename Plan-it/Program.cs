@@ -1,13 +1,17 @@
 using System.Text;
 using Application.UseCases.Accounts;
+using Application.UseCases.Companies;
+using Application.UseCases.Companies.Dtos;
 using Application.UseCases.Functions;
 using Domain;
 using Infrastructure;
 using Infrastructure.EF;
+using Infrastructure.EF.Companies;
 using JWT.Models;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using Plan_it;
+using Service.UseCases.Companies;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -21,6 +25,15 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddScoped<IConnectionStringProvider, ConnectionStringProvider>();
 builder.Services.AddScoped<IAccountRepository, EfAccountRepository>();
 builder.Services.AddScoped<IFunctionRepository, EfFunctionRepository>();
+builder.Services.AddScoped<ICompaniesRepository,EfCompaniesRepository>();
+
+//User cases Companies
+builder.Services.AddScoped<UseCaseFetchAllCompanies>();
+builder.Services.AddScoped<UseCaseCreateCompanies>();
+builder.Services.AddScoped<UseCaseDeleteCompanies>();
+builder.Services.AddScoped<UseCaseUpdateCompanies>();
+builder.Services.AddScoped<UseCaseFetchCompaniesByName>();
+builder.Services.AddScoped<UseCaseFetchCompaniesById>();
 
 // Use cases accounts
 builder.Services.AddScoped<UseCaseLoginAccount>();

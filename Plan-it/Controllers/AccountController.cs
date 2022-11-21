@@ -11,7 +11,6 @@ namespace Plan_it.Controllers;
 [Route("api/v1/[controller]")]
 public class AccountController : ControllerBase
 {
-    private const string _route="api/v1/accounts/";
     private readonly UseCaseLoginAccount _useCaseLoginAccount;
     private readonly UseCaseCreateAccount _useCaseCreateAccount;
     private readonly UseCaseUpdateAccount _useCaseUpdateAccount;
