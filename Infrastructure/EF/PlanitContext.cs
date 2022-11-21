@@ -9,6 +9,8 @@ public class PlanitContext : DbContext
 
     public DbSet<Account> Accounts { get; set; }
     public DbSet<Function> Functions { get; set; }
+    
+    public DbSet<Domain.Companies> Companies { get; set; }
 
     public PlanitContext(IConnectionStringProvider connectionStringProvider)
     {
@@ -48,6 +50,14 @@ public class PlanitContext : DbContext
             entity.ToTable("Functions"); // Accounts tables
             entity.HasKey(arg => arg.Title); // Primary key
             entity.Property(arg => arg.Title).HasColumnName("title");
+        });
+        modelBuilder.Entity<Domain.Companies>(entity =>
+        {
+            entity.ToTable("Companies"); // Accounts tables
+            entity.HasKey(arg => arg.IdCompanies); // Primary key
+            entity.Property(arg => arg.IdCompanies).HasColumnName("idCompanies");
+            entity.Property(arg => arg.CompaniesName).HasColumnName("companiesName");
+            entity.Property(arg => arg.DirectorEmail).HasColumnName("directorEmail");
         });
     }
 }
