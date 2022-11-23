@@ -27,10 +27,6 @@ public class UseCaseUpdateAccount : IUseCaseWriter<Boolean, DtoInputUpdateAccoun
         
         account.IsAdmin = input.IsAdmin;
 
-        account.IdAddress = input.IdAddress;
-
-        account.PictureURL = input.PictureURL;
-        
         return _accountRepository.Update(account);
     }
 }
