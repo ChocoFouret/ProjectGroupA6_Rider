@@ -4,6 +4,7 @@ using AutoMapper;
 using Domain;
 using Infrastructure.Ef.DbEntities;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using Service.UseCases.Has.Dtos;
 
 namespace Application;
 
@@ -34,6 +35,10 @@ public static class Mapper
             cfg.CreateMap<Companies, DtoOutputCompanies>();
             cfg.CreateMap<DbCompanies, DtoOutputCompanies>();
             cfg.CreateMap<DbCompanies, Companies>();
+
+            cfg.CreateMap<Has, DtoOutputHas>();
+            cfg.CreateMap<DbHas, DtoOutputHas>();
+            cfg.CreateMap<DbHas, Has>();
         });
         return new AutoMapper.Mapper(config);
     }

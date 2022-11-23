@@ -7,8 +7,6 @@ public class EfCompaniesRepository : ICompaniesRepository
 {
     private readonly PlanitContextProvider _planitContextProvider;
 
-    // For add method : Application -> UsesCases -> Account
-
     public EfCompaniesRepository(PlanitContextProvider planitContextProvider)
     {
         _planitContextProvider = planitContextProvider;
@@ -31,10 +29,11 @@ public class EfCompaniesRepository : ICompaniesRepository
             return companies;
     }
 
-    public Companies FetchByName(string name)
+    public IEnumerable<Companies> FetchByName(string name)
     {
         using var context = _planitContextProvider.NewContext();
-        var companies = context.Companies.FirstOrDefault(companies => companies.CompaniesName == name);
+        
+        var companies = context.Companies.Where(companies => companies.CompaniesName == name).ToList();
 
         return companies;
     }

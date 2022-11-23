@@ -11,6 +11,8 @@ public class PlanitContext : DbContext
     public DbSet<Function> Functions { get; set; }
     
     public DbSet<Domain.Companies> Companies { get; set; }
+    
+    public DbSet<Domain.Has> has { get; set; }
 
     public PlanitContext(IConnectionStringProvider connectionStringProvider)
     {
@@ -53,11 +55,20 @@ public class PlanitContext : DbContext
         });
         modelBuilder.Entity<Domain.Companies>(entity =>
         {
-            entity.ToTable("Companies"); // Accounts tables
+            entity.ToTable("Companies"); 
             entity.HasKey(arg => arg.IdCompanies); // Primary key
             entity.Property(arg => arg.IdCompanies).HasColumnName("idCompanies");
             entity.Property(arg => arg.CompaniesName).HasColumnName("companiesName");
             entity.Property(arg => arg.DirectorEmail).HasColumnName("directorEmail");
+        });
+        modelBuilder.Entity<Domain.Has>(entity =>
+        {
+            entity.ToTable("Has");
+            entity.HasKey(arg => arg.IdHas);
+            entity.Property(arg => arg.IdHas).HasColumnName("idHas");
+            entity.Property(arg => arg.IdAccount).HasColumnName("idAccount");
+            entity.Property(arg => arg.IdCompanies).HasColumnName("idCompanies");
+            entity.Property(arg => arg.IdFunctions).HasColumnName("idFunctions");
         });
     }
 }

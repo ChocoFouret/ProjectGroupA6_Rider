@@ -64,18 +64,9 @@ public class CompaniesController : Controller
     
     [HttpGet]
     [Route("fetch/{name}")]
-    [ProducesResponseType(StatusCodes.Status200OK)]
-    [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public ActionResult<DtoOutputCompanies> FetchByName(string name)
+    public IEnumerable<DtoOutputCompanies> FetchByName(string name)
     {
-        try
-        {
-            return _useCaseFetchCompaniesByName.Execute(name);
-        }
-        catch (KeyNotFoundException e)
-        {
-            return NotFound(e.Message);
-        }
+        return _useCaseFetchCompaniesByName.Execute(name);
     }
     
     [HttpPost]

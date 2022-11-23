@@ -13,9 +13,9 @@ public class UseCaseFetchCompaniesByName
         _companiesRepository = companiesRepository;
     }
     
-    public DtoOutputCompanies Execute(string name)
+    public IEnumerable<DtoOutputCompanies> Execute(string name)
     {
         var dbCompanies = _companiesRepository.FetchByName(name);
-        return Mapper.GetInstance().Map<DtoOutputCompanies>(dbCompanies);
+        return Mapper.GetInstance().Map<IEnumerable<DtoOutputCompanies>>(dbCompanies);
     }
 }

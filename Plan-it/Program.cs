@@ -3,15 +3,19 @@ using Application.UseCases.Accounts;
 using Application.UseCases.Companies;
 using Application.UseCases.Companies.Dtos;
 using Application.UseCases.Functions;
+using Application.UseCases.Has;
+using Application.UseCases.Has.Dtos;
 using Domain;
 using Infrastructure;
 using Infrastructure.EF;
 using Infrastructure.EF.Companies;
+using Infrastructure.EF.Has;
 using JWT.Models;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using Plan_it;
 using Service.UseCases.Companies;
+using Service.UseCases.Has;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -26,6 +30,16 @@ builder.Services.AddScoped<IConnectionStringProvider, ConnectionStringProvider>(
 builder.Services.AddScoped<IAccountRepository, EfAccountRepository>();
 builder.Services.AddScoped<IFunctionRepository, EfFunctionRepository>();
 builder.Services.AddScoped<ICompaniesRepository,EfCompaniesRepository>();
+builder.Services.AddScoped<IHasRepository, EfHasRepository>();
+
+//Use Case Has
+builder.Services.AddScoped<UseCaseFetchAllHas>();
+builder.Services.AddScoped<UseCaseFetchHasByCompanies>();
+builder.Services.AddScoped<UseCaseFetchHasByAccount>();
+builder.Services.AddScoped<UseCaseFetchHasByFunctions>();
+builder.Services.AddScoped<UseCaseCreateHas>();
+builder.Services.AddScoped<UseCaseFetchHasById>();
+builder.Services.AddScoped<UseCaseDeleteHas>();
 
 //User cases Companies
 builder.Services.AddScoped<UseCaseFetchAllCompanies>();
