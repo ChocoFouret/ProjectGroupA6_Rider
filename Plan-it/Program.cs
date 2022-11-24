@@ -65,6 +65,7 @@ builder.Services.AddScoped<UseCaseGetAccount>();
 // Use cases events
 builder.Services.AddScoped<UseCaseCreateEvents>();
 builder.Services.AddScoped<UseCaseFetchAllEvents>();
+builder.Services.AddScoped<UseCaseFetchEventsById>();
 builder.Services.AddScoped<UseCaseFetchFromToEvents>();
 builder.Services.AddScoped<UseCaseUpdateEvents>();
 

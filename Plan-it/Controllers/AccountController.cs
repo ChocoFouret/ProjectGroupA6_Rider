@@ -2,7 +2,6 @@ using Application.UseCases.Accounts;
 using Application.UseCases.Accounts.Dtos;
 using Domain;
 using JWT.Models;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Plan_it.Controllers;

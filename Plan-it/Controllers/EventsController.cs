@@ -5,10 +5,11 @@ namespace Plan_it.Controllers;
 
 [ApiController]
 [Route("api/v1/[controller]")]
-public class EventsController
+public class EventsController : ControllerBase
 {
     private readonly UseCaseCreateEvents _useCaseCreateEvents;
     private readonly UseCaseFetchAllEvents _useCaseFetchAllEvents;
+    private readonly UseCaseFetchEventsById _useCaseFetchEventById;
     private readonly UseCaseFetchFromToEvents _useCaseFetchFromToEvents;
     private readonly UseCaseUpdateEvents _useCaseUpdateEvents;
     
@@ -17,6 +18,7 @@ public class EventsController
     public EventsController(
         UseCaseCreateEvents useCaseCreateEvents,
         UseCaseFetchAllEvents useCaseFetchAllEvents,
+        UseCaseFetchEventsById useCaseFetchEventById,
         UseCaseFetchFromToEvents useCaseFetchFromToEvents,
         UseCaseUpdateEvents useCaseUpdateEvents,
         IConfiguration configuration
@@ -24,6 +26,7 @@ public class EventsController
     {
         _useCaseCreateEvents = useCaseCreateEvents;
         _useCaseFetchAllEvents = useCaseFetchAllEvents;
+        _useCaseFetchEventById = useCaseFetchEventById;
         _useCaseFetchFromToEvents = useCaseFetchFromToEvents;
         _useCaseUpdateEvents = useCaseUpdateEvents;
         _config = configuration;
@@ -36,7 +39,23 @@ public class EventsController
     {
         return _useCaseFetchAllEvents.Execute();
     }
-
+    
+    [HttpGet]
+    [Route("fetch/{id:int}")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public ActionResult<DtoOutputEvents> FetchById(int id)
+    {
+        try
+        {
+            return _useCaseFetchEventById.Execute(id);
+        }
+        catch (KeyNotFoundException e)
+        {
+            return NotFound(e.Message);
+        }
+    }
+    
     [HttpGet]
     [Route("fetch/{idSchedule}/{from}/{to}")]
     public IEnumerable<DtoOutputEvents> FetchFromTo(int idSchedule, DateTime from, DateTime to)
@@ -57,17 +76,13 @@ public class EventsController
     [ProducesResponseType(StatusCodes.Status409Conflict)]
     public ActionResult<DtoInputCreateEvents> Create(DtoInputCreateEvents dto)
     {
-        // Use for add new account easily
-        //dto.account.Function = "Employee";
+        return dto;
         var output = _useCaseCreateEvents.Execute(dto);
-        return null;
-        /*
         return CreatedAtAction(
             nameof(FetchById),
-            new { id = output.IdAccount },
+            new { id = output.IdEventsEmployee },
             output
         );
-        */
     }
     
     [HttpPut]

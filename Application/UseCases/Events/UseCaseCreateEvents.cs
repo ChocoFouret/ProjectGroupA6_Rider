@@ -16,6 +16,11 @@ public class UseCaseCreateEvents : IUseCaseWriter<DtoOutputEvents, DtoInputCreat
     public DtoOutputEvents Execute(DtoInputCreateEvents input)
     {
         var events = _eventsRepository.Create(input.events);
+
+        events.IdHolidays = null;
+        events.IdAbsents = null;
+        events.IdWork = null;
+
         return Mapper.GetInstance().Map<DtoOutputEvents>(events);
     }
 }
