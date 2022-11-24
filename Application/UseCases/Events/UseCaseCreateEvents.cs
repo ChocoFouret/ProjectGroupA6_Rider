@@ -12,10 +12,17 @@ public class UseCaseCreateEvents : IUseCaseWriter<DtoOutputEvents, DtoInputCreat
         _eventsRepository = eventsRepository;
     }
 
-    // Call the method into EfAccountRepesitory
     public DtoOutputEvents Execute(DtoInputCreateEvents input)
     {
-        var events = _eventsRepository.Create(input.events);
+        Events newEvent = new Events();
+        
+        newEvent.IdEventsEmployee = input.IdEventsEmployee;
+        newEvent.IdSchedule = input.IdSchedule;
+        newEvent.IdAccount = input.IdAccount;
+        newEvent.StartDate = input.StartDate;
+        newEvent.EndDate = input.EndDate;
+
+        var events = _eventsRepository.Create(newEvent);
 
         events.IdHolidays = null;
         events.IdAbsents = null;

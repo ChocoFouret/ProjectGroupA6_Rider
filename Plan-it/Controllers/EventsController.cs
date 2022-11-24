@@ -1,4 +1,5 @@
-﻿using Application.UseCases.Events.Dtos;
+﻿using Application.UseCases.Accounts;
+using Application.UseCases.Events.Dtos;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Plan_it.Controllers;
@@ -8,6 +9,7 @@ namespace Plan_it.Controllers;
 public class EventsController : ControllerBase
 {
     private readonly UseCaseCreateEvents _useCaseCreateEvents;
+    private readonly UseCaseDeleteEvents _useCaseDeleteEvents;
     private readonly UseCaseFetchAllEvents _useCaseFetchAllEvents;
     private readonly UseCaseFetchEventsById _useCaseFetchEventById;
     private readonly UseCaseFetchFromToEvents _useCaseFetchFromToEvents;
@@ -17,6 +19,7 @@ public class EventsController : ControllerBase
 
     public EventsController(
         UseCaseCreateEvents useCaseCreateEvents,
+        UseCaseDeleteEvents useCaseDeleteEvents,
         UseCaseFetchAllEvents useCaseFetchAllEvents,
         UseCaseFetchEventsById useCaseFetchEventById,
         UseCaseFetchFromToEvents useCaseFetchFromToEvents,
@@ -25,6 +28,7 @@ public class EventsController : ControllerBase
     )
     {
         _useCaseCreateEvents = useCaseCreateEvents;
+        _useCaseDeleteEvents = useCaseDeleteEvents;
         _useCaseFetchAllEvents = useCaseFetchAllEvents;
         _useCaseFetchEventById = useCaseFetchEventById;
         _useCaseFetchFromToEvents = useCaseFetchFromToEvents;
@@ -76,7 +80,6 @@ public class EventsController : ControllerBase
     [ProducesResponseType(StatusCodes.Status409Conflict)]
     public ActionResult<DtoInputCreateEvents> Create(DtoInputCreateEvents dto)
     {
-        return dto;
         var output = _useCaseCreateEvents.Execute(dto);
         return CreatedAtAction(
             nameof(FetchById),
@@ -94,4 +97,12 @@ public class EventsController : ControllerBase
         return _useCaseUpdateEvents.Execute(dto);
     }
     
+    [HttpDelete]
+    [Route("delete/{IdEventsEmployee:int}")]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public ActionResult<Boolean> Delete(int IdEventsEmployee)
+    {
+        return _useCaseDeleteEvents.Execute(IdEventsEmployee);
+    }
 }
