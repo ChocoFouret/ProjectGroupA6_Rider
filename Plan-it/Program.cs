@@ -2,6 +2,7 @@ using System.Text;
 using Application.UseCases.Accounts;
 using Application.UseCases.Companies;
 using Application.UseCases.Companies.Dtos;
+using Application.UseCases.Events.Dtos;
 using Application.UseCases.Functions;
 using Application.UseCases.Has;
 using Application.UseCases.Has.Dtos;
@@ -31,6 +32,7 @@ builder.Services.AddScoped<IAccountRepository, EfAccountRepository>();
 builder.Services.AddScoped<IFunctionRepository, EfFunctionRepository>();
 builder.Services.AddScoped<ICompaniesRepository,EfCompaniesRepository>();
 builder.Services.AddScoped<IHasRepository, EfHasRepository>();
+builder.Services.AddScoped<IEventsRepository, EfEventsRepository>();
 
 //Use Case Has
 builder.Services.AddScoped<UseCaseFetchAllHas>();
@@ -59,6 +61,12 @@ builder.Services.AddScoped<UseCaseFetchAllAccounts>();
 builder.Services.AddScoped<UseCaseFetchAccountById>();
 builder.Services.AddScoped<UseCaseFetchAccountByEmail>();
 builder.Services.AddScoped<UseCaseGetAccount>();
+
+// Use cases events
+builder.Services.AddScoped<UseCaseCreateEvents>();
+builder.Services.AddScoped<UseCaseFetchAllEvents>();
+builder.Services.AddScoped<UseCaseFetchFromToEvents>();
+builder.Services.AddScoped<UseCaseUpdateEvents>();
 
 // Use cases functions
 builder.Services.AddScoped<UseCaseFetchAllFunctions>();

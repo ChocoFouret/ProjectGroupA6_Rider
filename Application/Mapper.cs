@@ -1,5 +1,6 @@
 ﻿using Application.UseCases.Accounts.Dtos;
 using Application.UseCases.Companies.Dtos;
+using Application.UseCases.Events.Dtos;
 using AutoMapper;
 using Domain;
 using Infrastructure.Ef.DbEntities;
@@ -39,6 +40,10 @@ public static class Mapper
             cfg.CreateMap<Has, DtoOutputHas>();
             cfg.CreateMap<DbHas, DtoOutputHas>();
             cfg.CreateMap<DbHas, Has>();
+            
+            cfg.CreateMap<Events, DtoOutputEvents>();
+            cfg.CreateMap<DbEvents, DtoOutputEvents>();
+            cfg.CreateMap<DbEvents, Events>();
         });
         return new AutoMapper.Mapper(config);
     }

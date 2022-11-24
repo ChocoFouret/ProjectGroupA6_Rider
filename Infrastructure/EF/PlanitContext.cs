@@ -13,7 +13,9 @@ public class PlanitContext : DbContext
     public DbSet<Domain.Companies> Companies { get; set; }
     
     public DbSet<Domain.Has> has { get; set; }
-
+    
+    public DbSet<Domain.Events> Events { get; set; }
+    
     public PlanitContext(IConnectionStringProvider connectionStringProvider)
     {
         _connectionStringProvider = connectionStringProvider;
@@ -69,6 +71,19 @@ public class PlanitContext : DbContext
             entity.Property(arg => arg.IdAccount).HasColumnName("idAccount");
             entity.Property(arg => arg.IdCompanies).HasColumnName("idCompanies");
             entity.Property(arg => arg.IdFunctions).HasColumnName("idFunctions");
+        });
+        modelBuilder.Entity<Domain.Events>(entity =>
+        {
+            entity.ToTable("EventsEmployee");
+            entity.HasKey(arg => arg.IdEventsEmployee);
+            entity.Property(arg => arg.IdEventsEmployee).HasColumnName("idEventsEmployee");
+            entity.Property(arg => arg.IdSchedule).HasColumnName("idSchedules");
+            entity.Property(arg => arg.IdAccount).HasColumnName("idAccount");
+            entity.Property(arg => arg.StartDate).HasColumnName("startDate");
+            entity.Property(arg => arg.EndDate).HasColumnName("endDate");
+            entity.Property(arg => arg.IdWork).HasColumnName("idWork");
+            entity.Property(arg => arg.IdAbsents).HasColumnName("idAbsents");
+            entity.Property(arg => arg.IdHolidays).HasColumnName("idHolidays");
         });
     }
 }
