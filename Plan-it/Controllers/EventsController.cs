@@ -1,6 +1,8 @@
 ﻿using Application.UseCases.Accounts;
 using Application.UseCases.Events.Dtos;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.SignalR;
+using WebSocketDemo.Hubs;
 
 namespace Plan_it.Controllers;
 
@@ -15,8 +17,7 @@ public class EventsController : ControllerBase
     private readonly UseCaseFetchFromToEvents _useCaseFetchFromToEvents;
     private readonly UseCaseFetchFromToAccountEvents _useCaseFetchFromToAccountEvents;
     private readonly UseCaseUpdateEvents _useCaseUpdateEvents;
-    
-    private readonly IConfiguration _config;
+    private readonly IHubContext<EventHub> eventHub;
 
     public EventsController(
         UseCaseCreateEvents useCaseCreateEvents,
@@ -26,7 +27,7 @@ public class EventsController : ControllerBase
         UseCaseFetchFromToEvents useCaseFetchFromToEvents,
         UseCaseFetchFromToAccountEvents useCaseFetchFromToAccountEvents,
         UseCaseUpdateEvents useCaseUpdateEvents,
-        IConfiguration configuration
+        IHubContext<EventHub> eventHub
     )
     {
         _useCaseCreateEvents = useCaseCreateEvents;
@@ -36,9 +37,8 @@ public class EventsController : ControllerBase
         _useCaseFetchFromToEvents = useCaseFetchFromToEvents;
         _useCaseFetchFromToAccountEvents = useCaseFetchFromToAccountEvents;
         _useCaseUpdateEvents = useCaseUpdateEvents;
-        _config = configuration;
+        this.eventHub = eventHub;
     }
-
 
     [HttpGet]
     [Route("fetch/all")]
@@ -99,6 +99,7 @@ public class EventsController : ControllerBase
     public ActionResult<DtoInputCreateEvents> Create(DtoInputCreateEvents dto)
     {
         var output = _useCaseCreateEvents.Execute(dto);
+        eventHub.Clients.All.SendAsync(WebSocketActions.MESSAGE_CREATED, dto);
         return CreatedAtAction(
             nameof(FetchById),
             new { id = output.IdEventsEmployee },
@@ -112,6 +113,7 @@ public class EventsController : ControllerBase
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public ActionResult<Boolean> Update(DtoInputUpdateEvents dto)
     {
+        eventHub.Clients.All.SendAsync(WebSocketActions.MESSAGE_UPDATED, dto);
         return _useCaseUpdateEvents.Execute(dto);
     }
     
@@ -121,6 +123,7 @@ public class EventsController : ControllerBase
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public ActionResult<Boolean> Delete(string IdEventsEmployee)
     {
+        eventHub.Clients.All.SendAsync(WebSocketActions.MESSAGE_DELETED, IdEventsEmployee);
         return _useCaseDeleteEvents.Execute(IdEventsEmployee);
     }
 }

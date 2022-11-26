@@ -17,6 +17,7 @@ using Microsoft.IdentityModel.Tokens;
 using Plan_it;
 using Service.UseCases.Companies;
 using Service.UseCases.Has;
+using WebSocketDemo.Hubs;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -135,6 +136,11 @@ builder.Services.AddAuthorization(options =>
 });
 builder.Services.AddScoped<ISessionService, SessionService>();
 
+/*****/
+builder.Services.AddControllersWithViews();
+builder.Services.AddSignalR();
+/*****/
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -148,6 +154,20 @@ app.UseHttpsRedirection();
 
 /* It allows the frontend to access the backend. */
 app.UseCors("Dev");
+
+/*****/
+app.UseWebSockets(new WebSocketOptions
+{
+    KeepAliveInterval = TimeSpan.FromSeconds(10),
+});
+
+app.UseRouting();
+
+app.UseEndpoints(endpoints =>
+{
+    endpoints.MapHub<EventHub>("/EventHub");
+});
+/*****/
 
 // Authentification
 app.UseAuthentication();

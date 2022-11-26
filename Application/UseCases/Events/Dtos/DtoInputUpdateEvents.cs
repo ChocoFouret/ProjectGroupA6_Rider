@@ -12,4 +12,5 @@ public class DtoInputUpdateEvents
     public bool IsValid { get; set; }
     public string? Comments { get; set; }
     public string Types { get; set; }
+    public EventTypes EventTypes { get; set; }
 }
