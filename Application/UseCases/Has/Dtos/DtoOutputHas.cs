@@ -9,4 +9,5 @@ public class DtoOutputHas
     public int IdFunctions { get; set; }
     public int IdHas { get; set; }
     public DtoOutputAccount Account { get; set; }
+    public DtoOutputFunction Function { get; set; }
 }

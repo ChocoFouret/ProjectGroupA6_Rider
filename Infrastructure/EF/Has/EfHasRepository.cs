@@ -28,6 +28,7 @@ public class EfHasRepository: IHasRepository
         for(var x = 0; x < companies.Count; x++)
         {
             companies[x].Account = context.Accounts.FirstOrDefault(account => account.IdAccount == companies[x].IdAccount);
+            companies[x].Function = context.Functions.FirstOrDefault(function => function.IdFunctions == companies[x].IdFunctions);
         }
         
         return companies;

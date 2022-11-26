@@ -77,6 +77,10 @@ public class PlanitContext : DbContext
                 .WithOne()
                 .HasForeignKey<Domain.Has>(arg => arg.IdAccount)
                 .HasPrincipalKey<Domain.Account>(arg => arg.IdAccount);
+            entity.HasOne(arg => arg.Function)
+                .WithOne()
+                .HasForeignKey<Domain.Has>(arg => arg.IdFunctions)
+                .HasPrincipalKey<Domain.Function>(arg => arg.IdFunctions);
         });
         modelBuilder.Entity<Domain.EventTypes>(entity =>
         {
