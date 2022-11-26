@@ -1,12 +1,9 @@
-﻿using Application.UseCases.Accounts.Dtos;
-using Application.UseCases.Events.Dtos;
-using Application.UseCases.Utils;
+﻿using Application.UseCases.Utils;
 using Domain;
-using Infrastructure.EF;
 
 namespace Application.UseCases.Accounts;
 
-public class UseCaseDeleteEvents : IUseCaseWriter<Boolean, int>
+public class UseCaseDeleteEvents : IUseCaseWriter<Boolean, string>
 {
     private readonly IEventsRepository _eventsRepository;
 
@@ -15,7 +12,7 @@ public class UseCaseDeleteEvents : IUseCaseWriter<Boolean, int>
         _eventsRepository = eventsRepository;
     }
     
-    public Boolean Execute(int IdEventsEmployee)
+    public Boolean Execute(string IdEventsEmployee)
     {
         var events = _eventsRepository.FetchById(IdEventsEmployee);
         return _eventsRepository.Delete(events);

@@ -13,6 +13,7 @@ public class EventsController : ControllerBase
     private readonly UseCaseFetchAllEvents _useCaseFetchAllEvents;
     private readonly UseCaseFetchEventsById _useCaseFetchEventById;
     private readonly UseCaseFetchFromToEvents _useCaseFetchFromToEvents;
+    private readonly UseCaseFetchFromToAccountEvents _useCaseFetchFromToAccountEvents;
     private readonly UseCaseUpdateEvents _useCaseUpdateEvents;
     
     private readonly IConfiguration _config;
@@ -23,6 +24,7 @@ public class EventsController : ControllerBase
         UseCaseFetchAllEvents useCaseFetchAllEvents,
         UseCaseFetchEventsById useCaseFetchEventById,
         UseCaseFetchFromToEvents useCaseFetchFromToEvents,
+        UseCaseFetchFromToAccountEvents useCaseFetchFromToAccountEvents,
         UseCaseUpdateEvents useCaseUpdateEvents,
         IConfiguration configuration
     )
@@ -32,6 +34,7 @@ public class EventsController : ControllerBase
         _useCaseFetchAllEvents = useCaseFetchAllEvents;
         _useCaseFetchEventById = useCaseFetchEventById;
         _useCaseFetchFromToEvents = useCaseFetchFromToEvents;
+        _useCaseFetchFromToAccountEvents = useCaseFetchFromToAccountEvents;
         _useCaseUpdateEvents = useCaseUpdateEvents;
         _config = configuration;
     }
@@ -45,10 +48,10 @@ public class EventsController : ControllerBase
     }
     
     [HttpGet]
-    [Route("fetch/{id:int}")]
+    [Route("fetch/{id}")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public ActionResult<DtoOutputEvents> FetchById(int id)
+    public ActionResult<DtoOutputEvents> FetchById(string id)
     {
         try
         {
@@ -72,6 +75,21 @@ public class EventsController : ControllerBase
         };
 
         return _useCaseFetchFromToEvents.Execute(date);
+    }
+    
+    [HttpGet]
+    [Route("fetch/{idSchedule}/{idAccount}/{from}/{to}")]
+    public IEnumerable<DtoOutputEvents> FetchFromTo(int idSchedule, DateTime from, DateTime to, int idAccount)
+    {
+        DtoInputDateEvents date = new DtoInputDateEvents
+        {
+            IdAccount = idAccount,
+            IdSchedule = idSchedule,
+            From = from,
+            To = to
+        };
+
+        return _useCaseFetchFromToAccountEvents.Execute(date);
     }
     
     [HttpPost]
@@ -98,10 +116,10 @@ public class EventsController : ControllerBase
     }
     
     [HttpDelete]
-    [Route("delete/{IdEventsEmployee:int}")]
+    [Route("delete/{IdEventsEmployee}")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public ActionResult<Boolean> Delete(int IdEventsEmployee)
+    public ActionResult<Boolean> Delete(string IdEventsEmployee)
     {
         return _useCaseDeleteEvents.Execute(IdEventsEmployee);
     }

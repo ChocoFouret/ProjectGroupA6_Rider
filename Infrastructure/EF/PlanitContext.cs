@@ -16,6 +16,8 @@ public class PlanitContext : DbContext
     
     public DbSet<Domain.Events> Events { get; set; }
     
+    public DbSet<Domain.EventTypes> EventTypes { get; set; }
+    
     public PlanitContext(IConnectionStringProvider connectionStringProvider)
     {
         _connectionStringProvider = connectionStringProvider;
@@ -71,6 +73,17 @@ public class PlanitContext : DbContext
             entity.Property(arg => arg.IdAccount).HasColumnName("idAccount");
             entity.Property(arg => arg.IdCompanies).HasColumnName("idCompanies");
             entity.Property(arg => arg.IdFunctions).HasColumnName("idFunctions");
+            entity.HasOne(arg => arg.Account)
+                .WithOne()
+                .HasForeignKey<Domain.Has>(arg => arg.IdAccount)
+                .HasPrincipalKey<Domain.Account>(arg => arg.IdAccount);
+        });
+        modelBuilder.Entity<Domain.EventTypes>(entity =>
+        {
+            entity.ToTable("EventTypes");
+            entity.HasKey(arg => arg.Types);
+            entity.Property(arg => arg.Types).HasColumnName("types");
+            entity.Property(arg => arg.BarColor).HasColumnName("barColor");
         });
         modelBuilder.Entity<Domain.Events>(entity =>
         {
@@ -81,9 +94,13 @@ public class PlanitContext : DbContext
             entity.Property(arg => arg.IdAccount).HasColumnName("idAccount");
             entity.Property(arg => arg.StartDate).HasColumnName("startDate");
             entity.Property(arg => arg.EndDate).HasColumnName("endDate");
-            entity.Property(arg => arg.IdWork).HasColumnName("idWork");
-            entity.Property(arg => arg.IdAbsents).HasColumnName("idAbsents");
-            entity.Property(arg => arg.IdHolidays).HasColumnName("idHolidays");
+            entity.Property(arg => arg.Types).HasColumnName("types");
+            entity.Property(arg => arg.IsValid).HasColumnName("isValid");
+            entity.Property(arg => arg.Comments).HasColumnName("comments");
+            entity.HasOne(arg => arg.EventTypes)
+                .WithOne()
+                .HasForeignKey<Events>(arg => arg.Types)
+                .HasPrincipalKey<Domain.EventTypes>(arg => arg.Types);
         });
     }
 }

@@ -6,7 +6,7 @@ namespace Infrastructure.EF;
 public class EfEventsRepository : IEventsRepository
 {
     private readonly PlanitContextProvider _planitContextProvider;
-    
+
     public EfEventsRepository(PlanitContextProvider planitContextProvider)
     {
         _planitContextProvider = planitContextProvider;
@@ -18,7 +18,7 @@ public class EfEventsRepository : IEventsRepository
         return context.Events.ToList<Events>();
     }
 
-    public Events FetchById(int idEventsEmployee)
+    public Events FetchById(string idEventsEmployee)
     {
         using var context = _planitContextProvider.NewContext();
         var events = context.Events.FirstOrDefault(events => events.IdEventsEmployee == idEventsEmployee);
@@ -26,20 +26,54 @@ public class EfEventsRepository : IEventsRepository
         if (events == null)
             throw new KeyNotFoundException($"Events with {idEventsEmployee} has not been found");
 
+        var eventType = context.EventTypes.FirstOrDefault(eventsType => eventsType.Types == events.Types);
+        events.EventTypes = eventType;
+
         return events;
     }
-    
+
     public IEnumerable<Events> FetchFromTo(int IdSchedule, DateTime from, DateTime to)
     {
         using var context = _planitContextProvider.NewContext();
-        var events = context.Events.Where(events =>  events.IdSchedule == IdSchedule && events.StartDate >= from && events.EndDate <= to).ToList();
+        var events = context.Events.Where(events =>
+            events.IdSchedule == IdSchedule && events.StartDate >= from && events.EndDate <= to).ToList();
 
         if (events == null)
-            throw new KeyNotFoundException($"Events for Company ID {IdSchedule} between {from} and {to} were not found");
+            throw new KeyNotFoundException(
+                $"Events for Company ID {IdSchedule} between {from} and {to} were not found");
+
+        EventTypes eventType;
+        int x;
+        for (x = 0; x <= events.Count - 1; x++)
+        {
+            eventType = context.EventTypes.FirstOrDefault(eventsType => eventsType.Types == events[x].Types);
+            events[x].EventTypes = eventType;
+        }
 
         return events;
     }
     
+    public IEnumerable<Events> FetchFromToAccount(int IdSchedule, DateTime from, DateTime to, int? idAccount)
+    {
+        using var context = _planitContextProvider.NewContext();
+        var events = context.Events.Where(events =>
+            events.IdSchedule == IdSchedule && events.StartDate >= from && events.EndDate <= to && events.IdAccount == idAccount).ToList();
+
+        if (events == null)
+            throw new KeyNotFoundException(
+                $"Events for Company ID {IdSchedule} between {from} and {to} were not found");
+
+        EventTypes eventType;
+        int x;
+        for (x = 0; x <= events.Count - 1; x++)
+        {
+            eventType = context.EventTypes.FirstOrDefault(eventsType => eventsType.Types == events[x].Types);
+            events[x].EventTypes = eventType;
+        }
+
+        return events;
+    }
+
     public Events Create(Events events)
     {
         using var context = _planitContextProvider.NewContext();
@@ -61,6 +95,8 @@ public class EfEventsRepository : IEventsRepository
         try
         {
             context.Events.Update(events);
+            //Console.WriteLine(events.Types);
+            //Console.WriteLine(context.Events.FirstOrDefault(e => e.IdEventsEmployee == events.IdEventsEmployee)?.Types);
             return context.SaveChanges() == 1;
         }
         catch (DbUpdateConcurrencyException e)
@@ -82,5 +118,4 @@ public class EfEventsRepository : IEventsRepository
             return false;
         }
     }
-
 }

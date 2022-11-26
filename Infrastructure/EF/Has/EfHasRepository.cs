@@ -24,6 +24,12 @@ public class EfHasRepository: IHasRepository
 
         if (companies == null)
             throw new KeyNotFoundException($"Companies with {id} has not been found");
+        
+        for(var x = 0; x < companies.Count; x++)
+        {
+            companies[x].Account = context.Accounts.FirstOrDefault(account => account.IdAccount == companies[x].IdAccount);
+        }
+        
         return companies;
     }
 

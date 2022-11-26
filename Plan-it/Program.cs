@@ -33,6 +33,7 @@ builder.Services.AddScoped<IFunctionRepository, EfFunctionRepository>();
 builder.Services.AddScoped<ICompaniesRepository,EfCompaniesRepository>();
 builder.Services.AddScoped<IHasRepository, EfHasRepository>();
 builder.Services.AddScoped<IEventsRepository, EfEventsRepository>();
+builder.Services.AddScoped<IEventTypesRepository, EfEventTypesRepository>();
 
 //Use Case Has
 builder.Services.AddScoped<UseCaseFetchAllHas>();
@@ -68,7 +69,14 @@ builder.Services.AddScoped<UseCaseDeleteEvents>();
 builder.Services.AddScoped<UseCaseFetchAllEvents>();
 builder.Services.AddScoped<UseCaseFetchEventsById>();
 builder.Services.AddScoped<UseCaseFetchFromToEvents>();
+builder.Services.AddScoped<UseCaseFetchFromToAccountEvents>();
 builder.Services.AddScoped<UseCaseUpdateEvents>();
+
+// Use cases eventTypes
+builder.Services.AddScoped<UseCaseCreateEventTypes>();
+builder.Services.AddScoped<UseCaseUpdateEventTypes>();
+builder.Services.AddScoped<UseCaseFetchEventTypesByType>();
+builder.Services.AddScoped<UseCaseFetchAllEventType>();
 
 // Use cases functions
 builder.Services.AddScoped<UseCaseFetchAllFunctions>();

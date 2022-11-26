@@ -1,13 +1,18 @@
-﻿namespace Domain;
+﻿using System.ComponentModel.DataAnnotations.Schema;
+
+namespace Domain;
 
 public class Events
 {
-    public int IdEventsEmployee { get; set; }
+    public string IdEventsEmployee { get; set; }
     public int IdSchedule { get; set; }
     public int IdAccount { get; set; }
     public DateTime StartDate { get; set; }
     public DateTime EndDate { get; set; }
-    public int? IdWork { get; set; }
-    public int? IdAbsents { get; set; }
-    public int? IdHolidays { get; set; }
+    public bool IsValid { get; set; }
+    public string? Comments { get; set; }
+
+    [ForeignKey("Types")]
+    public string Types { get; set; }
+    public EventTypes? EventTypes { get; set; }
 }
