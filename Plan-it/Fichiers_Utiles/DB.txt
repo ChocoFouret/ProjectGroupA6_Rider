@@ -38,14 +38,14 @@ CREATE TABLE Schedules
     FOREIGN KEY(idSchedule) REFERENCES Accounts(idAccount)
 );
 
-CREATE TABLE Holidays
+CREATE TABLE EventTypes
 (
-    idHolidays   INT IDENTITY NOT NULL PRIMARY KEY,
-    dateHolidays DATE         NOT NULL,
+    idEventTypes   INT IDENTITY NOT NULL PRIMARY KEY,
+    dateEventTypes DATE         NOT NULL,
     isAccepted   BIT          NOT NULL,
     comments     VARCHAR(200),
     idAccount INT NOT NULL,
-    FOREIGN KEY(idHolidays) REFERENCES Accounts(idAccount)
+    FOREIGN KEY(idEventTypes) REFERENCES Accounts(idAccount)
 );
 
 CREATE TABLE Absents

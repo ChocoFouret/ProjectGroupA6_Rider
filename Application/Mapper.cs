@@ -1,5 +1,6 @@
 ﻿using Application.UseCases.Accounts.Dtos;
 using Application.UseCases.Companies.Dtos;
+using Application.UseCases.Events.Dtos;
 using AutoMapper;
 using Domain;
 using Infrastructure.Ef.DbEntities;
@@ -24,6 +25,7 @@ public static class Mapper
             // Source, Destination
             // Account
             cfg.CreateMap<Account, DtoOutputAccount>();
+            cfg.CreateMap<Account, DtoOutputAccountForCompagnies>();
             cfg.CreateMap<DbAccount, DtoOutputAccount>();
             cfg.CreateMap<DbAccount, Account>();
             
@@ -39,6 +41,14 @@ public static class Mapper
             cfg.CreateMap<Has, DtoOutputHas>();
             cfg.CreateMap<DbHas, DtoOutputHas>();
             cfg.CreateMap<DbHas, Has>();
+            
+            cfg.CreateMap<Events, DtoOutputEvents>();
+            cfg.CreateMap<DbEvents, DtoOutputEvents>();
+            cfg.CreateMap<DbEvents, Events>();
+            
+            cfg.CreateMap<EventTypes, DtoOutputEventTypes>();
+            cfg.CreateMap<DbEventTypes, DtoOutputEventTypes>();
+            cfg.CreateMap<DbEventTypes, EventTypes>();
         });
         return new AutoMapper.Mapper(config);
     }

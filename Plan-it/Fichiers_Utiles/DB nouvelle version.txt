@@ -71,7 +71,7 @@ CREATE TABLE Absents
     comments    TEXT         NOT NULL
 );
 
-CREATE TABLE Holidays
+CREATE TABLE EventTypes
 (
     idHoliday  INT IDENTITY NOT NULL PRIMARY KEY,
     isAccepted BIT          NOT NULL,
@@ -92,7 +92,7 @@ CREATE TABLE EVENTS_EMPLOYEE
     FOREIGN KEY (idAccount) REFERENCES Accounts (idAccount),
     FOREIGN KEY (idHour) REFERENCES Hours (idHour),
     FOREIGN KEY (idAbsent) REFERENCES Absents (idAbsent),
-    FOREIGN KEY (idHoliday) REFERENCES Holidays (idHoliday)
+    FOREIGN KEY (idHoliday) REFERENCES EventTypes (idHoliday)
 );
 
 INSERT INTO dbo.Functions(title)

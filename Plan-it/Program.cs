@@ -2,6 +2,7 @@ using System.Text;
 using Application.UseCases.Accounts;
 using Application.UseCases.Companies;
 using Application.UseCases.Companies.Dtos;
+using Application.UseCases.Events.Dtos;
 using Application.UseCases.Functions;
 using Application.UseCases.Has;
 using Application.UseCases.Has.Dtos;
@@ -16,6 +17,7 @@ using Microsoft.IdentityModel.Tokens;
 using Plan_it;
 using Service.UseCases.Companies;
 using Service.UseCases.Has;
+using WebSocketDemo.Hubs;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -31,6 +33,8 @@ builder.Services.AddScoped<IAccountRepository, EfAccountRepository>();
 builder.Services.AddScoped<IFunctionRepository, EfFunctionRepository>();
 builder.Services.AddScoped<ICompaniesRepository,EfCompaniesRepository>();
 builder.Services.AddScoped<IHasRepository, EfHasRepository>();
+builder.Services.AddScoped<IEventsRepository, EfEventsRepository>();
+builder.Services.AddScoped<IEventTypesRepository, EfEventTypesRepository>();
 
 //Use Case Has
 builder.Services.AddScoped<UseCaseFetchAllHas>();
@@ -59,6 +63,21 @@ builder.Services.AddScoped<UseCaseFetchAllAccounts>();
 builder.Services.AddScoped<UseCaseFetchAccountById>();
 builder.Services.AddScoped<UseCaseFetchAccountByEmail>();
 builder.Services.AddScoped<UseCaseGetAccount>();
+
+// Use cases events
+builder.Services.AddScoped<UseCaseCreateEvents>();
+builder.Services.AddScoped<UseCaseDeleteEvents>();
+builder.Services.AddScoped<UseCaseFetchAllEvents>();
+builder.Services.AddScoped<UseCaseFetchEventsById>();
+builder.Services.AddScoped<UseCaseFetchFromToEvents>();
+builder.Services.AddScoped<UseCaseFetchFromToAccountEvents>();
+builder.Services.AddScoped<UseCaseUpdateEvents>();
+
+// Use cases eventTypes
+builder.Services.AddScoped<UseCaseCreateEventTypes>();
+builder.Services.AddScoped<UseCaseUpdateEventTypes>();
+builder.Services.AddScoped<UseCaseFetchEventTypesByType>();
+builder.Services.AddScoped<UseCaseFetchAllEventType>();
 
 // Use cases functions
 builder.Services.AddScoped<UseCaseFetchAllFunctions>();
@@ -117,6 +136,11 @@ builder.Services.AddAuthorization(options =>
 });
 builder.Services.AddScoped<ISessionService, SessionService>();
 
+/*****/
+builder.Services.AddControllersWithViews();
+builder.Services.AddSignalR();
+/*****/
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -130,6 +154,20 @@ app.UseHttpsRedirection();
 
 /* It allows the frontend to access the backend. */
 app.UseCors("Dev");
+
+/*****/
+app.UseWebSockets(new WebSocketOptions
+{
+    KeepAliveInterval = TimeSpan.FromSeconds(10),
+});
+
+app.UseRouting();
+
+app.UseEndpoints(endpoints =>
+{
+    endpoints.MapHub<EventHub>("/EventHub");
+});
+/*****/
 
 // Authentification
 app.UseAuthentication();
