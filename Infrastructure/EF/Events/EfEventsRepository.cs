@@ -1,3 +1,4 @@
+using System.Collections.Immutable;
 using Domain;
 using Microsoft.EntityFrameworkCore;
 
@@ -117,5 +118,15 @@ public class EfEventsRepository : IEventsRepository
         {
             return false;
         }
+    }
+
+    public IEnumerable<Events> FetchEventsByEmployee(Account account)
+    {
+        using var context = _planitContextProvider.NewContext();
+        var events = context.Events.Where(events => events.IdAccount == account.IdAccount).ToList();
+        if (events == null)
+            throw new KeyNotFoundException(
+                $" event for account not found");
+        return events;
     }
 }

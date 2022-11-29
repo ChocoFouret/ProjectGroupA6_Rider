@@ -72,6 +72,7 @@ builder.Services.AddScoped<UseCaseFetchEventsById>();
 builder.Services.AddScoped<UseCaseFetchFromToEvents>();
 builder.Services.AddScoped<UseCaseFetchFromToAccountEvents>();
 builder.Services.AddScoped<UseCaseUpdateEvents>();
+builder.Services.AddScoped<UseCaseFetchEventsByEmployee>();
 
 // Use cases eventTypes
 builder.Services.AddScoped<UseCaseCreateEventTypes>();

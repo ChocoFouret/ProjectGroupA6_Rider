@@ -18,6 +18,7 @@ public class EventsController : ControllerBase
     private readonly UseCaseFetchFromToAccountEvents _useCaseFetchFromToAccountEvents;
     private readonly UseCaseUpdateEvents _useCaseUpdateEvents;
     private readonly IHubContext<EventHub> eventHub;
+    private readonly UseCaseFetchEventsByEmployee _useCaseFetchEventsByEmployee;
 
     public EventsController(
         UseCaseCreateEvents useCaseCreateEvents,
@@ -27,7 +28,8 @@ public class EventsController : ControllerBase
         UseCaseFetchFromToEvents useCaseFetchFromToEvents,
         UseCaseFetchFromToAccountEvents useCaseFetchFromToAccountEvents,
         UseCaseUpdateEvents useCaseUpdateEvents,
-        IHubContext<EventHub> eventHub
+        IHubContext<EventHub> eventHub,
+        UseCaseFetchEventsByEmployee useCaseFetchEventsByEmployee
     )
     {
         _useCaseCreateEvents = useCaseCreateEvents;
@@ -37,6 +39,7 @@ public class EventsController : ControllerBase
         _useCaseFetchFromToEvents = useCaseFetchFromToEvents;
         _useCaseFetchFromToAccountEvents = useCaseFetchFromToAccountEvents;
         _useCaseUpdateEvents = useCaseUpdateEvents;
+        _useCaseFetchEventsByEmployee = useCaseFetchEventsByEmployee;
         this.eventHub = eventHub;
     }
 
@@ -126,4 +129,14 @@ public class EventsController : ControllerBase
         eventHub.Clients.All.SendAsync(WebSocketActions.MESSAGE_DELETED, IdEventsEmployee);
         return _useCaseDeleteEvents.Execute(IdEventsEmployee);
     }
+    
+    [HttpGet]
+    [Route("fetch/employee/{id}")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public IEnumerable<DtoOutputEvents> FetchByEmployee(int id)
+    {
+        return _useCaseFetchEventsByEmployee.Execute(id);
+    }
+
 }

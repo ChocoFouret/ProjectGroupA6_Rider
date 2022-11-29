@@ -35,7 +35,7 @@ public class SessionService : ISessionService
         {
             new Claim(ClaimTypes.Email, account.Email),
             new Claim(ClaimTypes.Role, account.IsAdmin.ToString()),
-            new Claim(ClaimTypes.SerialNumber, account.IdAccount.ToString()),
+            new Claim(ClaimTypes.Role, account.IdAccount.ToString()),
             new Claim(ClaimTypes.NameIdentifier,
                 Guid.NewGuid().ToString())
         };
