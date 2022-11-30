@@ -166,7 +166,7 @@ app.UseRouting();
 
 app.UseEndpoints(endpoints =>
 {
-    endpoints.MapHub<EventHub>("/EventHub");
+    endpoints.MapHub<EventsHub>("/EventHub");
 });
 /*****/
 
