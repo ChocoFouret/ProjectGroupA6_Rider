@@ -73,6 +73,7 @@ builder.Services.AddScoped<UseCaseFetchEventsById>();
 builder.Services.AddScoped<UseCaseFetchFromToEvents>();
 builder.Services.AddScoped<UseCaseFetchFromToAccountEvents>();
 builder.Services.AddScoped<UseCaseUpdateEvents>();
+builder.Services.AddScoped<UseCaseFetchEventsByEmployee>();
 
 // Use cases eventTypes
 builder.Services.AddScoped<UseCaseCreateEventTypes>();
@@ -166,7 +167,7 @@ app.UseRouting();
 
 app.UseEndpoints(endpoints =>
 {
-    endpoints.MapHub<EventHub>("/EventHub");
+    endpoints.MapHub<EventsHub>("/EventHub");
 });
 /*****/
 

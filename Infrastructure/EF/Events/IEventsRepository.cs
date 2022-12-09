@@ -11,4 +11,5 @@ public interface IEventsRepository
     Events Create(Events events);
     bool Update(Events events);
     bool Delete(Events events);
+    IEnumerable<Events> FetchEventsByEmployee(Account account);
 }
