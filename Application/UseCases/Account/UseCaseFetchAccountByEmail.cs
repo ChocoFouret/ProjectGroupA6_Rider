@@ -5,7 +5,7 @@ using Infrastructure.Ef;
 
 namespace Application.UseCases.Accounts;
 
-public class UseCaseFetchAccountByEmail : IUseCaseParameterizedQuery<DtoOutputAccount, string>
+public class UseCaseFetchAccountByEmail : IUseCaseParameterizedQuery<Account, string>
 {
     private readonly IAccountRepository _accountRepository;
 
@@ -15,9 +15,9 @@ public class UseCaseFetchAccountByEmail : IUseCaseParameterizedQuery<DtoOutputAc
     }
 
     // Call the method into EfAccountRepesitory
-    public DtoOutputAccount Execute(string email)
+    public Account Execute(string email)
     {
         var dbAccount = _accountRepository.FetchByEmail(email);
-        return Mapper.GetInstance().Map<DtoOutputAccount>(dbAccount);
+        return Mapper.GetInstance().Map<Account>(dbAccount);
     }
 }

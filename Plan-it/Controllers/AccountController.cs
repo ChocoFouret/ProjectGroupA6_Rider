@@ -21,7 +21,6 @@ public class AccountController : ControllerBase
     private readonly UseCaseFetchAllAccounts _useCaseFetchAllAccounts;
     private readonly UseCaseFetchAccountById _useCaseFetchAccountById;
     private readonly UseCaseFetchAccountByEmail _useCaseFetchAccountByEmail;
-    private readonly UseCaseGetAccount _useCaseGetAccount;
     private readonly UseCaseFetchHasByAccount _useCaseFetchHasByAccount;
     private readonly UseCaseFetchFunctionById _useCaseFetchFunctionById;
     
@@ -36,7 +35,6 @@ public class AccountController : ControllerBase
         UseCaseDeleteAccount useCaseDeleteAccount,
         UseCaseFetchAllAccounts useCaseFetchAllAccounts,
         UseCaseFetchAccountById useCaseFetchAccountById,
-        UseCaseGetAccount useCaseGetAccount,
         UseCaseFetchAccountByEmail useCaseFetchAccountByEmail,
         ISessionService sessionService,
         IConfiguration configuration, 
@@ -51,7 +49,6 @@ public class AccountController : ControllerBase
         _useCaseDeleteAccount = useCaseDeleteAccount;
         _useCaseFetchAllAccounts = useCaseFetchAllAccounts;
         _useCaseFetchAccountById = useCaseFetchAccountById;
-        _useCaseGetAccount = useCaseGetAccount;
         _useCaseFetchAccountByEmail = useCaseFetchAccountByEmail;
         _useCaseFetchHasByAccount = useCaseFetchHasByAccount;
         _useCaseFetchFunctionById = useCaseFetchFunctionById;
@@ -108,7 +105,7 @@ public class AccountController : ControllerBase
     [Route("fetch/{email}")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public ActionResult<DtoOutputAccount> FetchByEmail(string email)
+    public ActionResult<Account> FetchByEmail(string email)
     {
         try
         {
@@ -206,7 +203,7 @@ public class AccountController : ControllerBase
     {
         if (_useCaseLoginAccount.Execute(dto))
         {
-            Account account = _useCaseGetAccount.Execute(dto.Email);
+            Account account = _useCaseFetchAccountByEmail.Execute(dto.Email);
             IEnumerable<DtoOutputHas> has = _useCaseFetchHasByAccount.Execute(account.IdAccount);
             bool isHas = has.ToList().Count != 0;
 

@@ -1,9 +1,10 @@
+using Application.UseCases.Utils;
 using Infrastructure.EF.Has;
 using Service.UseCases.Has.Dtos;
 
 namespace Application.UseCases.Has;
 
-public class UseCaseCreateHas
+public class UseCaseCreateHas : IUseCaseWriter<DtoOutputHas, DtoInputCreateHas>
 {
    private readonly IHasRepository _hasRepository;
 

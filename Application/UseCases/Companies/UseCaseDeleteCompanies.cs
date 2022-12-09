@@ -1,8 +1,9 @@
+using Application.UseCases.Utils;
 using Infrastructure.EF.Companies;
 
 namespace Service.UseCases.Companies;
 
-public class UseCaseDeleteCompanies
+public class UseCaseDeleteCompanies : IUseCaseWriter<Boolean, int>
 {
     private readonly ICompaniesRepository _companiesRepository;
 

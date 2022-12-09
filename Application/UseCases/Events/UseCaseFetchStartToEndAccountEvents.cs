@@ -4,16 +4,15 @@ using Domain;
 
 namespace Application.UseCases.Events.Dtos;
 
-public class UseCaseFetchFromToAccountEvents : IUseCaseParameterizedQuery<IEnumerable<DtoOutputEvents>, DtoInputDateEvents>
+public class UseCaseFetchStartToEndAccountEvents : IUseCaseParameterizedQuery<IEnumerable<DtoOutputEvents>, DtoInputDateEvents>
 {
     private readonly IEventsRepository _eventsRepository;
 
-    public UseCaseFetchFromToAccountEvents(IEventsRepository eventsRepository)
+    public UseCaseFetchStartToEndAccountEvents(IEventsRepository eventsRepository)
     {
         _eventsRepository = eventsRepository;
     }
-
-    // Call the method into EfAccountRepesitory
+    
     public IEnumerable<DtoOutputEvents> Execute(DtoInputDateEvents date)
     {
         var dbEvents = _eventsRepository.FetchFromToAccount(date.IdCompanies, date.From, date.To, date.IdAccount);

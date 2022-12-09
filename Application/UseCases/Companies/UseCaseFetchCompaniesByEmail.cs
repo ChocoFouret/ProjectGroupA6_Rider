@@ -1,8 +1,9 @@
+using Application.UseCases.Utils;
 using Infrastructure.EF.Companies;
 
 namespace Service.UseCases.Companies;
 
-public class UseCaseFetchCompaniesByEmail 
+public class UseCaseFetchCompaniesByEmail : IUseCaseParameterizedQuery<Domain.Companies, string>
 {
     private readonly ICompaniesRepository _companiesRepository;
 

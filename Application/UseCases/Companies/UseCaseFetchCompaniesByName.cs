@@ -1,10 +1,11 @@
 using Application;
 using Application.UseCases.Companies.Dtos;
+using Application.UseCases.Utils;
 using Infrastructure.EF.Companies;
 
 namespace Service.UseCases.Companies;
 
-public class UseCaseFetchCompaniesByName
+public class UseCaseFetchCompaniesByName: IUseCaseParameterizedQuery<IEnumerable<DtoOutputCompanies>, string>
 {
     private readonly ICompaniesRepository _companiesRepository;
 

@@ -1,8 +1,9 @@
+using Application.UseCases.Utils;
 using Infrastructure.EF.Companies;
 
 namespace Application.UseCases.Companies.Dtos;
 
-public class UseCaseFetchAllCompanies
+public class UseCaseFetchAllCompanies: IUseCaseQuery<IEnumerable<DtoOutputCompanies>>
 {
     private readonly ICompaniesRepository _companieRepository;
 
