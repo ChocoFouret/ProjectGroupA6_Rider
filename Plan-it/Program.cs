@@ -52,6 +52,7 @@ builder.Services.AddScoped<UseCaseDeleteCompanies>();
 builder.Services.AddScoped<UseCaseUpdateCompanies>();
 builder.Services.AddScoped<UseCaseFetchCompaniesByName>();
 builder.Services.AddScoped<UseCaseFetchCompaniesById>();
+builder.Services.AddScoped<UseCaseFetchCompaniesByEmail>();
 
 // Use cases accounts
 builder.Services.AddScoped<UseCaseLoginAccount>();

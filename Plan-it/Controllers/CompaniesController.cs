@@ -21,6 +21,8 @@ public class CompaniesController : Controller
     private readonly UseCaseUpdateCompanies _useCaseUpdateCompanies;
 
     private readonly UseCaseDeleteCompanies _useCaseDeleteCompanies;
+
+    private readonly UseCaseFetchCompaniesByEmail _useCaseFetchCompaniesByEmail;
     // GET
 
     public CompaniesController(
@@ -29,7 +31,8 @@ public class CompaniesController : Controller
         UseCaseFetchCompaniesByName useCaseFetchCompaniesByName,
         UseCaseCreateCompanies useCaseCreateCompanies,
         UseCaseUpdateCompanies useCaseUpdateCompanies,
-        UseCaseDeleteCompanies useCaseDeleteCompanies)
+        UseCaseDeleteCompanies useCaseDeleteCompanies,
+        UseCaseFetchCompaniesByEmail useCaseFetchCompaniesByEmail)
     {
         _useCaseFetchAllCompanies = useCaseFetchAllCompanies;
         _useCaseFetchCompaniesById = useCaseFetchCompaniesById;
@@ -37,6 +40,7 @@ public class CompaniesController : Controller
         _useCaseCreateCompanies = useCaseCreateCompanies;
         _useCaseUpdateCompanies = useCaseUpdateCompanies;
         _useCaseDeleteCompanies = useCaseDeleteCompanies;
+        _useCaseFetchCompaniesByEmail = useCaseFetchCompaniesByEmail;
 
     }
     [HttpGet]
@@ -47,7 +51,7 @@ public class CompaniesController : Controller
     }
     
     [HttpGet]
-    [Route("fetch/{id:int}")]
+    [Route("fetchById/{id:int}")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public ActionResult<DtoOutputCompanies> FetchById(int id)
@@ -63,7 +67,23 @@ public class CompaniesController : Controller
     }
     
     [HttpGet]
-    [Route("fetch/{name}")]
+    [Route("fetchByEmail/{email}")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public Companies FetchByEmail(string email)
+    {
+        try
+        {
+            return _useCaseFetchCompaniesByEmail.Execute(email);
+        }
+        catch (KeyNotFoundException e)
+        {
+            return null;
+        }
+    }
+    
+    [HttpGet]
+    [Route("fetchByName/{name}")]
     public IEnumerable<DtoOutputCompanies> FetchByName(string name)
     {
         return _useCaseFetchCompaniesByName.Execute(name);
@@ -75,8 +95,6 @@ public class CompaniesController : Controller
     [ProducesResponseType(StatusCodes.Status409Conflict)]
     public ActionResult<DtoOutputCompanies> Create(DtoInputCreateCompanies dto)
     {
-        // Use for add new account easily
-        //dto.account.Function = "Employee";
         var output = _useCaseCreateCompanies.Execute(dto);
 
         if (output == null) return Conflict(new Companies());

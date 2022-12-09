@@ -8,5 +8,6 @@ public interface ICompaniesRepository
     IEnumerable<Companies> FetchByName(string name);
     Companies Create(Companies companie);
     bool Update(Companies companies);
-    bool Delete(Companies companies);
+    bool Delete(Companies companies); 
+    Companies FetchByEmail(string email);
 }

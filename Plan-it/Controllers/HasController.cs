@@ -55,7 +55,7 @@ public class HasController : Controller
         }
         catch (KeyNotFoundException e)
         {
-            return NotFound(e.Message);
+            return null;
         }
     }
     

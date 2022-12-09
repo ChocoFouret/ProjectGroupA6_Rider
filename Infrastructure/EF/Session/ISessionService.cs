@@ -8,7 +8,7 @@ public interface ISessionService
 
     // string BuildTokenFunction(string key, string issuer, string role);
     
-    string BuildTokenPublic(string key, string issuer, Account account);
+    string BuildTokenPublic(string key, string issuer, Account account, int id);
 
     bool IsTokenValid(string key, string issuer, string token);
 }
