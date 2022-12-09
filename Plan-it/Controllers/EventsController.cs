@@ -67,12 +67,12 @@ public class EventsController : ControllerBase
     }
     
     [HttpGet]
-    [Route("fetch/{idSchedule}/{from}/{to}")]
-    public IEnumerable<DtoOutputEvents> FetchFromTo(int idSchedule, DateTime from, DateTime to)
+    [Route("fetch/{idCompanies}/{from}/{to}")]
+    public IEnumerable<DtoOutputEvents> FetchFromTo(int idCompanies, DateTime from, DateTime to)
     {
         DtoInputDateEvents date = new DtoInputDateEvents
         {
-            IdSchedule = idSchedule,
+            IdCompanies = idCompanies,
             From = from,
             To = to
         };
@@ -81,13 +81,13 @@ public class EventsController : ControllerBase
     }
     
     [HttpGet]
-    [Route("fetch/{idSchedule}/{idAccount}/{from}/{to}")]
-    public IEnumerable<DtoOutputEvents> FetchFromTo(int idSchedule, DateTime from, DateTime to, int idAccount)
+    [Route("fetch/{idCompanies}/{idAccount}/{from}/{to}")]
+    public IEnumerable<DtoOutputEvents> FetchFromTo(int idCompanies, DateTime from, DateTime to, int idAccount)
     {
         DtoInputDateEvents date = new DtoInputDateEvents
         {
             IdAccount = idAccount,
-            IdSchedule = idSchedule,
+            IdCompanies = idCompanies,
             From = from,
             To = to
         };

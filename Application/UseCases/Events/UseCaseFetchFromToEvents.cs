@@ -16,7 +16,7 @@ public class UseCaseFetchFromToEvents : IUseCaseParameterizedQuery<IEnumerable<D
     // Call the method into EfAccountRepesitory
     public IEnumerable<DtoOutputEvents> Execute(DtoInputDateEvents date)
     {
-        var dbEvents = _eventsRepository.FetchFromTo(date.IdSchedule, date.From, date.To);
+        var dbEvents = _eventsRepository.FetchFromTo(date.IdCompanies, date.From, date.To);
         return Mapper.GetInstance().Map<IEnumerable<DtoOutputEvents>>(dbEvents);
     }
 }

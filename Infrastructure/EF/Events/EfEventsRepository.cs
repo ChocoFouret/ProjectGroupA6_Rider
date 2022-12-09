@@ -33,15 +33,15 @@ public class EfEventsRepository : IEventsRepository
         return events;
     }
 
-    public IEnumerable<Events> FetchFromTo(int IdSchedule, DateTime from, DateTime to)
+    public IEnumerable<Events> FetchFromTo(int IdCompanies, DateTime from, DateTime to)
     {
         using var context = _planitContextProvider.NewContext();
         var events = context.Events.Where(events =>
-            events.IdSchedule == IdSchedule && events.StartDate >= from && events.EndDate <= to).ToList();
+            events.IdCompanies == IdCompanies && events.StartDate >= from && events.EndDate <= to).ToList();
 
         if (events == null)
             throw new KeyNotFoundException(
-                $"Events for Company ID {IdSchedule} between {from} and {to} were not found");
+                $"Events for Company ID {IdCompanies} between {from} and {to} were not found");
 
         EventTypes eventType;
         int x;
@@ -54,15 +54,15 @@ public class EfEventsRepository : IEventsRepository
         return events;
     }
     
-    public IEnumerable<Events> FetchFromToAccount(int IdSchedule, DateTime from, DateTime to, int? idAccount)
+    public IEnumerable<Events> FetchFromToAccount(int idCompanies, DateTime from, DateTime to, int? idAccount)
     {
         using var context = _planitContextProvider.NewContext();
         var events = context.Events.Where(events =>
-            events.IdSchedule == IdSchedule && events.StartDate >= from && events.EndDate <= to && events.IdAccount == idAccount).ToList();
+            events.IdCompanies == idCompanies && events.StartDate >= from && events.EndDate <= to && events.IdAccount == idAccount).ToList();
 
         if (events == null)
             throw new KeyNotFoundException(
-                $"Events for Company ID {IdSchedule} between {from} and {to} were not found");
+                $"Events for Company ID {idCompanies} between {from} and {to} were not found");
 
         EventTypes eventType;
         int x;

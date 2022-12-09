@@ -5,7 +5,7 @@ namespace Application.UseCases.Events.Dtos;
 public class DtoOutputEvents
 {
     public string IdEventsEmployee { get; set; }
-    public int IdSchedule { get; set; }
+    public int IdCompanies { get; set; }
     public int IdAccount { get; set; }
     public DateTime StartDate { get; set; }
     public DateTime EndDate { get; set; }

@@ -94,7 +94,7 @@ public class PlanitContext : DbContext
             entity.ToTable("EventsEmployee");
             entity.HasKey(arg => arg.IdEventsEmployee);
             entity.Property(arg => arg.IdEventsEmployee).HasColumnName("idEventsEmployee");
-            entity.Property(arg => arg.IdSchedule).HasColumnName("idSchedules");
+            entity.Property(arg => arg.IdCompanies).HasColumnName("idCompanies");
             entity.Property(arg => arg.IdAccount).HasColumnName("idAccount");
             entity.Property(arg => arg.StartDate).HasColumnName("startDate");
             entity.Property(arg => arg.EndDate).HasColumnName("endDate");
