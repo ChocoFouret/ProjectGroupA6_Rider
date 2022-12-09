@@ -84,7 +84,7 @@ builder.Services.AddScoped<UseCaseFetchAllEventType>();
 // Use cases functions
 builder.Services.AddScoped<UseCaseFetchAllFunctions>();
 builder.Services.AddScoped<UseCaseCreateFunction>();
-builder.Services.AddScoped<UseCaseFetchFunctionByTitle>();
+builder.Services.AddScoped<UseCaseFetchFunctionById>();
 
 // Database
 builder.Services.AddScoped<IConnectionStringProvider, ConnectionStringProvider>();

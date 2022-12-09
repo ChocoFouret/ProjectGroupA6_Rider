@@ -23,7 +23,8 @@ public class AccountController : ControllerBase
     private readonly UseCaseFetchAccountByEmail _useCaseFetchAccountByEmail;
     private readonly UseCaseGetAccount _useCaseGetAccount;
     private readonly UseCaseFetchHasByAccount _useCaseFetchHasByAccount;
-
+    private readonly UseCaseFetchFunctionById _useCaseFetchFunctionById;
+    
     private readonly ISessionService _sessionService;
     private readonly IConfiguration _config;
     
@@ -39,7 +40,8 @@ public class AccountController : ControllerBase
         UseCaseFetchAccountByEmail useCaseFetchAccountByEmail,
         ISessionService sessionService,
         IConfiguration configuration, 
-        UseCaseFetchHasByAccount useCaseFetchHasByAccount
+        UseCaseFetchHasByAccount useCaseFetchHasByAccount,
+        UseCaseFetchFunctionById useCaseFetchFunctionById
     )
     {
         _useCaseLoginAccount = useCaseLoginAccount;
@@ -52,7 +54,8 @@ public class AccountController : ControllerBase
         _useCaseGetAccount = useCaseGetAccount;
         _useCaseFetchAccountByEmail = useCaseFetchAccountByEmail;
         _useCaseFetchHasByAccount = useCaseFetchHasByAccount;
-
+        _useCaseFetchFunctionById = useCaseFetchFunctionById;
+        
         _sessionService = sessionService;
         _config = configuration;
     }
@@ -208,12 +211,19 @@ public class AccountController : ControllerBase
             bool isHas = has.ToList().Count != 0;
 
             int idCompanie = -1;
+            string functionName = "";
             if (isHas)
             {
                 idCompanie = has.ToList().FirstOrDefault().IdCompanies;
+                
+                DtoOutputFunction function = _useCaseFetchFunctionById.Execute(has.FirstOrDefault().IdFunctions);
+                if (function != null)
+                {
+                    functionName = function.Title;   
+                }
+                
             }
             
-            Console.WriteLine(isHas);
             var generatedToken =
                 _sessionService.BuildToken(_config["Jwt:Key"].ToString(), _config["Jwt:Issuer"].ToString(), account);
             
@@ -225,9 +235,8 @@ public class AccountController : ControllerBase
             };
             Response.Cookies.Append("session", generatedToken, cookie);
 
-            
             var generatedTokenPublic =
-                _sessionService.BuildTokenPublic(_config["Jwt:Key"].ToString(), _config["Jwt:Issuer"].ToString(), account, idCompanie);
+                _sessionService.BuildTokenPublic(_config["Jwt:Key"].ToString(), _config["Jwt:Issuer"].ToString(), account, idCompanie, functionName);
             var cookiePublic = new CookieOptions()
             {
                 Secure = true,

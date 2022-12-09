@@ -62,6 +62,16 @@ public class EfFunctionRepository : IFunctionRepository
         return function;
     }
     
+    public Function FetchById(int id)
+    {
+        using var context = _planitContextProvider.NewContext();
+        var function = context.Functions.FirstOrDefault(function => function.IdFunctions == id);
+
+        if (function == null)
+            throw new KeyNotFoundException($"Function with {id} has not been found");
+
+        return function;
+    }
     
     /*
     public Function Read(Function function)

@@ -14,9 +14,8 @@ public class SessionService : ISessionService
     {
         var claims = new[]
         {
-            new Claim(ClaimTypes.Email, account.Email),
+            new Claim(ClaimTypes.Email, account.IdAccount.ToString()),
             new Claim(ClaimTypes.Name, account.LastName),
-            //new Claim(ClaimTypes.Role, account.Function),
             new Claim(ClaimTypes.NameIdentifier,
                 Guid.NewGuid().ToString())
         };
@@ -27,16 +26,16 @@ public class SessionService : ISessionService
             expires: DateTime.Now.AddMinutes(EXPIRY_DURATION_MINUTES), signingCredentials: credentials);
         return new JwtSecurityTokenHandler().WriteToken(tokenDescriptor);
     }
-    
+
 //    public string BuildTokenFunction(string key, string issuer, string role)
-    public string BuildTokenPublic(string key, string issuer, Account account, int id)
+    public string BuildTokenPublic(string key, string issuer, Account account, int id, string function)
     {
         var claims = new[]
         {
-            new Claim(ClaimTypes.Email, account.Email),
-            new Claim(ClaimTypes.Role, account.IsAdmin.ToString()),
-            new Claim(ClaimTypes.Role, account.IdAccount.ToString()),
-            new Claim(ClaimTypes.Role, id.ToString()),
+            new Claim(ClaimTypes.Email, account.IdAccount.ToString()),
+            new Claim(ClaimTypes.Authentication, account.IsAdmin.ToString()),
+            new Claim(ClaimTypes.UserData, id.ToString()),
+            new Claim(ClaimTypes.Role, function),
             new Claim(ClaimTypes.NameIdentifier,
                 Guid.NewGuid().ToString())
         };
@@ -47,7 +46,7 @@ public class SessionService : ISessionService
             expires: DateTime.Now.AddMinutes(EXPIRY_DURATION_MINUTES), signingCredentials: credentials);
         return new JwtSecurityTokenHandler().WriteToken(tokenDescriptor);
     }
-    
+
     public bool IsTokenValid(string key, string issuer, string token)
     {
         var mySecret = Encoding.UTF8.GetBytes(key);

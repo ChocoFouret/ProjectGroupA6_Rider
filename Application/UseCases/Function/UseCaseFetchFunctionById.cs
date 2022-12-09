@@ -3,18 +3,18 @@ using Application;
 using Application.UseCases.Utils;
 using Domain;
 
-public class UseCaseFetchFunctionByTitle : IUseCaseParameterizedQuery<DtoOutputFunction, string>
+public class UseCaseFetchFunctionById : IUseCaseParameterizedQuery<DtoOutputFunction, int>
 {
     private readonly IFunctionRepository _functionRepository;
 
-    public UseCaseFetchFunctionByTitle(IFunctionRepository functionRepository)
+    public UseCaseFetchFunctionById(IFunctionRepository functionRepository)
     {
         _functionRepository = functionRepository;
     }
 
-    public DtoOutputFunction Execute(string title)
+    public DtoOutputFunction Execute(int id)
     {
-        var dbFunction = _functionRepository.FetchByTitle(title);
+        var dbFunction = _functionRepository.FetchById(id);
         return Mapper.GetInstance().Map<DtoOutputFunction>(dbFunction);
     }
 }
