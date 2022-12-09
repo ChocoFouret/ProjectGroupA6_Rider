@@ -17,7 +17,7 @@ public class EventsController : ControllerBase
     private readonly UseCaseFetchFromToEvents _useCaseFetchFromToEvents;
     private readonly UseCaseFetchFromToAccountEvents _useCaseFetchFromToAccountEvents;
     private readonly UseCaseUpdateEvents _useCaseUpdateEvents;
-    private readonly IHubContext<EventHub> eventHub;
+    private readonly IHubContext<EventsHub> _eventsHub;
     private readonly UseCaseFetchEventsByEmployee _useCaseFetchEventsByEmployee;
 
     public EventsController(
@@ -28,7 +28,7 @@ public class EventsController : ControllerBase
         UseCaseFetchFromToEvents useCaseFetchFromToEvents,
         UseCaseFetchFromToAccountEvents useCaseFetchFromToAccountEvents,
         UseCaseUpdateEvents useCaseUpdateEvents,
-        IHubContext<EventHub> eventHub,
+        IHubContext<EventsHub> eventsHub,
         UseCaseFetchEventsByEmployee useCaseFetchEventsByEmployee
     )
     {
@@ -40,7 +40,7 @@ public class EventsController : ControllerBase
         _useCaseFetchFromToAccountEvents = useCaseFetchFromToAccountEvents;
         _useCaseUpdateEvents = useCaseUpdateEvents;
         _useCaseFetchEventsByEmployee = useCaseFetchEventsByEmployee;
-        this.eventHub = eventHub;
+        _eventsHub = eventsHub;
     }
 
     [HttpGet]
@@ -96,13 +96,13 @@ public class EventsController : ControllerBase
     }
     
     [HttpPost]
-    [Route("create")]
+    [Route("create/{idCompanies}")]
     [ProducesResponseType(StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status409Conflict)]
-    public ActionResult<DtoInputCreateEvents> Create(DtoInputCreateEvents dto)
+    public ActionResult<DtoInputCreateEvents> Create(DtoInputCreateEvents dto, string idCompanies)
     {
         var output = _useCaseCreateEvents.Execute(dto);
-        eventHub.Clients.All.SendAsync(WebSocketActions.MESSAGE_CREATED, dto);
+        _eventsHub.Clients.Group(idCompanies).SendAsync(WebSocketActions.MESSAGE_CREATED, dto);
         return CreatedAtAction(
             nameof(FetchById),
             new { id = output.IdEventsEmployee },
@@ -111,22 +111,22 @@ public class EventsController : ControllerBase
     }
     
     [HttpPut]
-    [Route("update")]
+    [Route("update/{idCompanies}")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public ActionResult<Boolean> Update(DtoInputUpdateEvents dto)
+    public ActionResult<Boolean> Update(DtoInputUpdateEvents dto, string idCompanies)
     {
-        eventHub.Clients.All.SendAsync(WebSocketActions.MESSAGE_UPDATED, dto);
+        _eventsHub.Clients.Group(idCompanies).SendAsync(WebSocketActions.MESSAGE_UPDATED, dto);
         return _useCaseUpdateEvents.Execute(dto);
     }
     
     [HttpDelete]
-    [Route("delete/{IdEventsEmployee}")]
+    [Route("delete/{IdEventsEmployee}/{idCompanies}")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public ActionResult<Boolean> Delete(string IdEventsEmployee)
+    public ActionResult<Boolean> Delete(string IdEventsEmployee, string idCompanies)
     {
-        eventHub.Clients.All.SendAsync(WebSocketActions.MESSAGE_DELETED, IdEventsEmployee);
+        _eventsHub.Clients.Group(idCompanies).SendAsync(WebSocketActions.MESSAGE_DELETED, IdEventsEmployee);
         return _useCaseDeleteEvents.Execute(IdEventsEmployee);
     }
     
