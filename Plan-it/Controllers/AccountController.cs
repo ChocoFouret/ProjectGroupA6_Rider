@@ -1,8 +1,11 @@
 using Application.UseCases.Accounts;
 using Application.UseCases.Accounts.Dtos;
+using Application.UseCases.Has.Dtos;
 using Domain;
 using JWT.Models;
 using Microsoft.AspNetCore.Mvc;
+using Service.UseCases.Companies;
+using Service.UseCases.Has.Dtos;
 
 namespace Plan_it.Controllers;
 
@@ -19,6 +22,7 @@ public class AccountController : ControllerBase
     private readonly UseCaseFetchAccountById _useCaseFetchAccountById;
     private readonly UseCaseFetchAccountByEmail _useCaseFetchAccountByEmail;
     private readonly UseCaseGetAccount _useCaseGetAccount;
+    private readonly UseCaseFetchHasByAccount _useCaseFetchHasByAccount;
 
     private readonly ISessionService _sessionService;
     private readonly IConfiguration _config;
@@ -34,7 +38,8 @@ public class AccountController : ControllerBase
         UseCaseGetAccount useCaseGetAccount,
         UseCaseFetchAccountByEmail useCaseFetchAccountByEmail,
         ISessionService sessionService,
-        IConfiguration configuration
+        IConfiguration configuration, 
+        UseCaseFetchHasByAccount useCaseFetchHasByAccount
     )
     {
         _useCaseLoginAccount = useCaseLoginAccount;
@@ -46,6 +51,7 @@ public class AccountController : ControllerBase
         _useCaseFetchAccountById = useCaseFetchAccountById;
         _useCaseGetAccount = useCaseGetAccount;
         _useCaseFetchAccountByEmail = useCaseFetchAccountByEmail;
+        _useCaseFetchHasByAccount = useCaseFetchHasByAccount;
 
         _sessionService = sessionService;
         _config = configuration;
@@ -198,6 +204,16 @@ public class AccountController : ControllerBase
         if (_useCaseLoginAccount.Execute(dto))
         {
             Account account = _useCaseGetAccount.Execute(dto.Email);
+            IEnumerable<DtoOutputHas> has = _useCaseFetchHasByAccount.Execute(account.IdAccount);
+            bool isHas = has.ToList().Count != 0;
+
+            int idCompanie = -1;
+            if (isHas)
+            {
+                idCompanie = has.ToList().FirstOrDefault().IdCompanies;
+            }
+            
+            Console.WriteLine(isHas);
             var generatedToken =
                 _sessionService.BuildToken(_config["Jwt:Key"].ToString(), _config["Jwt:Issuer"].ToString(), account);
             
@@ -209,8 +225,9 @@ public class AccountController : ControllerBase
             };
             Response.Cookies.Append("session", generatedToken, cookie);
 
+            
             var generatedTokenPublic =
-                _sessionService.BuildTokenPublic(_config["Jwt:Key"].ToString(), _config["Jwt:Issuer"].ToString(), account);
+                _sessionService.BuildTokenPublic(_config["Jwt:Key"].ToString(), _config["Jwt:Issuer"].ToString(), account, idCompanie);
             var cookiePublic = new CookieOptions()
             {
                 Secure = true,

@@ -29,13 +29,14 @@ public class SessionService : ISessionService
     }
     
 //    public string BuildTokenFunction(string key, string issuer, string role)
-    public string BuildTokenPublic(string key, string issuer, Account account)
+    public string BuildTokenPublic(string key, string issuer, Account account, int id)
     {
         var claims = new[]
         {
             new Claim(ClaimTypes.Email, account.Email),
             new Claim(ClaimTypes.Role, account.IsAdmin.ToString()),
-            new Claim(ClaimTypes.SerialNumber, account.IdAccount.ToString()),
+            new Claim(ClaimTypes.Role, account.IdAccount.ToString()),
+            new Claim(ClaimTypes.Role, id.ToString()),
             new Claim(ClaimTypes.NameIdentifier,
                 Guid.NewGuid().ToString())
         };

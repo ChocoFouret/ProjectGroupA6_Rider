@@ -18,9 +18,6 @@ public class UseCaseCreateCompanies
     // Call the method into EfAccountRepesitory
     public DtoOutputCompanies Execute(DtoInputCreateCompanies input)
     {
-        var companies = _companiesRepository.FetchByName(input.companie.CompaniesName);
-        if (companies != null) return null;
-
         var dbCompanies = _companiesRepository.Create(input.companie);
         return Mapper.GetInstance().Map<DtoOutputCompanies>(dbCompanies);
     }
