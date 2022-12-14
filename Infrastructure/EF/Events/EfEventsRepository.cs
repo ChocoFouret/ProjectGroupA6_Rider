@@ -78,6 +78,19 @@ public class EfEventsRepository : IEventsRepository
     public Events Create(Events events)
     {
         using var context = _planitContextProvider.NewContext();
+        
+        if(context.Companies.FirstOrDefault(company => company.IdCompanies == events.IdCompanies) == null)
+            throw new KeyNotFoundException($"Company with ID {events.IdCompanies} has not been found");
+        
+        if(context.Accounts.FirstOrDefault(account => account.IdAccount == events.IdAccount) == null)
+            throw new KeyNotFoundException($"Account with ID {events.IdAccount} has not been found");
+        
+        if(context.EventTypes.FirstOrDefault(eventType => eventType.Types == events.Types) == null)
+            throw new KeyNotFoundException($"Event Type {events.Types} has not been found");
+        
+        if (events.StartDate > events.EndDate)
+            throw new ArgumentException("Start date cannot be after end date");
+
         try
         {
             context.Events.Add(events);
