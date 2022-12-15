@@ -10,7 +10,9 @@ using Domain;
 using Infrastructure;
 using Infrastructure.EF;
 using Infrastructure.EF.Companies;
+using Infrastructure.EF.Events;
 using Infrastructure.EF.Has;
+using Infrastructure.EF.Session;
 using JWT.Models;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
@@ -136,10 +138,8 @@ builder.Services.AddAuthorization(options =>
 });
 builder.Services.AddScoped<ISessionService, SessionService>();
 
-/*****/
 builder.Services.AddControllersWithViews();
 builder.Services.AddSignalR();
-/*****/
 
 var app = builder.Build();
 
@@ -150,10 +150,12 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-app.UseHttpsRedirection();
-
 /* It allows the frontend to access the backend. */
 app.UseCors("Dev");
+
+app.UseHttpsRedirection();
+
+app.UseCookiePolicy();
 
 app.UseWebSockets(new WebSocketOptions
 {

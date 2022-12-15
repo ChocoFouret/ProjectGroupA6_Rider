@@ -1,5 +1,4 @@
-﻿using Application.UseCases.Accounts;
-using Application.UseCases.Events.Dtos;
+﻿using Application.UseCases.Events.Dtos;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Plan_it.Controllers;
@@ -13,21 +12,17 @@ public class EventTypesController : ControllerBase
     private readonly UseCaseFetchEventTypesByType _useCaseFetchEventTypesByType;
     private readonly UseCaseUpdateEventTypes _useCaseUpdateEventTypes;
     
-    private readonly IConfiguration _config;
-
     public EventTypesController(
         UseCaseCreateEventTypes useCaseCreateEventTypes,
         UseCaseFetchAllEventType useCaseFetchAllEventType,
         UseCaseFetchEventTypesByType useCaseFetchEventTypesByType,
-        UseCaseUpdateEventTypes useCaseUpdateEventTypes,
-        IConfiguration configuration
+        UseCaseUpdateEventTypes useCaseUpdateEventTypes
     )
     {
         _useCaseCreateEventTypes = useCaseCreateEventTypes;
         _useCaseFetchAllEventType = useCaseFetchAllEventType;
         _useCaseFetchEventTypesByType = useCaseFetchEventTypesByType;
         _useCaseUpdateEventTypes = useCaseUpdateEventTypes;
-        _config = configuration;
     }
     
     [HttpGet]
