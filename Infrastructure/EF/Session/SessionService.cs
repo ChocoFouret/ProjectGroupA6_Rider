@@ -10,12 +10,13 @@ public class SessionService : ISessionService
 {
     private const double EXPIRY_DURATION_MINUTES = 1440;
 
-    public string BuildToken(string key, string issuer, Account account)
+    public string BuildToken(string key, string issuer, Account account, string function)
     {
         var claims = new[]
         {
             new Claim(ClaimTypes.Email, account.IdAccount.ToString()),
             new Claim(ClaimTypes.Name, account.LastName),
+            new Claim(ClaimTypes.Role, function),
             new Claim(ClaimTypes.NameIdentifier,
                 Guid.NewGuid().ToString())
         };

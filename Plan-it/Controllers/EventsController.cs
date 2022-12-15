@@ -1,5 +1,9 @@
 ﻿using Application.UseCases.Accounts;
 using Application.UseCases.Events.Dtos;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Authorization.Infrastructure;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
 using WebSocketDemo.Hubs;
@@ -8,6 +12,7 @@ namespace Plan_it.Controllers;
 
 [ApiController]
 [Route("api/v1/[controller]")]
+// [Authorize(Policy = "all")]
 public class EventsController : ControllerBase
 {
     private readonly UseCaseCreateEvents _useCaseCreateEvents;
@@ -112,10 +117,22 @@ public class EventsController : ControllerBase
     
     [HttpPut]
     [Route("update/{idCompanies}")]
+    // [Authorize(Policy = "all")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public ActionResult<Boolean> Update(DtoInputUpdateEvents dto, string idCompanies)
     {
+        /*
+        if (!User.IsInRole("Directeur"))
+        {
+            Console.WriteLine("PAS DIRECTEUR");
+            if (dto.StartDate > dto.EndDate || dto.IsValid)
+            {
+                return false;
+            }
+        }
+        */
+        
         _eventsHub.Clients.Group(idCompanies).SendAsync(WebSocketActions.MESSAGE_UPDATED, dto);
         return _useCaseUpdateEvents.Execute(dto);
     }

@@ -225,7 +225,7 @@ public class AccountController : ControllerBase
             }
             
             var generatedToken =
-                _sessionService.BuildToken(_config["Jwt:Key"].ToString(), _config["Jwt:Issuer"].ToString(), account);
+                _sessionService.BuildToken(_config["Jwt:Key"].ToString(), _config["Jwt:Issuer"].ToString(), account, functionName);
             
             var cookie = new CookieOptions()
             {

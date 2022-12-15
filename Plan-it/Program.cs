@@ -132,9 +132,8 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJw
 });
 builder.Services.AddAuthorization(options =>
 {
-    options.AddPolicy("director", policy => policy.RequireRole("Director"));
-    options.AddPolicy("administrator", policy => policy.RequireRole("Administrator"));
-    options.AddPolicy("all", policy => policy.RequireRole("Director", "Administrator"));
+    options.AddPolicy("directors", policy => policy.RequireRole("Directeur"));
+    options.AddPolicy("all", policy => policy.RequireRole("Employe", "Directeur"));
 });
 builder.Services.AddScoped<ISessionService, SessionService>();
 
@@ -157,7 +156,6 @@ app.UseHttpsRedirection();
 /* It allows the frontend to access the backend. */
 app.UseCors("Dev");
 
-/*****/
 app.UseWebSockets(new WebSocketOptions
 {
     KeepAliveInterval = TimeSpan.FromSeconds(10),
@@ -165,16 +163,15 @@ app.UseWebSockets(new WebSocketOptions
 
 app.UseRouting();
 
-app.UseEndpoints(endpoints =>
-{
-    endpoints.MapHub<EventsHub>("/EventHub");
-});
-/*****/
-
 // Authentification
 app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
+app.UseEndpoints(endpoints =>
+{
+    endpoints.MapHub<EventsHub>("/EventHub");
+});
+
 
 app.Run();

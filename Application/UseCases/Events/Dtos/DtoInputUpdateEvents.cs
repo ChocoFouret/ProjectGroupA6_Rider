@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.Runtime.InteropServices;
 using Domain;
 
 namespace Application.UseCases.Events.Dtos;
@@ -12,5 +13,6 @@ public class DtoInputUpdateEvents
     public bool IsValid { get; set; }
     public string? Comments { get; set; }
     public string Types { get; set; }
-    public EventTypes EventTypes { get; set; }
+    
+    public EventTypes? EventTypes { get; set; }
 }
