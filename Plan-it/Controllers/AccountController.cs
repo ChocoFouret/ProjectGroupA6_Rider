@@ -135,6 +135,7 @@ public class AccountController : ControllerBase
     {
         // Use for add new account easily
         //dto.account.Function = "Employee";
+        dto.account.IsAdmin = false;
         var output = _useCaseCreateAccount.Execute(dto);
 
         if (output == null) return Conflict(new Account());
