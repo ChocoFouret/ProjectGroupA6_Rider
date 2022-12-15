@@ -63,7 +63,6 @@ builder.Services.AddScoped<UseCaseDeleteAccount>();
 builder.Services.AddScoped<UseCaseFetchAllAccounts>();
 builder.Services.AddScoped<UseCaseFetchAccountById>();
 builder.Services.AddScoped<UseCaseFetchAccountByEmail>();
-builder.Services.AddScoped<UseCaseGetAccount>();
 
 // Use cases events
 builder.Services.AddScoped<UseCaseCreateEvents>();
@@ -71,7 +70,7 @@ builder.Services.AddScoped<UseCaseDeleteEvents>();
 builder.Services.AddScoped<UseCaseFetchAllEvents>();
 builder.Services.AddScoped<UseCaseFetchEventsById>();
 builder.Services.AddScoped<UseCaseFetchFromToEvents>();
-builder.Services.AddScoped<UseCaseFetchFromToAccountEvents>();
+builder.Services.AddScoped<UseCaseFetchStartToEndAccountEvents>();
 builder.Services.AddScoped<UseCaseUpdateEvents>();
 builder.Services.AddScoped<UseCaseFetchEventsByEmployee>();
 

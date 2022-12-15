@@ -13,8 +13,7 @@ public class UseCaseUpdatePasswordAccount : IUseCaseWriter<String, DtoInputUpdat
     {
         _accountRepository = accountRepository;
     }
-
-    // Call the method into EfAccountRepesitory
+    
     public String Execute(DtoInputUpdatePasswordAccount dto)
     {
         var account = _accountRepository.FetchById(dto.Id);

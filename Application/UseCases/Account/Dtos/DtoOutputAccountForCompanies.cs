@@ -3,9 +3,9 @@
 // Data
 // Transfer
 // Object
-public class DtoOutputAccountForCompagnies
+public class DtoOutputAccountForCompanies
 {
-    // Returns the information you wish to display ONLY
+    // So this dto is only used for the creation of a calendar (with the data that are useful for it)
     public int IdAccount { get; set; }
     public string Email { get; set; }
     public string LastName { get; set; }

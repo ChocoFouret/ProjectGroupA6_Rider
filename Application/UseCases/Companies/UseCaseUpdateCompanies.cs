@@ -1,9 +1,10 @@
 using Application.UseCases.Companies.Dtos;
+using Application.UseCases.Utils;
 using Infrastructure.EF.Companies;
 
 namespace Service.UseCases.Companies;
 
-public class UseCaseUpdateCompanies
+public class UseCaseUpdateCompanies: IUseCaseWriter<bool, DtoInputUpdateCompanies>
 {
     private readonly ICompaniesRepository _companiesRepository;
 

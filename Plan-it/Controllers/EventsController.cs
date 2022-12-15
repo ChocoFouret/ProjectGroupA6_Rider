@@ -20,7 +20,7 @@ public class EventsController : ControllerBase
     private readonly UseCaseFetchAllEvents _useCaseFetchAllEvents;
     private readonly UseCaseFetchEventsById _useCaseFetchEventById;
     private readonly UseCaseFetchFromToEvents _useCaseFetchFromToEvents;
-    private readonly UseCaseFetchFromToAccountEvents _useCaseFetchFromToAccountEvents;
+    private readonly UseCaseFetchStartToEndAccountEvents _useCaseFetchStartToEndAccountEvents;
     private readonly UseCaseUpdateEvents _useCaseUpdateEvents;
     private readonly IHubContext<EventsHub> _eventsHub;
     private readonly UseCaseFetchEventsByEmployee _useCaseFetchEventsByEmployee;
@@ -31,7 +31,7 @@ public class EventsController : ControllerBase
         UseCaseFetchAllEvents useCaseFetchAllEvents,
         UseCaseFetchEventsById useCaseFetchEventById,
         UseCaseFetchFromToEvents useCaseFetchFromToEvents,
-        UseCaseFetchFromToAccountEvents useCaseFetchFromToAccountEvents,
+        UseCaseFetchStartToEndAccountEvents useCaseFetchStartToEndAccountEvents,
         UseCaseUpdateEvents useCaseUpdateEvents,
         IHubContext<EventsHub> eventsHub,
         UseCaseFetchEventsByEmployee useCaseFetchEventsByEmployee
@@ -42,7 +42,7 @@ public class EventsController : ControllerBase
         _useCaseFetchAllEvents = useCaseFetchAllEvents;
         _useCaseFetchEventById = useCaseFetchEventById;
         _useCaseFetchFromToEvents = useCaseFetchFromToEvents;
-        _useCaseFetchFromToAccountEvents = useCaseFetchFromToAccountEvents;
+        _useCaseFetchStartToEndAccountEvents = useCaseFetchStartToEndAccountEvents;
         _useCaseUpdateEvents = useCaseUpdateEvents;
         _useCaseFetchEventsByEmployee = useCaseFetchEventsByEmployee;
         _eventsHub = eventsHub;
@@ -97,7 +97,7 @@ public class EventsController : ControllerBase
             To = to
         };
 
-        return _useCaseFetchFromToAccountEvents.Execute(date);
+        return _useCaseFetchStartToEndAccountEvents.Execute(date);
     }
     
     [HttpPost]

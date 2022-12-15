@@ -8,6 +8,6 @@ public class DtoOutputHas
     public int IdAccount { get; set; }
     public int IdFunctions { get; set; }
     public int IdHas { get; set; }
-    public DtoOutputAccountForCompagnies Account { get; set; }
+    public DtoOutputAccountForCompanies Account { get; set; }
     public DtoOutputFunction Function { get; set; }
 }

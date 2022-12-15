@@ -60,21 +60,6 @@ public class EfAccountRepository : IAccountRepository
     }
 
     /// <summary>
-    /// > This function returns an account object if the email exists in the database
-    /// </summary>
-    /// <param name="email">The email of the account to be retrieved.</param>
-    /// <returns>
-    /// An account object
-    /// </returns>
-    public Account? GetAccount(string email)
-    {
-        using var context = _planitContextProvider.NewContext();
-        var account = context.Accounts.FirstOrDefault(account => account.Email == email);
-
-        return account;
-    }
-
-    /// <summary>
     /// This function creates a new account in the database
     /// </summary>
     /// <param name="Account">The account object that is being created.</param>

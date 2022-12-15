@@ -1,10 +1,11 @@
 using Application;
+using Application.UseCases.Utils;
 using Infrastructure.EF.Has;
 using Service.UseCases.Has.Dtos;
 
 namespace Service.UseCases.Has;
 
-public class UseCaseFetchHasById
+public class UseCaseFetchHasById : IUseCaseParameterizedQuery<DtoOutputHas, int>
 {
     private readonly IHasRepository _hasRepository;
 

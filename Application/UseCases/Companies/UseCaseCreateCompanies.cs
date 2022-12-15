@@ -1,12 +1,13 @@
 using Application;
 using Application.UseCases.Accounts.Dtos;
 using Application.UseCases.Companies.Dtos;
+using Application.UseCases.Utils;
 using Domain;
 using Infrastructure.EF.Companies;
 
 namespace Service.UseCases.Companies;
 
-public class UseCaseCreateCompanies
+public class UseCaseCreateCompanies: IUseCaseWriter<DtoOutputCompanies, DtoInputCreateCompanies>
 {
     private readonly ICompaniesRepository _companiesRepository;
 

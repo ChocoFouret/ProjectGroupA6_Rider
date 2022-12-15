@@ -1,8 +1,9 @@
+using Application.UseCases.Utils;
 using Infrastructure.EF.Has;
 
 namespace Application.UseCases.Has;
 
-public class UseCaseDeleteHas
+public class UseCaseDeleteHas: IUseCaseWriter<Boolean, int>
 {
     private readonly IHasRepository _hasRepository;
 
