@@ -23,10 +23,16 @@ public class UseCaseUpdateAccount : IUseCaseWriter<Boolean, DtoInputUpdateAccoun
         account.LastName = input.LastName;
 
         account.Email = input.Email;
+        account.Phone = input.Phone;
         // account.Password = EncryptPassword.HashPassword(input.Password);
-        
-        account.IsAdmin = input.IsAdmin;
 
+        if (input.IsAdmin != null)
+        {
+            account.IsAdmin = input.IsAdmin;
+        }
+        
+        account.PictureURL = input.PictureURL;
+        
         return _accountRepository.Update(account);
     }
 }

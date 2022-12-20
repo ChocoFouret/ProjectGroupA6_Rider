@@ -1,8 +1,10 @@
 using Application.UseCases.Accounts;
 using Application.UseCases.Accounts.Dtos;
+using Application.UseCases.Companies;
 using Application.UseCases.Has.Dtos;
 using Domain;
 using JWT.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Service.UseCases.Companies;
 using Service.UseCases.Has.Dtos;
@@ -24,12 +26,11 @@ public class AccountController : ControllerBase
     private readonly UseCaseFetchHasByAccount _useCaseFetchHasByAccount;
     private readonly UseCaseFetchFunctionById _useCaseFetchFunctionById;
     private readonly UseCaseFetchProfilById _useCaseFetchProfilById;
+    private readonly UseCaseFetchAddressById _useCaseFetchAddressById;
+    private readonly UseCaseFetchCompaniesById _useCaseFetchCompaniesById;
     
     private readonly ISessionService _sessionService;
     private readonly IConfiguration _config;
-
-    private readonly CompaniesController _companiesController;
-    private readonly HasController _hasController;
     
     public AccountController(
         UseCaseLoginAccount useCaseLoginAccount,
@@ -44,10 +45,9 @@ public class AccountController : ControllerBase
         IConfiguration configuration, 
         UseCaseFetchHasByAccount useCaseFetchHasByAccount,
         UseCaseFetchFunctionById useCaseFetchFunctionById,
-        UseCaseFetchProfilById useCaseFetchProfilById
-
-        CompaniesController companiesController,
-        HasController hasController
+        UseCaseFetchProfilById useCaseFetchProfilById,
+        UseCaseFetchAddressById useCaseFetchAddressById,
+        UseCaseFetchCompaniesById useCaseFetchCompaniesById
     )
     {
         _useCaseLoginAccount = useCaseLoginAccount;
@@ -61,9 +61,8 @@ public class AccountController : ControllerBase
         _useCaseFetchHasByAccount = useCaseFetchHasByAccount;
         _useCaseFetchFunctionById = useCaseFetchFunctionById;
         _useCaseFetchProfilById = useCaseFetchProfilById;
-
-        _companiesController = companiesController;
-        _hasController = hasController;
+        _useCaseFetchAddressById = useCaseFetchAddressById;
+        _useCaseFetchCompaniesById = useCaseFetchCompaniesById;
         
         _sessionService = sessionService;
         _config = configuration;
@@ -131,7 +130,12 @@ public class AccountController : ControllerBase
     {
         try
         {
-            return _useCaseFetchProfilById.Execute(id);
+            DtoOutputProfilAccount dtoOutputProfilAccount = _useCaseFetchProfilById.Execute(id);
+            dtoOutputProfilAccount.Address = _useCaseFetchAddressById.Execute(dtoOutputProfilAccount.IdAddress);
+            var has = _useCaseFetchHasByAccount.Execute(id).FirstOrDefault()!;
+            dtoOutputProfilAccount.Companies = _useCaseFetchCompaniesById.Execute(has.IdCompanies);
+            dtoOutputProfilAccount.Function = has.Function.Title;
+            return dtoOutputProfilAccount;
         }
         catch (KeyNotFoundException e)
         {
@@ -217,6 +221,7 @@ public class AccountController : ControllerBase
     /// </returns>
     [HttpPut]
     [Route("update")]
+    [Authorize]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public ActionResult<Boolean> Update(DtoInputUpdateAccount dto)

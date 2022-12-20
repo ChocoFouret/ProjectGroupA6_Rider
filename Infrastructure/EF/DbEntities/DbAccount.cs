@@ -12,4 +12,5 @@ public class DbAccount
     
     public bool IsAdmin {get; set;}
     public string PictureURL {get; set;}
+    public string Phone { get; set; }
 }

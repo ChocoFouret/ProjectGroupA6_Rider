@@ -1,5 +1,6 @@
 using System.Text;
 using Application.UseCases.Accounts;
+using Application.UseCases.Addresss;
 using Application.UseCases.Companies;
 using Application.UseCases.Companies.Dtos;
 using Application.UseCases.Events.Dtos;
@@ -37,6 +38,7 @@ builder.Services.AddScoped<ICompaniesRepository,EfCompaniesRepository>();
 builder.Services.AddScoped<IHasRepository, EfHasRepository>();
 builder.Services.AddScoped<IEventsRepository, EfEventsRepository>();
 builder.Services.AddScoped<IEventTypesRepository, EfEventTypesRepository>();
+builder.Services.AddScoped<IAddressRepository, EfAddressRepository>();
 
 //Use Case Has
 builder.Services.AddScoped<UseCaseFetchAllHas>();
@@ -87,6 +89,11 @@ builder.Services.AddScoped<UseCaseFetchAllEventType>();
 builder.Services.AddScoped<UseCaseFetchAllFunctions>();
 builder.Services.AddScoped<UseCaseCreateFunction>();
 builder.Services.AddScoped<UseCaseFetchFunctionById>();
+
+// Uses cases address
+builder.Services.AddScoped<UseCaseFetchAllAddress>();
+builder.Services.AddScoped<UseCaseFetchAddressById>();
+builder.Services.AddScoped<UseCaseFetchAddressByPostCode>();
 
 // Database
 builder.Services.AddScoped<IConnectionStringProvider, ConnectionStringProvider>();

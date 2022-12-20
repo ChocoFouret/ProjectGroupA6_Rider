@@ -13,5 +13,6 @@ public class DtoOutputAccountList
     public int IdAddress { get; set; }
     public string PictureURL { get; set; }
     public bool IsAdmin { get; set; }
+    public string Phone { get; set; }
     public Domain.Companies? Companies { get; set; }
 }

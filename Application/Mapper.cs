@@ -36,7 +36,12 @@ public static class Mapper
             cfg.CreateMap<Function, DtoOutputFunction>();
             cfg.CreateMap<DbFunction, DtoOutputFunction>();
             cfg.CreateMap<DbFunction, Function>();
-
+            
+            // Address
+            cfg.CreateMap<Address, DtoOutputAddress>();
+            cfg.CreateMap<DbAddress, DtoOutputAddress>();
+            cfg.CreateMap<DbAddress, Address>();
+            
             cfg.CreateMap<Companies, DtoOutputCompanies>();
             cfg.CreateMap<DbCompanies, DtoOutputCompanies>();
             cfg.CreateMap<DbCompanies, Companies>();

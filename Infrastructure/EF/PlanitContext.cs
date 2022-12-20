@@ -8,6 +8,9 @@ public class PlanitContext : DbContext
     private readonly IConnectionStringProvider _connectionStringProvider;
 
     public DbSet<Account> Accounts { get; set; }
+    
+    public DbSet<Address> Address { get; set; }
+
     public DbSet<Function> Functions { get; set; }
     
     public DbSet<Domain.Companies> Companies { get; set; }
@@ -49,6 +52,7 @@ public class PlanitContext : DbContext
             entity.Property(arg => arg.IdAddress).HasColumnName("idAddress");
             entity.Property(arg => arg.IsAdmin).HasColumnName("isAdmin");
             entity.Property(arg => arg.PictureURL).HasColumnName("pictureUrl");
+            entity.Property(arg => arg.Phone).HasColumnName("phone");
         });
         // Function table
         modelBuilder.Entity<Function>(entity =>
@@ -105,6 +109,16 @@ public class PlanitContext : DbContext
                 .WithOne()
                 .HasForeignKey<Domain.Events>(arg => arg.Types)
                 .HasPrincipalKey<EventTypes>(arg => arg.Types);
+        });
+        modelBuilder.Entity<Domain.Address>(entity =>
+        {
+            entity.ToTable("Address");
+            entity.HasKey(arg => arg.IdAddress);
+            entity.Property(arg => arg.IdAddress).HasColumnName("idAddress");
+            entity.Property(arg => arg.Street).HasColumnName("street");
+            entity.Property(arg => arg.Number).HasColumnName("number");
+            entity.Property(arg => arg.PostCode).HasColumnName("postCode");
+            entity.Property(arg => arg.City).HasColumnName("city");
         });
     }
 }
