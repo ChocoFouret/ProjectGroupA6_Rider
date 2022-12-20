@@ -23,6 +23,7 @@ public class AccountController : ControllerBase
     private readonly UseCaseFetchAccountByEmail _useCaseFetchAccountByEmail;
     private readonly UseCaseFetchHasByAccount _useCaseFetchHasByAccount;
     private readonly UseCaseFetchFunctionById _useCaseFetchFunctionById;
+    private readonly UseCaseFetchProfilById _useCaseFetchProfilById;
     
     private readonly ISessionService _sessionService;
     private readonly IConfiguration _config;
@@ -43,6 +44,8 @@ public class AccountController : ControllerBase
         IConfiguration configuration, 
         UseCaseFetchHasByAccount useCaseFetchHasByAccount,
         UseCaseFetchFunctionById useCaseFetchFunctionById,
+        UseCaseFetchProfilById useCaseFetchProfilById
+
         CompaniesController companiesController,
         HasController hasController
     )
@@ -57,6 +60,8 @@ public class AccountController : ControllerBase
         _useCaseFetchAccountByEmail = useCaseFetchAccountByEmail;
         _useCaseFetchHasByAccount = useCaseFetchHasByAccount;
         _useCaseFetchFunctionById = useCaseFetchFunctionById;
+        _useCaseFetchProfilById = useCaseFetchProfilById;
+
         _companiesController = companiesController;
         _hasController = hasController;
         
@@ -111,6 +116,22 @@ public class AccountController : ControllerBase
         try
         {
             return _useCaseFetchAccountById.Execute(id);
+        }
+        catch (KeyNotFoundException e)
+        {
+            return NotFound(e.Message);
+        }
+    }
+    
+    [HttpGet]
+    [Route("fetch/profil/{id:int}")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public ActionResult<DtoOutputProfilAccount> FetchProfilById(int id)
+    {
+        try
+        {
+            return _useCaseFetchProfilById.Execute(id);
         }
         catch (KeyNotFoundException e)
         {
@@ -269,5 +290,51 @@ public class AccountController : ControllerBase
             return Ok(new {});
         }
         return Unauthorized();
+    }
+    
+    [HttpPost]
+    [Route("login/phone")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    public ActionResult<DtoOutputAccountPhone> LoginByPhone(DtoInputLoginAccount dto)
+    {
+        if (_useCaseLoginAccount.Execute(dto))
+        {
+            var account = _useCaseFetchAccountByEmail.Execute(dto.Email);
+            IEnumerable<DtoOutputHas> has = _useCaseFetchHasByAccount.Execute(account.IdAccount);
+            bool isHas = has.ToList().Count != 0;
+
+            int idCompanie = -1;
+            string functionName = "";
+            if (isHas)
+            {
+                idCompanie = has.ToList().FirstOrDefault().IdCompanies;
+                
+                DtoOutputFunction function = _useCaseFetchFunctionById.Execute(has.FirstOrDefault().IdFunctions);
+                if (function != null)
+                {
+                    functionName = function.Title;   
+                }
+                
+            }
+            
+            var generatedToken =
+                _sessionService.BuildToken(_config["Jwt:Key"].ToString(), _config["Jwt:Issuer"].ToString(), account, functionName);
+            var generatedTokenPublic =
+                _sessionService.BuildTokenPublic(_config["Jwt:Key"].ToString(), _config["Jwt:Issuer"].ToString(),
+                    account, idCompanie, functionName);
+            var dtoOutputAccount = new DtoOutputAccountPhone
+            {
+                Email = account.Email,
+                FirstName = account.FirstName,
+                LastName = account.LastName,
+                IdAccount = account.IdAccount,
+                Token = generatedTokenPublic,
+                TokenPrivate = generatedToken
+            };
+            
+            return dtoOutputAccount;
+        }
+        return null;
     }
 }
