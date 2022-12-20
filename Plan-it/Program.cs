@@ -65,6 +65,7 @@ builder.Services.AddScoped<UseCaseDeleteAccount>();
 builder.Services.AddScoped<UseCaseFetchAllAccounts>();
 builder.Services.AddScoped<UseCaseFetchAccountById>();
 builder.Services.AddScoped<UseCaseFetchAccountByEmail>();
+builder.Services.AddScoped<UseCaseFetchProfilById>();
 
 // Use cases events
 builder.Services.AddScoped<UseCaseCreateEvents>();
@@ -153,7 +154,11 @@ if (app.Environment.IsDevelopment())
 /* It allows the frontend to access the backend. */
 app.UseCors("Dev");
 
-app.UseHttpsRedirection();
+// Android Studio
+if (!app.Environment.IsDevelopment())
+{
+    app.UseHttpsRedirection();
+}
 
 app.UseCookiePolicy();
 

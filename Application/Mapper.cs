@@ -26,6 +26,8 @@ public static class Mapper
             // Account
             cfg.CreateMap<Account, DtoOutputAccount>();
             cfg.CreateMap<Account, DtoOutputAccountForCompanies>();
+            cfg.CreateMap<Account, DtoOutputAccountPhone>();
+            cfg.CreateMap<Account, DtoOutputProfilAccount>();
             cfg.CreateMap<DbAccount, DtoOutputAccount>();
             cfg.CreateMap<DbAccount, Account>();
             
