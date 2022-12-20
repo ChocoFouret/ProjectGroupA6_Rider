@@ -26,6 +26,9 @@ public class AccountController : ControllerBase
     
     private readonly ISessionService _sessionService;
     private readonly IConfiguration _config;
+
+    private readonly CompaniesController _companiesController;
+    private readonly HasController _hasController;
     
     public AccountController(
         UseCaseLoginAccount useCaseLoginAccount,
@@ -39,7 +42,9 @@ public class AccountController : ControllerBase
         ISessionService sessionService,
         IConfiguration configuration, 
         UseCaseFetchHasByAccount useCaseFetchHasByAccount,
-        UseCaseFetchFunctionById useCaseFetchFunctionById
+        UseCaseFetchFunctionById useCaseFetchFunctionById,
+        CompaniesController companiesController,
+        HasController hasController
     )
     {
         _useCaseLoginAccount = useCaseLoginAccount;
@@ -52,6 +57,8 @@ public class AccountController : ControllerBase
         _useCaseFetchAccountByEmail = useCaseFetchAccountByEmail;
         _useCaseFetchHasByAccount = useCaseFetchHasByAccount;
         _useCaseFetchFunctionById = useCaseFetchFunctionById;
+        _companiesController = companiesController;
+        _hasController = hasController;
         
         _sessionService = sessionService;
         _config = configuration;
@@ -70,6 +77,23 @@ public class AccountController : ControllerBase
     {
         return _useCaseFetchAllAccounts.Execute();
     }
+    
+    /*
+    [HttpGet]
+    [Route("fetchAllLists/")]
+    public IEnumerable<DtoOutputAccountList> FetchAllLists()
+    {
+        var result = _useCaseFetchAllAccounts.Execute();
+
+        IEnumerable<DtoOutputAccountList> dtos = new []{new DtoOutputAccountList()};
+        foreach (var r in result)
+        {
+            dtos.
+        }
+        
+        return 
+    }
+    */
 
     /// <summary>
     /// It returns a DtoOutputAccount object if the id is found, otherwise it returns a 404 Not Found error
