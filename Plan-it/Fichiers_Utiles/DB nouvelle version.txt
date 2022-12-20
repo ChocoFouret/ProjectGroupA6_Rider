@@ -1,0 +1,122 @@
+DROP DATABASE IF EXISTS GroupeA6
+CREATE DATABASE GroupeA6
+USE GroupeA6
+
+CREATE TABLE Functions
+(
+    title VARCHAR(50) NOT NULL PRIMARY KEY
+);
+
+CREATE TABLE Accounts
+(
+    idAccount  INT IDENTITY NOT NULL PRIMARY KEY,
+    email      VARCHAR(100) NOT NULL UNIQUE,
+    password   VARCHAR(200) NOT NULL,
+    lastName   VARCHAR(50)  NOT NULL,
+    firstName  VARCHAR(100) NOT NULL,
+    street     VARCHAR(100) NOT NULL,
+    number     VARCHAR(10)  NOT NULL,
+    postCode   INT          NOT NULL,
+    city       VARCHAR(30)  NOT NULL,
+    pictureURL VARCHAR(100) NOT NULL,
+    isAdmin    BIT          NOT NULL DEFAULT 0
+);
+
+CREATE TABLE Entreprises
+(
+    idEntreprise INT IDENTITY NOT NULL PRIMARY KEY,
+    nom          VARCHAR(100) NOT NULL,
+    contact      VARCHAR(100) NOT NULL
+);
+
+CREATE TABLE IS_EMPLOYED
+(
+    idAccount    INT         NOT NULL,
+    idEntreprise INT         NOT NULL,
+    title        VARCHAR(50) NOT NULL,
+    FOREIGN KEY (idAccount) REFERENCES Accounts (idAccount),
+    FOREIGN KEY (idEntreprise) REFERENCES Entreprises (idEntreprise),
+    FOREIGN KEY (title) REFERENCES Functions (title)
+);
+
+CREATE TABLE Announcements
+(
+    idAnnouncement INT IDENTITY NOT NULL,
+    idEntreprise   INT          NOT NULL,
+    title          VARCHAR(50)  NOT NULL,
+    content        TEXT         NOT NULL
+        FOREIGN KEY (idEntreprise) REFERENCES Entreprises (idEntreprise),
+    FOREIGN KEY (title) REFERENCES Functions (title)
+);
+
+CREATE TABLE Schedules
+(
+    idSchedule   INT IDENTITY NOT NULL PRIMARY KEY,
+    idEntreprise INT          NOT NULL,
+    FOREIGN KEY (idEntreprise) REFERENCES Entreprises (idEntreprise)
+);
+
+CREATE TABLE Hours
+(
+    idHour    INT IDENTITY NOT NULL PRIMARY KEY,
+    startHour TIME         NOT NULL,
+    endHour   TIME         NOT NULL,
+    breakTime TIME         NOT NULL
+);
+
+CREATE TABLE Absents
+(
+    idAbsent    INT IDENTITY NOT NULL PRIMARY KEY,
+    isJustified BIT          NOT NULL,
+    comments    TEXT         NOT NULL
+);
+
+CREATE TABLE EventTypes
+(
+    idHoliday  INT IDENTITY NOT NULL PRIMARY KEY,
+    isAccepted BIT          NOT NULL,
+    comments   TEXT         NOT NULL
+);
+
+CREATE TABLE EVENTS_EMPLOYEE
+(
+    idEventEmployee INT IDENTITY NOT NULL PRIMARY KEY,
+    idSchedule      INT          NOT NULL,
+    idAccount       INT          NOT NULL,
+    startDate       DATE         NOT NULL,
+    endDate         DATE         NOT NULL,
+    idHour          INT          NULL,
+    idAbsent        INT          NULL,
+    idHoliday       INT          NULL,
+    FOREIGN KEY (idSchedule) REFERENCES Schedules (idSchedule),
+    FOREIGN KEY (idAccount) REFERENCES Accounts (idAccount),
+    FOREIGN KEY (idHour) REFERENCES Hours (idHour),
+    FOREIGN KEY (idAbsent) REFERENCES Absents (idAbsent),
+    FOREIGN KEY (idHoliday) REFERENCES EventTypes (idHoliday)
+);
+
+INSERT INTO dbo.Functions(title)
+VALUES ('Employee'),
+       ('Director'),
+       ('Administrator');
+
+-- Password = 12345
+INSERT INTO Accounts
+(email, password, lastName, firstName, street, number, postCode, city, pictureURL, isAdmin)
+VALUES ('danazaret@admin.planit.be', '1000:lAwhECG/vjIu5XaM8/6Vnofas95NKCat:/SZEXfEa7RE6wrF1zFxJSafHSzs=', 'Da Nazaret',
+        'Nicolas', 'RUE 1', 'NUM 1', 1, 'VILLE 1', 'image', 1),
+       ('bouhmadi@admin.planit.be', '1000:lAwhECG/vjIu5XaM8/6Vnofas95NKCat:/SZEXfEa7RE6wrF1zFxJSafHSzs=', 'Bouhmadi',
+        'Shaïma', 'RUE 2', 'NUM 2', 2, 'VILLE 2', 'image', 1),
+       ('fouret@admin.planit.be', '1000:lAwhECG/vjIu5XaM8/6Vnofas95NKCat:/SZEXfEa7RE6wrF1zFxJSafHSzs=', 'Fouret',
+        'Jason', 'RUE 3', 'NUM 3', 3, 'VILLE 3', 'image', 1),
+       ('tchani@admin.planit.be', '1000:lAwhECG/vjIu5XaM8/6Vnofas95NKCat:/SZEXfEa7RE6wrF1zFxJSafHSzs=', 'Tchani',
+        'Ghislain', 'RUE 4', 'NUM 4', 4, 'VILLE 4', 'image', 1),
+       ('godemont@employee.planit.be', '1000:lAwhECG/vjIu5XaM8/6Vnofas95NKCat:/SZEXfEa7RE6wrF1zFxJSafHSzs=', 'Flavian',
+        'Godemont', 'RUE', 'NUM', 2, 'VILLE', 'image', 0),
+       ('livio@employee.planit.be', '1000:lAwhECG/vjIu5XaM8/6Vnofas95NKCat:/SZEXfEa7RE6wrF1zFxJSafHSzs=', 'Florian',
+        'Decout', 'RUE', 'NUM', 3, 'VILLE', 'image', 0),
+       ('florian@employee.planit.be', '1000:lAwhECG/vjIu5XaM8/6Vnofas95NKCat:/SZEXfEa7RE6wrF1zFxJSafHSzs=', 'Livio',
+        'Rubino', 'RUE', 'NUM', 3, 'VILLE', 'image', 0);
+           
+           
+           
