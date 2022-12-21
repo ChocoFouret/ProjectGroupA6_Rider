@@ -25,7 +25,10 @@ public static class Mapper
             // Source, Destination
             // Account
             cfg.CreateMap<Account, DtoOutputAccount>();
+            cfg.CreateMap<Account, DtoOutputAccountList>();
             cfg.CreateMap<Account, DtoOutputAccountForCompanies>();
+            cfg.CreateMap<Account, DtoOutputAccountPhone>();
+            cfg.CreateMap<Account, DtoOutputProfilAccount>();
             cfg.CreateMap<DbAccount, DtoOutputAccount>();
             cfg.CreateMap<DbAccount, Account>();
             
@@ -33,7 +36,12 @@ public static class Mapper
             cfg.CreateMap<Function, DtoOutputFunction>();
             cfg.CreateMap<DbFunction, DtoOutputFunction>();
             cfg.CreateMap<DbFunction, Function>();
-
+            
+            // Address
+            cfg.CreateMap<Address, DtoOutputAddress>();
+            cfg.CreateMap<DbAddress, DtoOutputAddress>();
+            cfg.CreateMap<DbAddress, Address>();
+            
             cfg.CreateMap<Companies, DtoOutputCompanies>();
             cfg.CreateMap<DbCompanies, DtoOutputCompanies>();
             cfg.CreateMap<DbCompanies, Companies>();

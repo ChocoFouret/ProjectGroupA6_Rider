@@ -1,5 +1,3 @@
-using System.Security.Cryptography;
-
 namespace Domain;
 
 public interface IEventsRepository

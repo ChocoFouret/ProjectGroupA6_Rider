@@ -2,9 +2,10 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 using Domain;
+using JWT.Models;
 using Microsoft.IdentityModel.Tokens;
 
-namespace JWT.Models;
+namespace Infrastructure.EF.Session;
 
 public class SessionService : ISessionService
 {

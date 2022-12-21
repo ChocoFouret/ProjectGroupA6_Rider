@@ -8,15 +8,18 @@ public class PlanitContext : DbContext
     private readonly IConnectionStringProvider _connectionStringProvider;
 
     public DbSet<Account> Accounts { get; set; }
+    
+    public DbSet<Address> Address { get; set; }
+
     public DbSet<Function> Functions { get; set; }
     
     public DbSet<Domain.Companies> Companies { get; set; }
     
-    public DbSet<Domain.Has> has { get; set; }
+    public DbSet<Domain.Has> Has { get; set; }
     
     public DbSet<Domain.Events> Events { get; set; }
     
-    public DbSet<Domain.EventTypes> EventTypes { get; set; }
+    public DbSet<EventTypes> EventTypes { get; set; }
     
     public PlanitContext(IConnectionStringProvider connectionStringProvider)
     {
@@ -49,6 +52,7 @@ public class PlanitContext : DbContext
             entity.Property(arg => arg.IdAddress).HasColumnName("idAddress");
             entity.Property(arg => arg.IsAdmin).HasColumnName("isAdmin");
             entity.Property(arg => arg.PictureURL).HasColumnName("pictureUrl");
+            entity.Property(arg => arg.Phone).HasColumnName("phone");
         });
         // Function table
         modelBuilder.Entity<Function>(entity =>
@@ -77,13 +81,13 @@ public class PlanitContext : DbContext
             entity.HasOne(arg => arg.Account)
                 .WithOne()
                 .HasForeignKey<Domain.Has>(arg => arg.IdAccount)
-                .HasPrincipalKey<Domain.Account>(arg => arg.IdAccount);
+                .HasPrincipalKey<Account>(arg => arg.IdAccount);
             entity.HasOne(arg => arg.Function)
                 .WithOne()
                 .HasForeignKey<Domain.Has>(arg => arg.IdFunctions)
-                .HasPrincipalKey<Domain.Function>(arg => arg.IdFunctions);
+                .HasPrincipalKey<Function>(arg => arg.IdFunctions);
         });
-        modelBuilder.Entity<Domain.EventTypes>(entity =>
+        modelBuilder.Entity<EventTypes>(entity =>
         {
             entity.ToTable("EventTypes");
             entity.HasKey(arg => arg.Types);
@@ -104,8 +108,18 @@ public class PlanitContext : DbContext
             entity.Property(arg => arg.Comments).HasColumnName("comments");
             entity.HasOne(arg => arg.EventTypes)
                 .WithOne()
-                .HasForeignKey<Events>(arg => arg.Types)
-                .HasPrincipalKey<Domain.EventTypes>(arg => arg.Types);
+                .HasForeignKey<Domain.Events>(arg => arg.Types)
+                .HasPrincipalKey<EventTypes>(arg => arg.Types);
+        });
+        modelBuilder.Entity<Domain.Address>(entity =>
+        {
+            entity.ToTable("Address");
+            entity.HasKey(arg => arg.IdAddress);
+            entity.Property(arg => arg.IdAddress).HasColumnName("idAddress");
+            entity.Property(arg => arg.Street).HasColumnName("street");
+            entity.Property(arg => arg.Number).HasColumnName("number");
+            entity.Property(arg => arg.PostCode).HasColumnName("postCode");
+            entity.Property(arg => arg.City).HasColumnName("city");
         });
     }
 }

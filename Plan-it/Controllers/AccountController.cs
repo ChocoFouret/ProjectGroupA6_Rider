@@ -1,8 +1,10 @@
 using Application.UseCases.Accounts;
 using Application.UseCases.Accounts.Dtos;
+using Application.UseCases.Companies;
 using Application.UseCases.Has.Dtos;
 using Domain;
 using JWT.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Service.UseCases.Companies;
 using Service.UseCases.Has.Dtos;
@@ -23,6 +25,9 @@ public class AccountController : ControllerBase
     private readonly UseCaseFetchAccountByEmail _useCaseFetchAccountByEmail;
     private readonly UseCaseFetchHasByAccount _useCaseFetchHasByAccount;
     private readonly UseCaseFetchFunctionById _useCaseFetchFunctionById;
+    private readonly UseCaseFetchProfilById _useCaseFetchProfilById;
+    private readonly UseCaseFetchAddressById _useCaseFetchAddressById;
+    private readonly UseCaseFetchCompaniesById _useCaseFetchCompaniesById;
     
     private readonly ISessionService _sessionService;
     private readonly IConfiguration _config;
@@ -39,7 +44,10 @@ public class AccountController : ControllerBase
         ISessionService sessionService,
         IConfiguration configuration, 
         UseCaseFetchHasByAccount useCaseFetchHasByAccount,
-        UseCaseFetchFunctionById useCaseFetchFunctionById
+        UseCaseFetchFunctionById useCaseFetchFunctionById,
+        UseCaseFetchProfilById useCaseFetchProfilById,
+        UseCaseFetchAddressById useCaseFetchAddressById,
+        UseCaseFetchCompaniesById useCaseFetchCompaniesById
     )
     {
         _useCaseLoginAccount = useCaseLoginAccount;
@@ -52,6 +60,9 @@ public class AccountController : ControllerBase
         _useCaseFetchAccountByEmail = useCaseFetchAccountByEmail;
         _useCaseFetchHasByAccount = useCaseFetchHasByAccount;
         _useCaseFetchFunctionById = useCaseFetchFunctionById;
+        _useCaseFetchProfilById = useCaseFetchProfilById;
+        _useCaseFetchAddressById = useCaseFetchAddressById;
+        _useCaseFetchCompaniesById = useCaseFetchCompaniesById;
         
         _sessionService = sessionService;
         _config = configuration;
@@ -70,6 +81,23 @@ public class AccountController : ControllerBase
     {
         return _useCaseFetchAllAccounts.Execute();
     }
+    
+    /*
+    [HttpGet]
+    [Route("fetchAllLists/")]
+    public IEnumerable<DtoOutputAccountList> FetchAllLists()
+    {
+        var result = _useCaseFetchAllAccounts.Execute();
+
+        IEnumerable<DtoOutputAccountList> dtos = new []{new DtoOutputAccountList()};
+        foreach (var r in result)
+        {
+            dtos.
+        }
+        
+        return 
+    }
+    */
 
     /// <summary>
     /// It returns a DtoOutputAccount object if the id is found, otherwise it returns a 404 Not Found error
@@ -87,6 +115,27 @@ public class AccountController : ControllerBase
         try
         {
             return _useCaseFetchAccountById.Execute(id);
+        }
+        catch (KeyNotFoundException e)
+        {
+            return NotFound(e.Message);
+        }
+    }
+    
+    [HttpGet]
+    [Route("fetch/profil/{id:int}")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public ActionResult<DtoOutputProfilAccount> FetchProfilById(int id)
+    {
+        try
+        {
+            DtoOutputProfilAccount dtoOutputProfilAccount = _useCaseFetchProfilById.Execute(id);
+            dtoOutputProfilAccount.Address = _useCaseFetchAddressById.Execute(dtoOutputProfilAccount.IdAddress);
+            var has = _useCaseFetchHasByAccount.Execute(id).FirstOrDefault()!;
+            dtoOutputProfilAccount.Companies = _useCaseFetchCompaniesById.Execute(has.IdCompanies);
+            dtoOutputProfilAccount.Function = has.Function.Title;
+            return dtoOutputProfilAccount;
         }
         catch (KeyNotFoundException e)
         {
@@ -224,6 +273,7 @@ public class AccountController : ControllerBase
     /// </returns>
     [HttpPut]
     [Route("update")]
+    [Authorize]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public ActionResult<Boolean> Update(DtoInputUpdateAccount dto)
@@ -317,5 +367,51 @@ public class AccountController : ControllerBase
             SameSite = SameSiteMode.None
         };
         Response.Cookies.Append("public", generatedTokenPublic, cookiePublic);   
+    }
+    
+    [HttpPost]
+    [Route("login/phone")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    public ActionResult<DtoOutputAccountPhone> LoginByPhone(DtoInputLoginAccount dto)
+    {
+        if (_useCaseLoginAccount.Execute(dto))
+        {
+            var account = _useCaseFetchAccountByEmail.Execute(dto.Email);
+            IEnumerable<DtoOutputHas> has = _useCaseFetchHasByAccount.Execute(account.IdAccount);
+            bool isHas = has.ToList().Count != 0;
+
+            int idCompanie = -1;
+            string functionName = "";
+            if (isHas)
+            {
+                idCompanie = has.ToList().FirstOrDefault().IdCompanies;
+                
+                DtoOutputFunction function = _useCaseFetchFunctionById.Execute(has.FirstOrDefault().IdFunctions);
+                if (function != null)
+                {
+                    functionName = function.Title;   
+                }
+                
+            }
+            
+            var generatedToken =
+                _sessionService.BuildToken(_config["Jwt:Key"].ToString(), _config["Jwt:Issuer"].ToString(), account, functionName);
+            var generatedTokenPublic =
+                _sessionService.BuildTokenPublic(_config["Jwt:Key"].ToString(), _config["Jwt:Issuer"].ToString(),
+                    account, idCompanie, functionName);
+            var dtoOutputAccount = new DtoOutputAccountPhone
+            {
+                Email = account.Email,
+                FirstName = account.FirstName,
+                LastName = account.LastName,
+                IdAccount = account.IdAccount,
+                Token = generatedTokenPublic,
+                TokenPrivate = generatedToken
+            };
+            
+            return dtoOutputAccount;
+        }
+        return null;
     }
 }

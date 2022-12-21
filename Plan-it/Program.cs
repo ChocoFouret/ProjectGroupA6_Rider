@@ -1,5 +1,6 @@
 using System.Text;
 using Application.UseCases.Accounts;
+using Application.UseCases.Addresss;
 using Application.UseCases.Companies;
 using Application.UseCases.Companies.Dtos;
 using Application.UseCases.Events.Dtos;
@@ -10,7 +11,9 @@ using Domain;
 using Infrastructure;
 using Infrastructure.EF;
 using Infrastructure.EF.Companies;
+using Infrastructure.EF.Events;
 using Infrastructure.EF.Has;
+using Infrastructure.EF.Session;
 using JWT.Models;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
@@ -36,6 +39,7 @@ builder.Services.AddScoped<ICompaniesRepository,EfCompaniesRepository>();
 builder.Services.AddScoped<IHasRepository, EfHasRepository>();
 builder.Services.AddScoped<IEventsRepository, EfEventsRepository>();
 builder.Services.AddScoped<IEventTypesRepository, EfEventTypesRepository>();
+builder.Services.AddScoped<IAddressRepository, EfAddressRepository>();
 
 //Use Case Has
 builder.Services.AddScoped<UseCaseFetchAllHas>();
@@ -66,6 +70,7 @@ builder.Services.AddScoped<UseCaseDeleteAccount>();
 builder.Services.AddScoped<UseCaseFetchAllAccounts>();
 builder.Services.AddScoped<UseCaseFetchAccountById>();
 builder.Services.AddScoped<UseCaseFetchAccountByEmail>();
+builder.Services.AddScoped<UseCaseFetchProfilById>();
 
 // Use cases events
 builder.Services.AddScoped<UseCaseCreateEvents>();
@@ -87,6 +92,11 @@ builder.Services.AddScoped<UseCaseFetchAllEventType>();
 builder.Services.AddScoped<UseCaseFetchAllFunctions>();
 builder.Services.AddScoped<UseCaseCreateFunction>();
 builder.Services.AddScoped<UseCaseFetchFunctionById>();
+
+// Uses cases address
+builder.Services.AddScoped<UseCaseFetchAllAddress>();
+builder.Services.AddScoped<UseCaseFetchAddressById>();
+builder.Services.AddScoped<UseCaseFetchAddressByPostCode>();
 
 // Database
 builder.Services.AddScoped<IConnectionStringProvider, ConnectionStringProvider>();
@@ -139,10 +149,8 @@ builder.Services.AddAuthorization(options =>
 });
 builder.Services.AddScoped<ISessionService, SessionService>();
 
-/*****/
 builder.Services.AddControllersWithViews();
 builder.Services.AddSignalR();
-/*****/
 
 var app = builder.Build();
 
@@ -153,10 +161,16 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-app.UseHttpsRedirection();
-
 /* It allows the frontend to access the backend. */
 app.UseCors("Dev");
+
+// Android Studio
+if (!app.Environment.IsDevelopment())
+{
+    app.UseHttpsRedirection();
+}
+
+app.UseCookiePolicy();
 
 app.UseWebSockets(new WebSocketOptions
 {

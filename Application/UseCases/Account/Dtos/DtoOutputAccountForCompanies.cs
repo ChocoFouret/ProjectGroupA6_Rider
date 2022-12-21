@@ -11,4 +11,5 @@ public class DtoOutputAccountForCompanies
     public string LastName { get; set; }
     public string FirstName { get; set; }
     public int IdAddress { get; set; }
+    public string Phone { get; set; }
 }

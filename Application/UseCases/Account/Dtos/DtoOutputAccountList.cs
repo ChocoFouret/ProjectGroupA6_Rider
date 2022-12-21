@@ -3,7 +3,7 @@
 // Data
 // Transfer
 // Object
-public class DtoOutputAccount
+public class DtoOutputAccountList
 {
     // Returns the information you wish to display ONLY
     public int IdAccount { get; set; }
@@ -14,5 +14,5 @@ public class DtoOutputAccount
     public string PictureURL { get; set; }
     public bool IsAdmin { get; set; }
     public string Phone { get; set; }
-
+    public Domain.Companies? Companies { get; set; }
 }
