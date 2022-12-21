@@ -14,7 +14,7 @@ public class SessionService : ISessionService
     {
         var claims = new[]
         {
-            new Claim(ClaimTypes.Email, account.IdAccount.ToString()),
+            new Claim(ClaimTypes.Email, account.Email),
             new Claim(ClaimTypes.Name, account.LastName),
             new Claim(ClaimTypes.Role, function),
             new Claim(ClaimTypes.NameIdentifier,

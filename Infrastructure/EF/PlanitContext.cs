@@ -64,6 +64,7 @@ public class PlanitContext : DbContext
             entity.Property(arg => arg.IdCompanies).HasColumnName("idCompanies");
             entity.Property(arg => arg.CompaniesName).HasColumnName("companiesName");
             entity.Property(arg => arg.DirectorEmail).HasColumnName("directorEmail");
+            entity.Property(arg => arg.Password).HasColumnName("password");
         });
         modelBuilder.Entity<Domain.Has>(entity =>
         {

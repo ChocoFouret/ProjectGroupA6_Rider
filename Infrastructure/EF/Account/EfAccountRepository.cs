@@ -136,10 +136,9 @@ public class EfAccountRepository : IAccountRepository
     {
         using var context = _planitContextProvider.NewContext();
         var account = context.Accounts.FirstOrDefault(account => account.Email == email);
-
         if (account == null)
             throw new KeyNotFoundException($"Account with {email} has not been found");
-
+        
         return EncryptPassword.ValidatePassword(password, account.Password);
     }
 }

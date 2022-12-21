@@ -89,4 +89,14 @@ public class EfCompaniesRepository : ICompaniesRepository
         Console.WriteLine(companies.IdCompanies);
         return companies;
     }
+
+    public bool Join(string inputName, string inputPassword)
+    {
+        using var context = _planitContextProvider.NewContext();
+        var companie = context.Companies.FirstOrDefault(companie => companie.CompaniesName == inputName);
+        if (companie == null)
+            throw new KeyNotFoundException($"companie with {inputName} has not been found");
+        
+        return EncryptPassword.ValidatePassword(inputPassword, companie.Password);
+    }
 }

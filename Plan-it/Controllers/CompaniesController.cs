@@ -1,6 +1,8 @@
+using System.Security.Claims;
 using Application.UseCases.Companies;
 using Application.UseCases.Companies.Dtos;
 using Domain;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Service.UseCases.Companies;
 
@@ -23,6 +25,9 @@ public class CompaniesController : Controller
     private readonly UseCaseDeleteCompanies _useCaseDeleteCompanies;
 
     private readonly UseCaseFetchCompaniesByEmail _useCaseFetchCompaniesByEmail;
+
+    private readonly UseCaseJoinCompanie _useCaseJoinCompanie;
+    
     // GET
 
     public CompaniesController(
@@ -32,7 +37,8 @@ public class CompaniesController : Controller
         UseCaseCreateCompanies useCaseCreateCompanies,
         UseCaseUpdateCompanies useCaseUpdateCompanies,
         UseCaseDeleteCompanies useCaseDeleteCompanies,
-        UseCaseFetchCompaniesByEmail useCaseFetchCompaniesByEmail)
+        UseCaseFetchCompaniesByEmail useCaseFetchCompaniesByEmail,
+        UseCaseJoinCompanie useCaseJoinCompanie)
     {
         _useCaseFetchAllCompanies = useCaseFetchAllCompanies;
         _useCaseFetchCompaniesById = useCaseFetchCompaniesById;
@@ -41,6 +47,7 @@ public class CompaniesController : Controller
         _useCaseUpdateCompanies = useCaseUpdateCompanies;
         _useCaseDeleteCompanies = useCaseDeleteCompanies;
         _useCaseFetchCompaniesByEmail = useCaseFetchCompaniesByEmail;
+        _useCaseJoinCompanie = useCaseJoinCompanie;
 
     }
     [HttpGet]
@@ -91,10 +98,14 @@ public class CompaniesController : Controller
     
     [HttpPost]
     [Route("create")]
+    [Authorize]
     [ProducesResponseType(StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status409Conflict)]
     public ActionResult<DtoOutputCompanies> Create(DtoInputCreateCompanies dto)
     {
+        dto.companie.DirectorEmail =
+            User.Claims.Where(c => c.Type == ClaimTypes.Email).Select(c => c.Value).SingleOrDefault();
+        Console.WriteLine(dto.companie.DirectorEmail);
         var output = _useCaseCreateCompanies.Execute(dto);
 
         if (output == null) return Conflict(new Companies());
@@ -122,5 +133,19 @@ public class CompaniesController : Controller
     public ActionResult<Boolean> Delete(int id)
     {
         return _useCaseDeleteCompanies.Execute(id);
+    }
+
+    [HttpPost]
+    [Route("join")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    public IActionResult join(DtoInputJoinCompanie dto)
+    {
+        if (_useCaseJoinCompanie.Execute(dto))
+        {
+            return Ok(new { });
+        }
+
+        return Unauthorized();
     }
 }

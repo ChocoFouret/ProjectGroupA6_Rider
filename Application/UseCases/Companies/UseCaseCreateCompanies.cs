@@ -19,6 +19,9 @@ public class UseCaseCreateCompanies: IUseCaseWriter<DtoOutputCompanies, DtoInput
     // Call the method into EfAccountRepesitory
     public DtoOutputCompanies Execute(DtoInputCreateCompanies input)
     {
+        var tmp = input.companie.Password;
+        input.companie.Password = EncryptPassword.HashPassword(tmp);
+        
         var dbCompanies = _companiesRepository.Create(input.companie);
         return Mapper.GetInstance().Map<DtoOutputCompanies>(dbCompanies);
     }
