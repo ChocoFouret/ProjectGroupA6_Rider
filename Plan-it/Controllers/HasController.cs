@@ -56,7 +56,8 @@ public class HasController : Controller
         _sessionService = sessionService;
         _config = configuration;
     }
-    
+    //fetches are used to see if there is already a
+    //has with one of the data we send
     [HttpGet]
     [Route("fetch/")]
     public IEnumerable<DtoOutputHas> FetchAll()
@@ -107,6 +108,8 @@ public class HasController : Controller
         return _useCaseFetchHasByFunctions.Execute(idFunction);
     }
     
+    //Since has is a table that unites function, account, company,
+    //if you create a company with a manager, you need a has
     [HttpPost]
     [Route("create")]
     [ProducesResponseType(StatusCodes.Status201Created)]
@@ -117,7 +120,7 @@ public class HasController : Controller
 
         if (output == null) return Conflict(new Has());
 
-        var account = _accountController.FetchById(dto.has.IdAccount);
+        var account = _accountController.FetchProfilById(dto.has.IdAccount);
         DtoInputLoginAccount accountLogin = new DtoInputLoginAccount
         {
             Email = account.Value.Email,
@@ -142,6 +145,8 @@ public class HasController : Controller
         return _useCaseDeleteHas.Execute(id);
     }
     
+    //Connect and disconnect are the same methods as in account controler
+    //but if you don't put them there it can't find the diff
     [HttpPost]
     [Route("connect")]
     [ProducesResponseType(StatusCodes.Status200OK)]
@@ -157,8 +162,7 @@ public class HasController : Controller
         if (isHas)
         {
             idCompanie = has.ToList().FirstOrDefault().IdCompanies;
-            Console.WriteLine(idCompanie);
-                
+
             DtoOutputFunction function = _useCaseFetchFunctionById.Execute(has.FirstOrDefault().IdFunctions);
             if (function != null)
             {

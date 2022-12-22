@@ -9,19 +9,17 @@ namespace Plan_it.Controllers;
 public class FunctionController : ControllerBase
 {
     private readonly UseCaseCreateFunction _useCaseCreateFunction;
-    private readonly UseCaseFetchAllFunctions _useCaseFetchAllFunctions;
     private readonly UseCaseFetchFunctionById _useCaseFetchFunctionById;
     
-    public FunctionController(UseCaseCreateFunction useCaseCreateFunction, UseCaseFetchAllFunctions useCaseFetchAllFunctions,
+    public FunctionController(UseCaseCreateFunction useCaseCreateFunction,
         UseCaseFetchFunctionById useCaseFetchFunctionById)
     {
         _useCaseCreateFunction = useCaseCreateFunction;
-        _useCaseFetchAllFunctions = useCaseFetchAllFunctions;
         _useCaseFetchFunctionById = useCaseFetchFunctionById;
     }
 
     [HttpGet]
-    [Route("{title}")]
+    [Route("fetchByTitle/{title}")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public ActionResult<DtoOutputFunction> FetchById(int id)
@@ -37,7 +35,7 @@ public class FunctionController : ControllerBase
     }
     
     [HttpPost]
-    [Route("/function/create")]
+    [Route("create")]
     [ProducesResponseType(StatusCodes.Status201Created)]
     public ActionResult<DtoOutputFunction> Create(DtoInputCreateFunction dto)
     {

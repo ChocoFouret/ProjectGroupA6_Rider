@@ -11,8 +11,6 @@ public class DtoInputUpdateAccount
     [Required] public string Phone { get; set; }
     [Required] public string LastName { get; set; }
     [Required] public string FirstName { get; set; }
-
-    public int? IdAddress { get; set; }
     public bool? IsAdmin { get; set; }
     public string? PictureURL {get; set;}
 }

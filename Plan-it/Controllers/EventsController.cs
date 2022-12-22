@@ -48,7 +48,7 @@ public class EventsController : ControllerBase
     }
 
 
-    /// Get all the events
+    
     [HttpGet]
     [Route("fetch/all")]
     public IEnumerable<DtoOutputEvents> FetchAll()
@@ -56,7 +56,8 @@ public class EventsController : ControllerBase
         return _useCaseFetchAllEvents.Execute();
     }
 
-    /// Retrieve an event by its ID
+    //Allows you to display the details of an event
+    //when you click on it in the schedule
     [HttpGet]
     [Route("fetch/{id}")]
     [ProducesResponseType(StatusCodes.Status200OK)]
@@ -73,7 +74,7 @@ public class EventsController : ControllerBase
         }
     }
 
-    /// Allows you to retrieve events related to a company between two dates
+    //Allows events to be displayed by company
     [HttpGet]
     [Route("fetch/{idCompanies}/{from}/{to}")]
     public IEnumerable<DtoOutputEvents> FetchFromTo(int idCompanies, DateTime from, DateTime to)
@@ -88,7 +89,7 @@ public class EventsController : ControllerBase
         return _useCaseFetchFromToEvents.Execute(date);
     }
 
-    /// Allows you to retrieve events related to a company between two dates (by account id)
+    //Allows events to be displayed by company and by account
     [HttpGet]
     [Route("fetch/{idCompanies:int}/{idAccount:int}/{from:datetime}/{to:datetime}")]
     public IEnumerable<DtoOutputEvents> FetchFromTo(int idCompanies, DateTime from, DateTime to, int idAccount)
@@ -104,7 +105,7 @@ public class EventsController : ControllerBase
         return _useCaseFetchStartToEndAccountEvents.Execute(date);
     }
 
-    /// Create a new event
+    
     [HttpPost]
     [Route("create/{idCompanies}")]
     [ProducesResponseType(StatusCodes.Status201Created)]
@@ -120,7 +121,7 @@ public class EventsController : ControllerBase
         );
     }
 
-    /// Update a event
+    
     [HttpPut]
     [Route("update/{idCompanies}")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
@@ -185,7 +186,7 @@ public class EventsController : ControllerBase
         return _useCaseUpdateEvents.Execute(dto);
     }
 
-    /// Delete a event
+    
     [HttpDelete]
     [Route("delete/{idEventsEmployee}/{idCompanies}")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
@@ -196,7 +197,7 @@ public class EventsController : ControllerBase
         return _useCaseDeleteEvents.Execute(idEventsEmployee);
     }
 
-    /// Gets all the events of a user
+    
     [HttpGet]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]

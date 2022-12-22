@@ -86,7 +86,6 @@ public class EfCompaniesRepository : ICompaniesRepository
         using var context = _planitContextProvider.NewContext();
         
         var companies = context.Companies.FirstOrDefault(companies=>companies.DirectorEmail==email);
-        Console.WriteLine(companies.IdCompanies);
         return companies;
     }
 

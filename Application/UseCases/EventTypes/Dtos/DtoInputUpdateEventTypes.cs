@@ -1,5 +1,7 @@
-﻿public class DtoInputUpdateEventTypes
+﻿using System.ComponentModel.DataAnnotations;
+
+public class DtoInputUpdateEventTypes
 {
-    public string Types { get; set; }
-    public string BarColor { get; set; }
+    [Required] public string Types { get; set; }
+   [Required] public string BarColor { get; set; }
 }
