@@ -21,6 +21,8 @@ public class PlanitContext : DbContext
     
     public DbSet<EventTypes> EventTypes { get; set; }
     
+    public DbSet<Announcements> Announcements { get; set; }
+    
     public PlanitContext(IConnectionStringProvider connectionStringProvider)
     {
         _connectionStringProvider = connectionStringProvider;
@@ -120,6 +122,15 @@ public class PlanitContext : DbContext
             entity.Property(arg => arg.Number).HasColumnName("number");
             entity.Property(arg => arg.PostCode).HasColumnName("postCode");
             entity.Property(arg => arg.City).HasColumnName("city");
+        });
+        modelBuilder.Entity<Announcements>(entity =>
+        {
+            entity.ToTable("Announcements");
+            entity.HasKey(arg => arg.IdAnnouncements);
+            entity.Property(arg => arg.IdAnnouncements).HasColumnName("idAnnouncements");
+            entity.Property(arg => arg.IdCompanies).HasColumnName("idCompanies");
+            entity.Property(arg => arg.IdFunctions).HasColumnName("idFunctions");
+            entity.Property(arg => arg.Content).HasColumnName("content");
         });
     }
 }

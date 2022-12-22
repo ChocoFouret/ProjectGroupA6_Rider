@@ -1,6 +1,7 @@
 using System.Text;
 using Application.UseCases.Accounts;
 using Application.UseCases.Addresss;
+using Application.UseCases.Announcements;
 using Application.UseCases.Companies;
 using Application.UseCases.Companies.Dtos;
 using Application.UseCases.Events.Dtos;
@@ -41,6 +42,7 @@ builder.Services.AddScoped<IHasRepository, EfHasRepository>();
 builder.Services.AddScoped<IEventsRepository, EfEventsRepository>();
 builder.Services.AddScoped<IEventTypesRepository, EfEventTypesRepository>();
 builder.Services.AddScoped<IAddressRepository, EfAddressRepository>();
+builder.Services.AddScoped<IAnnouncementsRepository, EfAnnouncementsRepository>();
 
 //Use Case Has
 builder.Services.AddScoped<UseCaseFetchAllHas>();
@@ -100,6 +102,14 @@ builder.Services.AddScoped<UseCaseFetchAddressById>();
 builder.Services.AddScoped<UseCaseFetchAddressByPostCode>();
 builder.Services.AddScoped<UseCaseCreateAddress>();
 builder.Services.AddScoped<UseCaseUpdateAddress>();
+
+// Uses cases announcements
+builder.Services.AddScoped<UseCaseFetchAllByCompanyAnnouncements>();
+builder.Services.AddScoped<UseCaseUpdateAnnouncements>();
+builder.Services.AddScoped<UseCaseFetchAnnouncementsById>();
+builder.Services.AddScoped<UseCaseFetchAnnouncementsByIdFunction>();
+builder.Services.AddScoped<UseCaseCreateAnnouncements>();
+builder.Services.AddScoped<UseCaseDeleteAnnouncements>();
 
 // Database
 builder.Services.AddScoped<IConnectionStringProvider, ConnectionStringProvider>();

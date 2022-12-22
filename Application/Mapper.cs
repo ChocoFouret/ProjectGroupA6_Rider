@@ -57,6 +57,10 @@ public static class Mapper
             cfg.CreateMap<EventTypes, DtoOutputEventTypes>();
             cfg.CreateMap<DbEventTypes, DtoOutputEventTypes>();
             cfg.CreateMap<DbEventTypes, EventTypes>();
+            
+            cfg.CreateMap<Announcements, DtoOutputAnnouncements>();
+            cfg.CreateMap<DbAnnouncements, DtoOutputAnnouncements>();
+            cfg.CreateMap<DbAnnouncements, Announcements>();
         });
         return new AutoMapper.Mapper(config);
     }
