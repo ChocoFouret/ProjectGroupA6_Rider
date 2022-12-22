@@ -37,7 +37,7 @@ public class EfEventsRepository : IEventsRepository
         using var context = _planitContextProvider.NewContext();
         var events = context.Events.Where(events =>
             events.IdCompanies == idCompanies && events.StartDate >= from && events.EndDate <= to).ToList();
-
+        
         if (events == null)
             throw new KeyNotFoundException(
                 $"Events for Company ID {idCompanies} between {from} and {to} were not found");
@@ -49,7 +49,6 @@ public class EfEventsRepository : IEventsRepository
             eventType = context.EventTypes.FirstOrDefault(eventsType => eventsType.Types == events[x].Types)!;
             events[x].EventTypes = eventType;
         }
-
         return events;
     }
     
@@ -70,7 +69,7 @@ public class EfEventsRepository : IEventsRepository
             eventType = context.EventTypes.FirstOrDefault(eventsType => eventsType.Types == events[x].Types)!;
             events[x].EventTypes = eventType;
         }
-
+        events.Sort((a, b) => DateTime.Compare(a.StartDate, b.StartDate));
         return events;
     }
 
@@ -136,6 +135,7 @@ public class EfEventsRepository : IEventsRepository
     {
         using var context = _planitContextProvider.NewContext();
         var events = context.Events.Where(events => events.IdAccount == account.IdAccount).ToList();
+        events.Sort((a, b) => DateTime.Compare(a.StartDate, b.StartDate));
         if (events == null)
             throw new KeyNotFoundException(
                 $" event for account not found");
