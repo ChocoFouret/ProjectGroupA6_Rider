@@ -10,4 +10,5 @@ public interface ICompaniesRepository
     bool Update(Companies companies);
     bool Delete(Companies companies); 
     Companies FetchByEmail(string email);
+    bool Join(string inputName, string inputPassword);
 }

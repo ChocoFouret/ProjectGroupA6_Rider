@@ -18,6 +18,8 @@ using JWT.Models;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using Plan_it;
+using Plan_it.Controllers;
+using Service.UseCases.Address;
 using Service.UseCases.Companies;
 using Service.UseCases.Has;
 using WebSocketDemo.Hubs;
@@ -48,6 +50,7 @@ builder.Services.AddScoped<UseCaseFetchHasByFunctions>();
 builder.Services.AddScoped<UseCaseCreateHas>();
 builder.Services.AddScoped<UseCaseFetchHasById>();
 builder.Services.AddScoped<UseCaseDeleteHas>();
+builder.Services.AddScoped<AccountController>();
 
 //User cases Companies
 builder.Services.AddScoped<UseCaseFetchAllCompanies>();
@@ -57,6 +60,7 @@ builder.Services.AddScoped<UseCaseUpdateCompanies>();
 builder.Services.AddScoped<UseCaseFetchCompaniesByName>();
 builder.Services.AddScoped<UseCaseFetchCompaniesById>();
 builder.Services.AddScoped<UseCaseFetchCompaniesByEmail>();
+builder.Services.AddScoped<UseCaseJoinCompanie>();
 
 // Use cases accounts
 builder.Services.AddScoped<UseCaseLoginAccount>();
@@ -94,6 +98,8 @@ builder.Services.AddScoped<UseCaseFetchFunctionById>();
 builder.Services.AddScoped<UseCaseFetchAllAddress>();
 builder.Services.AddScoped<UseCaseFetchAddressById>();
 builder.Services.AddScoped<UseCaseFetchAddressByPostCode>();
+builder.Services.AddScoped<UseCaseCreateAddress>();
+builder.Services.AddScoped<UseCaseUpdateAddress>();
 
 // Database
 builder.Services.AddScoped<IConnectionStringProvider, ConnectionStringProvider>();

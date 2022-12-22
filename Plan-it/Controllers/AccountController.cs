@@ -133,7 +133,10 @@ public class AccountController : ControllerBase
             DtoOutputProfilAccount dtoOutputProfilAccount = _useCaseFetchProfilById.Execute(id);
             dtoOutputProfilAccount.Address = _useCaseFetchAddressById.Execute(dtoOutputProfilAccount.IdAddress);
             var has = _useCaseFetchHasByAccount.Execute(id).FirstOrDefault()!;
-            dtoOutputProfilAccount.Companies = _useCaseFetchCompaniesById.Execute(has.IdCompanies);
+            if (has.IdCompanies != null)
+            {
+                dtoOutputProfilAccount.Companies = _useCaseFetchCompaniesById.Execute(has.IdCompanies); 
+            }
             dtoOutputProfilAccount.Function = has.Function.Title;
             return dtoOutputProfilAccount;
         }
@@ -185,10 +188,62 @@ public class AccountController : ControllerBase
         // Use for add new account easily
         //dto.account.Function = "Employee";
         dto.account.IsAdmin = false;
+        var passwordBeforeCrypt = dto.account.Password;
         var output = _useCaseCreateAccount.Execute(dto);
 
         if (output == null) return Conflict(new Account());
 
+        /// --------------------------------------------------------------------------------
+        DtoInputLoginAccount dtoLogin = new DtoInputLoginAccount()
+        {
+            Email = dto.account.Email,
+            Password = passwordBeforeCrypt
+        };
+        if (_useCaseLoginAccount.Execute(dtoLogin))
+        {
+            Account account = _useCaseFetchAccountByEmail.Execute(dtoLogin.Email);
+            IEnumerable<DtoOutputHas> has = _useCaseFetchHasByAccount.Execute(account.IdAccount);
+            bool isHas = has.ToList().Count != 0;
+
+            int idCompanie = -1;
+            string functionName = "";
+            if (isHas)
+            {
+                idCompanie = has.ToList().FirstOrDefault().IdCompanies;
+
+                DtoOutputFunction function = _useCaseFetchFunctionById.Execute(has.FirstOrDefault().IdFunctions);
+                if (function != null)
+                {
+                    functionName = function.Title;
+                }
+
+            }
+
+            var generatedToken =
+                _sessionService.BuildToken(_config["Jwt:Key"].ToString(), _config["Jwt:Issuer"].ToString(), account,
+                    functionName);
+
+            var cookie = new CookieOptions()
+            {
+                Secure = true,
+                HttpOnly = true,
+                SameSite = SameSiteMode.None
+            };
+            Response.Cookies.Append("session", generatedToken, cookie);
+
+            var generatedTokenPublic =
+                _sessionService.BuildTokenPublic(_config["Jwt:Key"].ToString(), _config["Jwt:Issuer"].ToString(),
+                    account, idCompanie, functionName);
+            var cookiePublic = new CookieOptions()
+            {
+                Secure = true,
+                HttpOnly = false,
+                SameSite = SameSiteMode.None
+            };
+            Response.Cookies.Append("public", generatedTokenPublic, cookiePublic);
+            ///--------------------------------------------------------------------------------------------------
+            
+        }
         return CreatedAtAction(
             nameof(FetchById),
             new { id = output.IdAccount },
@@ -254,47 +309,67 @@ public class AccountController : ControllerBase
     {
         if (_useCaseLoginAccount.Execute(dto))
         {
-            Account account = _useCaseFetchAccountByEmail.Execute(dto.Email);
-            IEnumerable<DtoOutputHas> has = _useCaseFetchHasByAccount.Execute(account.IdAccount);
-            bool isHas = has.ToList().Count != 0;
-
-            int idCompanie = -1;
-            string functionName = "";
-            if (isHas)
-            {
-                idCompanie = has.ToList().FirstOrDefault().IdCompanies;
-                
-                DtoOutputFunction function = _useCaseFetchFunctionById.Execute(has.FirstOrDefault().IdFunctions);
-                if (function != null)
-                {
-                    functionName = function.Title;   
-                }
-                
-            }
-            
-            var generatedToken =
-                _sessionService.BuildToken(_config["Jwt:Key"].ToString(), _config["Jwt:Issuer"].ToString(), account, functionName);
-            
-            var cookie = new CookieOptions()
-            {
-                Secure = true,
-                HttpOnly = true,
-                SameSite = SameSiteMode.None
-            };
-            Response.Cookies.Append("session", generatedToken, cookie);
-
-            var generatedTokenPublic =
-                _sessionService.BuildTokenPublic(_config["Jwt:Key"].ToString(), _config["Jwt:Issuer"].ToString(), account, idCompanie, functionName);
-            var cookiePublic = new CookieOptions()
-            {
-                Secure = true,
-                HttpOnly = false,
-                SameSite = SameSiteMode.None
-            };
-            Response.Cookies.Append("public", generatedTokenPublic, cookiePublic);
+            connect(dto);
             return Ok(new {});
         }
         return Unauthorized();
+    }
+    
+    [HttpPost]
+    [Route("disconnect")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    public IActionResult disconnect()
+    {
+        
+        Response.Cookies.Delete("public");
+        Response.Cookies.Delete("session");
+        return Ok(new {});
+    }
+
+    [HttpPost]
+    [Route("connect")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    public void connect(DtoInputLoginAccount dto)
+    {
+        var account = _useCaseFetchAccountByEmail.Execute(dto.Email);
+        var has = _useCaseFetchHasByAccount.Execute(account.IdAccount);
+        var isHas = has.ToList().Count != 0;
+
+        var idCompanie = -1;
+        var functionName = "";
+        if (isHas)
+        {
+            idCompanie = has.ToList().FirstOrDefault().IdCompanies;
+                
+            DtoOutputFunction function = _useCaseFetchFunctionById.Execute(has.FirstOrDefault().IdFunctions);
+            if (function != null)
+            {
+                functionName = function.Title;   
+            }
+                
+        }
+            
+        var generatedToken =
+            _sessionService.BuildToken(_config["Jwt:Key"], _config["Jwt:Issuer"], account, functionName);
+        var cookie = new CookieOptions
+        {
+            Secure = true,
+            HttpOnly = true,
+            SameSite = SameSiteMode.None
+        };
+        Response.Cookies.Append("session", generatedToken, cookie); 
+        
+        var generatedTokenPublic =
+            _sessionService.BuildTokenPublic(_config["Jwt:Key"], _config["Jwt:Issuer"], account, idCompanie, functionName);
+        var cookiePublic = new CookieOptions
+        {
+            Secure = true,
+            HttpOnly = false,
+            SameSite = SameSiteMode.None
+        };
+        Response.Cookies.Append("public", generatedTokenPublic, cookiePublic);   
     }
     
     [HttpPost]
