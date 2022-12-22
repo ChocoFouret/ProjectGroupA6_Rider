@@ -14,5 +14,5 @@ public class DtoInputUpdateAccount
 
     public int? IdAddress { get; set; }
     public bool? IsAdmin { get; set; }
-    [Required] public string PictureURL {get; set;}
+    public string? PictureURL {get; set;}
 }

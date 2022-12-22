@@ -112,7 +112,7 @@ builder.Services.AddCors(options =>
 {
     options.AddPolicy("Dev", policyBuilder =>
     {
-        policyBuilder.WithOrigins("http://localhost:4200")
+        policyBuilder.WithOrigins("https://localhost:4200")
             .AllowAnyHeader()
             .AllowAnyMethod()
             .AllowCredentials();
@@ -164,14 +164,14 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-/* It allows the frontend to access the backend. */
-app.UseCors("Dev");
-
 // Android Studio
 if (!app.Environment.IsDevelopment())
 {
     app.UseHttpsRedirection();
 }
+
+/* It allows the frontend to access the backend. */
+app.UseCors("Dev");
 
 app.UseCookiePolicy();
 
