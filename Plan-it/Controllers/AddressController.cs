@@ -4,6 +4,7 @@ using Application.UseCases.Addresss;
 using Domain;
 using JWT.Models;
 using Microsoft.AspNetCore.Mvc;
+using Service.UseCases.Address;
 
 namespace Plan_it.Controllers;
 
@@ -14,16 +15,22 @@ public class AddressController : ControllerBase
     private readonly UseCaseFetchAllAddress _useCaseFetchAllAddress;
     private readonly UseCaseFetchAddressById _useCaseFetchAddressById;
     private readonly UseCaseFetchAddressByPostCode _useCaseFetchAddressByPostCode;
+    private readonly UseCaseCreateAddress _useCaseCreateAddress;
+    private readonly UseCaseUpdateAddress _useCaseUpdateAddress;
 
     public AddressController(
         UseCaseFetchAllAddress useCaseFetchAllAddress,
         UseCaseFetchAddressById useCaseFetchAddressById,
-        UseCaseFetchAddressByPostCode useCaseFetchAddressByPostCode
+        UseCaseFetchAddressByPostCode useCaseFetchAddressByPostCode,
+        UseCaseCreateAddress useCaseCreateAddress,
+        UseCaseUpdateAddress useCaseUpdateAddress
     )
     {
         _useCaseFetchAllAddress = useCaseFetchAllAddress;
         _useCaseFetchAddressById = useCaseFetchAddressById;
         _useCaseFetchAddressByPostCode = useCaseFetchAddressByPostCode;
+        _useCaseCreateAddress = useCaseCreateAddress;
+        _useCaseUpdateAddress = useCaseUpdateAddress;
     }
     
     [HttpGet]
@@ -65,20 +72,27 @@ public class AddressController : ControllerBase
         }
     }
     
-    /*
     [HttpPost]
     [Route("create")]
     [ProducesResponseType(StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status409Conflict)]
     public ActionResult<DtoOutputAddress> Create(DtoInputCreateAddress dto)
     {
-        var output = _useCaseCreateAddress.Execute(dto);
+        var output = _useCaseCreateAddress.Execute(dto.address);
         return CreatedAtAction(
             nameof(FetchById),
             new { id = output.IdAddress },
             output
         );
     }
-    */
+    
+    [HttpPut]
+    [Route("update")]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public ActionResult<Boolean> Update(DtoInputUpdateAddress dto)
+    {
+        return _useCaseUpdateAddress.Execute(dto);
+    }
     
 }

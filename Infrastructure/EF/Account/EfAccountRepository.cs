@@ -23,7 +23,7 @@ public class EfAccountRepository : IAccountRepository
     public IEnumerable<Account> FetchAll()
     {
         using var context = _planitContextProvider.NewContext();
-        return context.Accounts.ToList<Account>();
+        return context.Accounts.ToList();
     }
 
     /// <summary>

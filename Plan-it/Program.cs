@@ -19,6 +19,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using Plan_it;
 using Plan_it.Controllers;
+using Service.UseCases.Address;
 using Service.UseCases.Companies;
 using Service.UseCases.Has;
 using WebSocketDemo.Hubs;
@@ -97,6 +98,8 @@ builder.Services.AddScoped<UseCaseFetchFunctionById>();
 builder.Services.AddScoped<UseCaseFetchAllAddress>();
 builder.Services.AddScoped<UseCaseFetchAddressById>();
 builder.Services.AddScoped<UseCaseFetchAddressByPostCode>();
+builder.Services.AddScoped<UseCaseCreateAddress>();
+builder.Services.AddScoped<UseCaseUpdateAddress>();
 
 // Database
 builder.Services.AddScoped<IConnectionStringProvider, ConnectionStringProvider>();

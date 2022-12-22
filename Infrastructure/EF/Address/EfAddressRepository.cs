@@ -50,4 +50,18 @@ public class EfAddressRepository : IAddressRepository
             return null;
         }
     }
+
+    public bool Update(Address address)
+    {
+        using var context = _planitContextProvider.NewContext();
+        try
+        {
+            context.Address.Update(address);
+            return context.SaveChanges() == 1;
+        }
+        catch (DbUpdateConcurrencyException e)
+        {
+            return false;
+        }
+    }
 }

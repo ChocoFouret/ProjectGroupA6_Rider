@@ -133,7 +133,10 @@ public class AccountController : ControllerBase
             DtoOutputProfilAccount dtoOutputProfilAccount = _useCaseFetchProfilById.Execute(id);
             dtoOutputProfilAccount.Address = _useCaseFetchAddressById.Execute(dtoOutputProfilAccount.IdAddress);
             var has = _useCaseFetchHasByAccount.Execute(id).FirstOrDefault()!;
-            dtoOutputProfilAccount.Companies = _useCaseFetchCompaniesById.Execute(has.IdCompanies);
+            if (has.IdCompanies != null)
+            {
+                dtoOutputProfilAccount.Companies = _useCaseFetchCompaniesById.Execute(has.IdCompanies); 
+            }
             dtoOutputProfilAccount.Function = has.Function.Title;
             return dtoOutputProfilAccount;
         }
