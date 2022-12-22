@@ -8,9 +8,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Infrastructure", "Infrastru
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Application", "Application\Application.csproj", "{8696AE6A-951F-4AD7-9FF5-51A3B986445D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestDomainAccount", "TestDomainAccount\TestDomainAccount.csproj", "{82D9A72D-F572-47ED-A639-FE29896DE335}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestEncryptPassword", "TestEncryptPassword\TestEncryptPassword.csproj", "{22587CC8-A792-4D85-822F-F1B0125586EF}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestDomain", "TestDomain\TestDomain.csproj", "{82D9A72D-F572-47ED-A639-FE29896DE335}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -38,9 +36,5 @@ Global
 		{82D9A72D-F572-47ED-A639-FE29896DE335}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{82D9A72D-F572-47ED-A639-FE29896DE335}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{82D9A72D-F572-47ED-A639-FE29896DE335}.Release|Any CPU.Build.0 = Release|Any CPU
-		{22587CC8-A792-4D85-822F-F1B0125586EF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{22587CC8-A792-4D85-822F-F1B0125586EF}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{22587CC8-A792-4D85-822F-F1B0125586EF}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{22587CC8-A792-4D85-822F-F1B0125586EF}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
