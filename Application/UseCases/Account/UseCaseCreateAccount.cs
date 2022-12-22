@@ -19,7 +19,7 @@ public class UseCaseCreateAccount : IUseCaseWriter<DtoOutputAccount, DtoInputCre
     {
         var account = _accountRepository.FetchByEmail(input.account.Email);
         if (account != null) return null;
-        
+
         var tmp = input.account.Password;
         input.account.Password = EncryptPassword.HashPassword(tmp);
         

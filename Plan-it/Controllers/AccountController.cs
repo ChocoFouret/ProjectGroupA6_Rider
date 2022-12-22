@@ -180,20 +180,21 @@ public class AccountController : ControllerBase
     /// </returns>
     // [Authorize(Policy = "all")]
     [HttpPost]
-    [Route("create")]
+    [Route("create/{confirmPassword}")]
     [ProducesResponseType(StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status409Conflict)]
-    public ActionResult<DtoOutputAccount> Create(DtoInputCreateAccount dto)
+    public ActionResult<DtoOutputAccount> Create(DtoInputCreateAccount dto, string confirmPassword)
     {
         // Use for add new account easily
         //dto.account.Function = "Employee";
         dto.account.IsAdmin = false;
         var passwordBeforeCrypt = dto.account.Password;
+        if (!dto.account.matchPassword(confirmPassword)) return Conflict(new Account());
+        if (!dto.account.goodMail()) return Conflict(new Account());
         var output = _useCaseCreateAccount.Execute(dto);
 
         if (output == null) return Conflict(new Account());
-
-        /// --------------------------------------------------------------------------------
+        
         DtoInputLoginAccount dtoLogin = new DtoInputLoginAccount()
         {
             Email = dto.account.Email,
