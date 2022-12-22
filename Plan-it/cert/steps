@@ -1,0 +1,10 @@
+https://medium.com/@richardr39/using-angular-cli-to-serve-over-https-locally-70dab07417c8
+
+1. Craete cnf :
+
+2. Create a self-signed certificate :
+openssl req -new -x509 -newkey rsa:2048 -sha256 -nodes -keyout localhost.key -days 3560 -out localhost.crt -config cert.cnf
+
+3. Configure PC with certificate :
+- MMC for Windows
+- Double click for Mac OS
