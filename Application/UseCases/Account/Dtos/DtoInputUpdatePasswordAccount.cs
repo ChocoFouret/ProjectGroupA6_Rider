@@ -1,7 +1,8 @@
-﻿namespace Application.UseCases.Accounts.Dtos;
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace Application.UseCases.Accounts.Dtos;
 
 public class DtoInputUpdatePasswordAccount
 {
-    //dto create to change only the password in a more secure way
-    public int Id { get; set; }
+   [Required] public int Id { get; set; }
 }

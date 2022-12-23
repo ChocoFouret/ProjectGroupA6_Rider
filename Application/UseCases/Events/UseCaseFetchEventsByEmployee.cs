@@ -18,7 +18,6 @@ public class UseCaseFetchEventsByEmployee : IUseCaseParameterizedQuery< IEnumera
     {
         var account = _accountRepository.FetchById(id);
         var dbEvents = _eventsRepository.FetchEventsByEmployee(account);
-        
         return Mapper.GetInstance().Map<IEnumerable<DtoOutputEvents>>(dbEvents);
     }
 }

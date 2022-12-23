@@ -51,6 +51,13 @@ public class EfHasRepository: IHasRepository
 
         if (accounts == null)
             throw new KeyNotFoundException($"Accounts with {id} has not been found");
+            
+        for(var x = 0; x < accounts.Count; x++)
+        {
+            accounts[x].Account = context.Accounts.FirstOrDefault(a => a.IdAccount == accounts[x].IdAccount);
+            accounts[x].Function = context.Functions.FirstOrDefault(a => a.IdFunctions == accounts[x].IdFunctions);
+        }
+            
         return accounts;
     }
 

@@ -1,5 +1,7 @@
 using System.Text;
 using Application.UseCases.Accounts;
+using Application.UseCases.Addresss;
+using Application.UseCases.Announcements;
 using Application.UseCases.Companies;
 using Application.UseCases.Companies.Dtos;
 using Application.UseCases.Events.Dtos;
@@ -17,6 +19,8 @@ using JWT.Models;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using Plan_it;
+using Plan_it.Controllers;
+using Service.UseCases.Address;
 using Service.UseCases.Companies;
 using Service.UseCases.Has;
 using WebSocketDemo.Hubs;
@@ -37,6 +41,8 @@ builder.Services.AddScoped<ICompaniesRepository,EfCompaniesRepository>();
 builder.Services.AddScoped<IHasRepository, EfHasRepository>();
 builder.Services.AddScoped<IEventsRepository, EfEventsRepository>();
 builder.Services.AddScoped<IEventTypesRepository, EfEventTypesRepository>();
+builder.Services.AddScoped<IAddressRepository, EfAddressRepository>();
+builder.Services.AddScoped<IAnnouncementsRepository, EfAnnouncementsRepository>();
 
 //Use Case Has
 builder.Services.AddScoped<UseCaseFetchAllHas>();
@@ -46,6 +52,7 @@ builder.Services.AddScoped<UseCaseFetchHasByFunctions>();
 builder.Services.AddScoped<UseCaseCreateHas>();
 builder.Services.AddScoped<UseCaseFetchHasById>();
 builder.Services.AddScoped<UseCaseDeleteHas>();
+builder.Services.AddScoped<AccountController>();
 
 //User cases Companies
 builder.Services.AddScoped<UseCaseFetchAllCompanies>();
@@ -55,16 +62,16 @@ builder.Services.AddScoped<UseCaseUpdateCompanies>();
 builder.Services.AddScoped<UseCaseFetchCompaniesByName>();
 builder.Services.AddScoped<UseCaseFetchCompaniesById>();
 builder.Services.AddScoped<UseCaseFetchCompaniesByEmail>();
+builder.Services.AddScoped<UseCaseJoinCompany>();
 
 // Use cases accounts
 builder.Services.AddScoped<UseCaseLoginAccount>();
 builder.Services.AddScoped<UseCaseCreateAccount>();
 builder.Services.AddScoped<UseCaseUpdateAccount>();
-builder.Services.AddScoped<UseCaseUpdatePasswordAccount>();
 builder.Services.AddScoped<UseCaseDeleteAccount>();
 builder.Services.AddScoped<UseCaseFetchAllAccounts>();
-builder.Services.AddScoped<UseCaseFetchAccountById>();
 builder.Services.AddScoped<UseCaseFetchAccountByEmail>();
+builder.Services.AddScoped<UseCaseFetchProfilById>();
 
 // Use cases events
 builder.Services.AddScoped<UseCaseCreateEvents>();
@@ -87,6 +94,21 @@ builder.Services.AddScoped<UseCaseFetchAllFunctions>();
 builder.Services.AddScoped<UseCaseCreateFunction>();
 builder.Services.AddScoped<UseCaseFetchFunctionById>();
 
+// Uses cases address
+builder.Services.AddScoped<UseCaseFetchAllAddress>();
+builder.Services.AddScoped<UseCaseFetchAddressById>();
+builder.Services.AddScoped<UseCaseFetchAddressByPostCode>();
+builder.Services.AddScoped<UseCaseCreateAddress>();
+builder.Services.AddScoped<UseCaseUpdateAddress>();
+
+// Uses cases announcements
+builder.Services.AddScoped<UseCaseFetchAllByCompanyAnnouncements>();
+builder.Services.AddScoped<UseCaseUpdateAnnouncements>();
+builder.Services.AddScoped<UseCaseFetchAnnouncementsById>();
+builder.Services.AddScoped<UseCaseFetchAnnouncementsByIdFunction>();
+builder.Services.AddScoped<UseCaseCreateAnnouncements>();
+builder.Services.AddScoped<UseCaseDeleteAnnouncements>();
+
 // Database
 builder.Services.AddScoped<IConnectionStringProvider, ConnectionStringProvider>();
 
@@ -98,7 +120,7 @@ builder.Services.AddCors(options =>
 {
     options.AddPolicy("Dev", policyBuilder =>
     {
-        policyBuilder.WithOrigins("http://localhost:4200")
+        policyBuilder.WithOrigins("https://localhost:4200")
             .AllowAnyHeader()
             .AllowAnyMethod()
             .AllowCredentials();
@@ -150,10 +172,14 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+// Android Studio
+if (!app.Environment.IsDevelopment())
+{
+    app.UseHttpsRedirection();
+}
+
 /* It allows the frontend to access the backend. */
 app.UseCors("Dev");
-
-app.UseHttpsRedirection();
 
 app.UseCookiePolicy();
 

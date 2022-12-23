@@ -1,6 +1,8 @@
+using System.Security.Claims;
 using Application.UseCases.Companies;
 using Application.UseCases.Companies.Dtos;
 using Domain;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Service.UseCases.Companies;
 
@@ -23,6 +25,9 @@ public class CompaniesController : Controller
     private readonly UseCaseDeleteCompanies _useCaseDeleteCompanies;
 
     private readonly UseCaseFetchCompaniesByEmail _useCaseFetchCompaniesByEmail;
+
+    private readonly UseCaseJoinCompany _useCaseJoinCompany;
+    
     // GET
 
     public CompaniesController(
@@ -32,7 +37,8 @@ public class CompaniesController : Controller
         UseCaseCreateCompanies useCaseCreateCompanies,
         UseCaseUpdateCompanies useCaseUpdateCompanies,
         UseCaseDeleteCompanies useCaseDeleteCompanies,
-        UseCaseFetchCompaniesByEmail useCaseFetchCompaniesByEmail)
+        UseCaseFetchCompaniesByEmail useCaseFetchCompaniesByEmail,
+        UseCaseJoinCompany useCaseJoinCompany)
     {
         _useCaseFetchAllCompanies = useCaseFetchAllCompanies;
         _useCaseFetchCompaniesById = useCaseFetchCompaniesById;
@@ -41,8 +47,11 @@ public class CompaniesController : Controller
         _useCaseUpdateCompanies = useCaseUpdateCompanies;
         _useCaseDeleteCompanies = useCaseDeleteCompanies;
         _useCaseFetchCompaniesByEmail = useCaseFetchCompaniesByEmail;
+        _useCaseJoinCompany = useCaseJoinCompany;
 
     }
+    //Use to display all companies in angular
+    //in the company management admin page
     [HttpGet]
     [Route("fetch/")]
     public IEnumerable<DtoOutputCompanies> FetchAll()
@@ -50,6 +59,8 @@ public class CompaniesController : Controller
         return _useCaseFetchAllCompanies.Execute();
     }
     
+    //Use to display the company details
+    //in the profile page
     [HttpGet]
     [Route("fetchById/{id:int}")]
     [ProducesResponseType(StatusCodes.Status200OK)]
@@ -78,6 +89,7 @@ public class CompaniesController : Controller
         }
         catch (KeyNotFoundException e)
         {
+            Console.WriteLine(e.Message);
             return null;
         }
     }
@@ -91,10 +103,13 @@ public class CompaniesController : Controller
     
     [HttpPost]
     [Route("create")]
+    [Authorize]
     [ProducesResponseType(StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status409Conflict)]
     public ActionResult<DtoOutputCompanies> Create(DtoInputCreateCompanies dto)
     {
+        dto.companie.DirectorEmail =
+            User.Claims.Where(c => c.Type == ClaimTypes.Email).Select(c => c.Value).SingleOrDefault();
         var output = _useCaseCreateCompanies.Execute(dto);
 
         if (output == null) return Conflict(new Companies());
@@ -122,5 +137,21 @@ public class CompaniesController : Controller
     public ActionResult<Boolean> Delete(int id)
     {
         return _useCaseDeleteCompanies.Execute(id);
+    }
+
+    //Use to determine if the user can join a company
+    //(correct name and password)
+    [HttpPost]
+    [Route("join")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    public IActionResult Join(DtoInputJoinCompanie dto)
+    {
+        if (_useCaseJoinCompany.Execute(dto))
+        {
+            return Ok(new { });
+        }
+
+        return Unauthorized();
     }
 }

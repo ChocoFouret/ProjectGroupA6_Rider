@@ -13,4 +13,6 @@ public class DtoOutputAccount
     public int IdAddress { get; set; }
     public string PictureURL { get; set; }
     public bool IsAdmin { get; set; }
+    public string Phone { get; set; }
+
 }
