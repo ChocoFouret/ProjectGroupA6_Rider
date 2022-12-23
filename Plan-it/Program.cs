@@ -62,16 +62,14 @@ builder.Services.AddScoped<UseCaseUpdateCompanies>();
 builder.Services.AddScoped<UseCaseFetchCompaniesByName>();
 builder.Services.AddScoped<UseCaseFetchCompaniesById>();
 builder.Services.AddScoped<UseCaseFetchCompaniesByEmail>();
-builder.Services.AddScoped<UseCaseJoinCompanie>();
+builder.Services.AddScoped<UseCaseJoinCompany>();
 
 // Use cases accounts
 builder.Services.AddScoped<UseCaseLoginAccount>();
 builder.Services.AddScoped<UseCaseCreateAccount>();
 builder.Services.AddScoped<UseCaseUpdateAccount>();
-builder.Services.AddScoped<UseCaseUpdatePasswordAccount>();
 builder.Services.AddScoped<UseCaseDeleteAccount>();
 builder.Services.AddScoped<UseCaseFetchAllAccounts>();
-builder.Services.AddScoped<UseCaseFetchAccountById>();
 builder.Services.AddScoped<UseCaseFetchAccountByEmail>();
 builder.Services.AddScoped<UseCaseFetchProfilById>();
 

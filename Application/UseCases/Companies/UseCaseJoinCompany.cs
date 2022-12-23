@@ -4,11 +4,11 @@ using Infrastructure.EF.Companies;
 
 namespace Service.UseCases.Companies;
 
-public class UseCaseJoinCompanie:IUseCaseWriter<Boolean, DtoInputJoinCompanie>
+public class UseCaseJoinCompany:IUseCaseWriter<Boolean, DtoInputJoinCompanie>
 {
     private readonly ICompaniesRepository _companiesRepository;
 
-    public UseCaseJoinCompanie(ICompaniesRepository companiesRepository)
+    public UseCaseJoinCompany(ICompaniesRepository companiesRepository)
     {
         _companiesRepository = companiesRepository;
     }

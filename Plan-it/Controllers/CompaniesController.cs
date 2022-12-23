@@ -26,7 +26,7 @@ public class CompaniesController : Controller
 
     private readonly UseCaseFetchCompaniesByEmail _useCaseFetchCompaniesByEmail;
 
-    private readonly UseCaseJoinCompanie _useCaseJoinCompany;
+    private readonly UseCaseJoinCompany _useCaseJoinCompany;
     
     // GET
 
@@ -38,7 +38,7 @@ public class CompaniesController : Controller
         UseCaseUpdateCompanies useCaseUpdateCompanies,
         UseCaseDeleteCompanies useCaseDeleteCompanies,
         UseCaseFetchCompaniesByEmail useCaseFetchCompaniesByEmail,
-        UseCaseJoinCompanie useCaseJoinCompany)
+        UseCaseJoinCompany useCaseJoinCompany)
     {
         _useCaseFetchAllCompanies = useCaseFetchAllCompanies;
         _useCaseFetchCompaniesById = useCaseFetchCompaniesById;

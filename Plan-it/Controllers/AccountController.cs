@@ -68,23 +68,6 @@ public class AccountController : ControllerBase
     {
         return _useCaseFetchAllAccounts.Execute();
     }
-
-    
-   /* [HttpGet]
-    [Route("fetch/{id:int}")]
-    [ProducesResponseType(StatusCodes.Status200OK)]
-    [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public ActionResult<DtoOutputAccount> FetchById(int id)
-    {
-        try
-        {
-            return _useCaseFetchAccountById.Execute(id);
-        }
-        catch (KeyNotFoundException e)
-        {
-            return NotFound(e.Message);
-        }
-    }*/
     
    //Use to show the profil page (webstorm and android studio)
     [HttpGet]
