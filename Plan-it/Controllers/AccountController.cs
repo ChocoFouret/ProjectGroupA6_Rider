@@ -97,12 +97,13 @@ public class AccountController : ControllerBase
         {
             DtoOutputProfilAccount dtoOutputProfilAccount = _useCaseFetchProfilById.Execute(id);
             dtoOutputProfilAccount.Address = _useCaseFetchAddressById.Execute(dtoOutputProfilAccount.IdAddress);
-            var has = _useCaseFetchHasByAccount.Execute(id).FirstOrDefault()!;
-            if (has.IdCompanies != 0)
+            var has = _useCaseFetchHasByAccount.Execute(id).FirstOrDefault();
+            if (has != null)
             {
                 dtoOutputProfilAccount.Companies = _useCaseFetchCompaniesById.Execute(has.IdCompanies); 
+                dtoOutputProfilAccount.Function = has.Function.Title;
             }
-            dtoOutputProfilAccount.Function = has.Function.Title;
+            
             return dtoOutputProfilAccount;
         }
         catch (KeyNotFoundException e)
@@ -334,9 +335,7 @@ public class AccountController : ControllerBase
                 {
                     functionName = function.Title;   
                 }
-                
             }
-            
             var generatedToken =
                 _sessionService.BuildToken(_config["Jwt:Key"], _config["Jwt:Issuer"], account, functionName);
             var generatedTokenPublic =
